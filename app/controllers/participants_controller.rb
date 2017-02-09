@@ -1,6 +1,5 @@
 class ParticipantsController < ApplicationController
   def new
-    @experiment_id = params[:experiment]
     @students = view_context.options_for_select(
         { "学部生(Bachelor)" => "B",
           "修士課程(Master)" => "M",

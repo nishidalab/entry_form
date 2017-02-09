@@ -1,5 +1,4 @@
 <% provide(:title, '実験参加登録フォーム') %>
-<% provide(:button_text, 'Create my account') %>
 <h1><%= yield(:title) %></h1>
 
 <p>実験参加にはアカウント登録が必要です。</p>
@@ -7,15 +6,6 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <%= form_tag(register_path) do %>
-      <%= label_tag :experiment_disabled, "実験名" %>
-      <% if @experiment_id.nil? %>
-        <%= text_field_tag :experiment_disabled, "パラメータ experiment が空です。", class: 'form-control', disabled: true %>
-      <% else %>
-        <%= text_field_tag :experiment_disabled, "実験ID: #{@experiment_id}", class: 'form-control', disabled: true %>
-      <% end %>
-
-      <%= hidden_field_tag :experiment, "実験ID: #{@experiment_id}" %>
-
       <%= label_tag :email, "メールアドレス" %>
       <%= email_field_tag :email, '', class: 'form-control' %>
 
@@ -30,6 +20,9 @@
 
       <%= label_tag :yomi, "お名前(ひらがな)" %>
       <%= text_field_tag :yomi, '', class: 'form-control' %>
+
+      <%= label_tag :gender, "性別" %>
+      <%= select_tag :gender, options_for_select({ "男性" => "M", "女性" => "F" }), class: 'form-control' %>
 
       <%= label_tag :student, "学生区分" %>
       <%= select_tag :student, @students, class: 'form-control' %>
