@@ -1,0 +1,30 @@
+<% provide(:title, '実験参加申請') %>
+<h1><%= yield(:title) %></h1>
+
+<div class="panel panel-primary">
+  <div class="panel-heading"><%= simple_format(h(@experiment[:title])) %></div>
+  <div class="panel-body">
+    <b>応募条件</b><br>
+    <%= simple_format(h(@experiment[:requirement])) %>
+    <hr>
+    <%= simple_format(h(@experiment[:describe])) %>
+  </div>
+</div>
+
+<%= form_tag(applications_path) do %>
+  <%= hidden_field_tag :experiment, @experiment[:id] %>
+
+  <div class="form-group">
+    <p class="control-label">希望日時</p>
+    <% @datetimes.each_with_index do |dt, idx| %>
+      <div class="checkbox">
+        <label>
+          <%= check_box_tag "datetime[#{idx}]" %>
+          <%= dt[:start].strftime("%Y/%m/%d %H:%M") + "  ～  " + dt[:end].strftime("%Y/%m/%d %H:%M") %>
+        </label>
+      </div>
+    <% end %>
+  </div>
+
+  <%= submit_tag "参加申請", class: "form-control btn btn-primary" %>
+<% end %>
