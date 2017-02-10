@@ -1,18 +1,34 @@
 class ParticipantsController < ApplicationController
+
   def new
-    @students = view_context.options_for_select(
-        { "学部生(Bachelor)" => "B",
-          "修士課程(Master)" => "M",
-          "博士課程(Doctor)" => "D" })
-    @faculties = view_context.options_for_select(
-        { "工学部" => 0,
-          "理学部" => 1})
-    @courses = view_context.options_for_select(
-        { "情報学研究科" => 0,
-          "理学研究科" => 1})
+    get_options_info
+    @participant = Participant.new
   end
 
   def create
-    redirect_to register_url
+    get_options_info
+    @participant = Participant.new(params.require(:participant).permit(
+        :name, :yomi, :gender, :classification, :grade, :faculty, :address, :birth, :email,
+        :password, :password_confirmation))
+    if @participant.save
+      redirect_to root_url
+    else
+      render 'new'
+    end
   end
+
+  private
+
+    def get_options_info
+      @classifications = {
+          "学部生(Bachelor)" => 1,
+          "修士課程(Master)" => 2,
+          "博士課程(Doctor)" => 3 }
+      @faculties = {
+          "工学部" => 1,
+          "理学部" => 2}
+      @courses = {
+          "情報学研究科" => 1,
+          "理学研究科" => 2}
+    end
 end

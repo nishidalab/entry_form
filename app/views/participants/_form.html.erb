@@ -1,0 +1,90 @@
+<%= form_for(@participant, url: register_path) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+
+  <%= f.label :name, "お名前(漢字)" %>
+  <%= f.text_field :name, class: 'form-control' %>
+
+  <%= f.label :yomi, "お名前(ひらがな)" %>
+  <%= f.text_field :yomi, class: 'form-control' %>
+
+  <%= f.label :gender, "性別" %>
+  <br>
+  <%= f.select :gender, options_for_select({ "男性" => 1, "女性" => 2 }), class: 'form-control' %>
+  <br>
+
+  <%= f.label :classification, "学生区分" %>
+  <br>
+  <%= f.select :classification, options_for_select(@classifications), class: 'form-control' %>
+  <br>
+
+  <%= f.label :grade, "学年" %>
+  <br>
+  <%= f.select :grade, '', class: 'form-control' %>
+  <br>
+
+  <%= f.label :faculty, "学部・研究科" %>
+  <br>
+  <%= f.select :faculty, '', class: 'form-control' %>
+  <br>
+
+  <%= f.label :address, "住所" %>
+  <%= f.text_field :address, class: 'form-control' %>
+
+  <%= f.label :birth, "生年月日" %>
+  <div>
+    <%= raw sprintf(
+          f.date_select(
+            :birth,
+            { start_year: 1970, end_year: Date.today.year - 17, use_month_numbers: true,
+              default: Date.new(1995, 1, 1), date_separator: '%s' },
+            { class: 'form-control bootstrap-date' }),
+              '年 ', '月 ') + '日' %>
+  </div>
+
+  <%= f.label :email, "メールアドレス" %>
+  <%= f.email_field :email, class: 'form-control' %>
+
+  <%= f.label :password, "パスワード" %>
+  <%= f.password_field :password, class: 'form-control' %>
+
+  <%= f.label :password_confirmation, "パスワード(確認)" %>
+  <%= f.password_field :password_confirmation, class: 'form-control' %>
+
+  <%= submit_tag "仮登録", class: "form-control btn btn-primary" %>
+<% end %>
+
+<script type="text/javascript">
+  var head_id = "participant_";
+  var grade_id = "#" + head_id + "grade";
+  var classification_id = "#" + head_id + "classification";
+  var faculty_id = "#" + head_id + "faculty";
+
+  // 学生区分が変更されたら学年や学部・研究科の選択肢を変える
+  function changeGradeFaculty() {
+    // 学年の選択肢変更
+    $(grade_id).children().remove();
+    var classification = $(classification_id).val()
+    var max = 4;
+    if(classification == 2)       max = 2;
+    else if(classification == 3)  max = 3;
+    for(var i = 1; i <= max; i++) {
+      $(grade_id).append($('<option>').attr({ value: i}).text(i));
+    }
+
+    // 学部・研究科の選択肢変更
+    $(faculty_id).children().remove();
+    if(classification == 1) {
+      <% @faculties.each do |faculty, idx| %>
+        $(faculty_id).append($('<option>').attr({ value: <%= idx %>}).text('<%= faculty %>'));
+      <% end %>
+    }
+    else {
+      <% @courses.each do |course, idx| %>
+        $(faculty_id).append($('<option>').attr({ value: <%= idx %>}).text('<%= course %>'));
+      <% end %>
+    }
+  }
+
+  $(changeGradeFaculty);
+  $(classification_id).change(changeGradeFaculty);
+</script>

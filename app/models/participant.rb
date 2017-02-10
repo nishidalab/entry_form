@@ -21,10 +21,10 @@ class Participant < ApplicationRecord
 
   def validate_birth
     if birth.nil?
-      errors.add(:birth, "birth should be present")
+      errors.add(:birth, "を入力してください")
       return
     end
     boundary = Date.today.years_ago(18)
-    errors.add(:birth, "birth should be former than #{boundary}") if birth > boundary
+    errors.add(:birth, "は#{boundary.to_s}以前である必要があります") if birth > boundary
   end
 end

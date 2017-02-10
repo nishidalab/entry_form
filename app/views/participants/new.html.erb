@@ -5,72 +5,7 @@
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-    <%= form_tag(register_path) do %>
-      <%= label_tag :email, "メールアドレス" %>
-      <%= email_field_tag :email, '', class: 'form-control' %>
-
-      <%= label_tag :password, "パスワード" %>
-      <%= password_field_tag :password, '', class: 'form-control' %>
-
-      <%= label_tag :password_confirmation, "パスワード(確認)" %>
-      <%= password_field_tag :password_confirmation, '', class: 'form-control' %>
-
-      <%= label_tag :name, "お名前(漢字)" %>
-      <%= text_field_tag :name, '', class: 'form-control' %>
-
-      <%= label_tag :yomi, "お名前(ひらがな)" %>
-      <%= text_field_tag :yomi, '', class: 'form-control' %>
-
-      <%= label_tag :gender, "性別" %>
-      <%= select_tag :gender, options_for_select({ "男性" => "M", "女性" => "F" }), class: 'form-control' %>
-
-      <%= label_tag :student, "学生区分" %>
-      <%= select_tag :student, @students, class: 'form-control' %>
-
-      <%= label_tag :grade, "学年" %>
-      <%= select_tag :grade, '', class: 'form-control' %>
-
-      <%= label_tag :faculty, "学部・研究科" %>
-      <%= select_tag :faculty, @faculties, class: 'form-control' %>
-      <%= select_tag :course, @courses, class: 'form-control' %>
-
-      <%= label_tag :address, "住所" %>
-      <%= text_field_tag :address, '', class: 'form-control' %>
-
-      <%= label_tag :birth, "生年月日" %>
-      <br>
-      <%= raw sprintf(
-                  date_select(
-                      :birth,
-                      '',
-                      { start_year: 1970, end_year: Time.now.year, use_month_numbers: true,
-                        default: Date.new(1990, 1, 1), date_separator: '%s' },
-                      { class: 'form-control bootstrap-date' }),
-                  '年 ', '月 ') + '日' %>
-
-      <%= submit_tag "仮登録", class: "form-control btn btn-primary" %>
-    <% end %>
+    <%= render partial: 'form',
+               locals: { classifications: @classifications, faculties: @faculties, courses: @courses } %>
   </div>
 </div>
-<script type="text/javascript">
-    // 学生区分が変更されたら学年や学部・研究科の選択肢を変える
-    function changeGradeEtc() {
-        // 学年の選択肢変更
-        $('#grade').children().remove();
-        var student = $('#student').val()
-        var max = 4;
-        if(student == 'M')       max = 2;
-        else if(student == 'D')  max = 3;
-        for(var i = 1; i <= max; i++) {
-            $('#grade').append($('<option>').attr({ value: i}).text(i));
-        }
-
-        // 学部・研究科の選択肢変更
-        var is_bachelor = student == 'B';
-        $('#faculty').toggle(is_bachelor);
-        $('#course').toggle(!is_bachelor);
-    }
-
-    $(changeGradeEtc);
-    $('#student').change(changeGradeEtc);
-</script>

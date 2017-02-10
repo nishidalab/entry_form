@@ -1,0 +1,22 @@
+ja:
+  activerecord:
+    models:
+      participant: 参加者
+    attributes:
+      participant:
+        id: ID
+        created_at: 登録日時
+        updated_at: 更新日時
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード(確認)
+        password_digest: パスワードハッシュ
+        name: 名前(漢字)
+        yomi: 名前(ひらがな)
+        gender: 性別
+        name: 名前(漢字)
+        birth: 生年月日
+        classification: 学生区分
+        grade: 学年
+        faculty: 学部・研究科
+        address: 住所
