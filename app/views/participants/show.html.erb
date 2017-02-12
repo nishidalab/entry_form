@@ -1,0 +1,5 @@
+<% provide(:title, 'マイページ') %>
+<h1><%= yield(:title) %></h1>
+<div class="row">
+  <%= "id: #{@participant.id}, 名前: #{@participant.name}" %>
+</div>

@@ -3,7 +3,7 @@ require 'test_helper'
 class ParticipantTest < ActiveSupport::TestCase
   def setup
     @participant = Participant.new(
-        email: "test@example.com", name: "test試験", yomi: "てすと",  gender: 1, birth: Date.new(1990, 1, 1),
+        email: "okabi@example.com", name: "御華美", yomi: "おかび",  gender: 1, birth: Date.new(1992, 7, 31),
         classification: 1, grade: 1, faculty: 1, address: "京都市左京区吉田本町",
         password: "password", password_confirmation: "password")
   end

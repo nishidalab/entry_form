@@ -1,12 +1,10 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  email: "one@example.com"
-  password_digest: "password"
+test:
+  email: "test@example.com"
+  password_digest: <%= Participant.digest("password") %>
   name: "test試験"
   yomi: "てすとしけん"
   gender: 1
-  birth: 1990-01-01
+  birth: 1995-01-01
   classification: 1
   grade: 1
   faculty: 1
