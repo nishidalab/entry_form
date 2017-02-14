@@ -1,4 +1,4 @@
-test:
+one:
   email: "test@example.com"
   password_digest: <%= Participant.digest("password") %>
   name: "test試験"

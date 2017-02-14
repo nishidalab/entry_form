@@ -1,5 +1,7 @@
 class Experiment < ApplicationRecord
   belongs_to :member
+  has_many :schedules, dependent: :destroy
+  has_many :applications, dependent: :destroy
 
   validate :validate_member_id
 

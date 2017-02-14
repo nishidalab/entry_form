@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  experiment: one
+  participant: one
+  slot: one
+  status: 1
+
+two:
+  experiment: two
+  participant: two
+  slot: two
+  status: 1
