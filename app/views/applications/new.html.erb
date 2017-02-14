@@ -11,20 +11,78 @@
   </div>
 </div>
 
-<%= form_tag(applications_path) do %>
-  <%= hidden_field_tag :experiment, @experiment[:id] %>
+<p>希望日時を選択し、「参加申請」をクリックしてください。</p>
+<div id="calendar"></div>
 
-  <div class="form-group">
-    <p class="control-label">希望日時</p>
-    <% @datetimes.each_with_index do |dt, idx| %>
-      <div class="checkbox">
-        <label>
-          <%= check_box_tag "datetime[#{idx}]" %>
-          <%= dt[:start].strftime("%Y/%m/%d %H:%M") + "  ～  " + dt[:end].strftime("%Y/%m/%d %H:%M") %>
-        </label>
-      </div>
+<%= hidden_field_tag :experiment, @experiment[:id] %>
+
+<%= button_tag '参加申請', onclick: "submit()", class: "form-control btn btn-primary" %>
+
+<script type="text/javascript">
+  // カレンダーに表示する日時候補
+  events = [
+    <% @datetimes.each_with_index do |d, idx| %>
+      {
+        id:       '<%= idx %>',
+        selected: false,
+        title:    '<%= "#{d[:start].to_s(:time)} ～ #{d[:end].to_s(:time)}" %>',
+        start:    '<%= d[:start].to_s %>',
+        end:      '<%= d[:end].to_s %>',
+        color:    'gray',
+      },
     <% end %>
-  </div>
+  ];
 
-  <%= submit_tag "参加申請", class: "form-control btn btn-primary" %>
-<% end %>
+  $(function(){
+    // カレンダーの表示
+    $('#calendar').fullCalendar({
+      // 日本語表記にする
+      lang: 'ja',
+      // イベントソース
+      eventSources: [{ events: events }],
+      // ヘッダーのタイトルとボタン
+      header: {
+        left: 'today prev,next',
+        center: 'title',
+        right: 'agendaWeek month',
+      },
+      // 週・日表示での時間フォーマット
+      slotLabelFormat: 'H:mm',
+      // イベントの時間表示フォーマット(イベント名で時間を指定するため空文字列にする)
+      timeFormat: ' ',
+      // 「終日」を非表示
+      allDaySlot: false,
+      // イベントクリックイベント
+      eventClick: function(event) {
+        var id = event.id;
+        events[id]['selected'] = !events[id]['selected'];
+        event.selected = events[id]['selected'];
+        if(event.selected) {
+          event.title = "【選択】" + events[id]['title'];
+          event.color = '#428bca';
+        }
+        else {
+          event.title = events[id]['title'];
+          event.color = 'gray';
+        }
+        $(this).text(event.title);
+        $(this).css('background-color', event.color);
+        $(this).css('border-color', event.color);
+      },
+    });
+  });
+
+  function submit (){
+    var selected = false;
+    events.forEach(function(event) {
+      if(event['selected']) {
+        alert(event['start'] + ' ～ ' + event['end']);
+        selected = true;
+      }
+    });
+    if(!selected) {
+      alert("日時を選択してください。");
+      return;
+    }
+  }
+</script>

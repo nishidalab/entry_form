@@ -10,7 +10,7 @@
     <%= simple_format(h(ex[:describe])) %>
   </div>
   <div class="panel-footer">
-    <%= link_to "参加する", new_application_path(experiment: ex[:id], participant: @participant[:id]),
+    <%= link_to "参加する", new_application_path(experiment: ex[:id]),
                 class: 'btn btn-primary' %>
   </div>
 </div>
