@@ -16,7 +16,7 @@
 
 <%= hidden_field_tag :experiment, @experiment[:id] %>
 
-<%= button_tag '参加申請', onclick: "submit()", class: "form-control btn btn-primary" %>
+<%= button_tag '参加申請', onclick: "submit('#{applications_path}')", class: "form-control btn btn-primary" %>
 <%= debug(@slots) %>
 
 <script type="text/javascript">
@@ -73,7 +73,7 @@
     });
   });
 
-  function submit (){
+  function submit (url){
     var selected = false;
     events.forEach(function(event) {
       if(event['selected']) {
@@ -85,5 +85,9 @@
       alert("日時を選択してください。");
       return;
     }
+    $.post(url, {
+      'experiment': <%= @experiment[:id] %>,
+      'slots[]': events.filter(function(e) { return e['selected']; }).map(function(e) { return e['id']; })
+    });
   }
 </script>

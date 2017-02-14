@@ -3,9 +3,9 @@
 class CreateSlots < ActiveRecord::Migration[5.0]
   def change
     create_table :slots do |t|
-      t.references :experiment, foreign_key: true
-      t.datetime :start
-      t.datetime :end
+      t.references :experiment, foreign_key: true, null: false
+      t.datetime :start, null: false
+      t.datetime :end, null: false
 
       t.timestamps
     end
