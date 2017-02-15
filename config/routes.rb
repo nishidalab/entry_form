@@ -7,4 +7,7 @@ Rails.application.routes.draw do
 
   # 実験応募ページ
   resources :applications
+
+  # カレンダー確認ページ
+  get   '/calendar', to: 'calendar#index'
 end
