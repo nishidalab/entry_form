@@ -10,7 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170212093120) do
+ActiveRecord::Schema.define(version: 20170217154538) do
+
+  create_table "experiments", force: :cascade do |t|
+    t.integer  "member_id"
+    t.date     "zisshi_ukagai_date"
+    t.string   "project_owner"
+    t.string   "place"
+    t.string   "budget"
+    t.string   "department_code"
+    t.string   "project_num"
+    t.string   "project_name"
+    t.string   "creditor_code"
+    t.integer  "expected_participant_count"
+    t.integer  "duration"
+    t.string   "name"
+    t.string   "description"
+    t.date     "schedule_from"
+    t.date     "schedule_to"
+    t.date     "final_report_date"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  create_table "members", force: :cascade do |t|
+    t.string   "name"
+    t.string   "yomi"
+    t.string   "email"
+    t.string   "password_digest"
+    t.string   "remember_digest"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
 
   create_table "participants", force: :cascade do |t|
     t.string   "email"
@@ -27,6 +58,14 @@ ActiveRecord::Schema.define(version: 20170212093120) do
     t.datetime "updated_at",      null: false
     t.string   "remember_digest"
     t.index ["email"], name: "index_participants_on_email", unique: true
+  end
+
+  create_table "schedules", force: :cascade do |t|
+    t.integer  "experiment_id"
+    t.integer  "participant_id"
+    t.datetime "datetime"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
 end
