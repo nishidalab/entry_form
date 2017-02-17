@@ -10,27 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217142514) do
+ActiveRecord::Schema.define(version: 20170217154538) do
 
   create_table "experiments", force: :cascade do |t|
     t.integer  "member_id"
     t.date     "zisshi_ukagai_date"
-    t.string   "zisshi_sekininsha"
-    t.string   "zisshi_place"
-    t.string   "yosankamoku"
-    t.string   "busho_code"
+    t.string   "project_owner"
+    t.string   "place"
+    t.string   "budget"
+    t.string   "department_code"
     t.string   "project_num"
     t.string   "project_name"
-    t.string   "saishu_code"
-    t.integer  "boshu_yotei_count"
-    t.integer  "zikansuu"
+    t.string   "creditor_code"
+    t.integer  "expected_participant_count"
+    t.integer  "duration"
     t.string   "name"
     t.string   "description"
     t.date     "schedule_from"
     t.date     "schedule_to"
     t.date     "final_report_date"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "members", force: :cascade do |t|
