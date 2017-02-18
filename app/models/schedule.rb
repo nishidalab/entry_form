@@ -1,9 +1,9 @@
 class Schedule < ApplicationRecord
-  has_one: experiment
-  has_one: participant
+  has_one :experiment
+  has_one :participant
 
-  validates :validate_experiment_id
-  validates :validate_participant_id
+  validate :validate_experiment_id
+  validate :validate_participant_id
 
   validates :experiment_id, presence: true
   validates :participant_id, presence: true
@@ -13,7 +13,7 @@ class Schedule < ApplicationRecord
   private
   # 指定されたexperiment_idのexperimentが存在するかチェック
   def validate_experiment_id
-      experiment = experiment.find(experiment_id)
+      experiment = Experiment.find_by_id(experiment_id)
 
       if !experiment
           errors.add(:experiment_id)
@@ -22,7 +22,7 @@ class Schedule < ApplicationRecord
 
   # 指定されたparticipant_idのparticipantが存在するかチェック
   def validate_participant_id
-      participant = Participant.find(participant_id)
+      participant = Participant.find_by_id(participant_id)
 
       if !participant
           errors.add(:participant_id)

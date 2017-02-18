@@ -1,7 +1,7 @@
 class Experiment < ApplicationRecord
-  belongs_to: member
+  belongs_to :member
 
-  validates :validate_member_id
+  validate :validate_member_id
 
   validates :member_id, presence: true
   validates :project_owner, presence: true
@@ -19,7 +19,7 @@ class Experiment < ApplicationRecord
   private
   # 指定されたmember_idのmemberが存在するかチェック
   def validate_member_id
-      member = Member.find_by_id(member_id: member_id)
+      member = Member.find_by_id(:member_id)
 
       if !member
           errors.add(:member_id)
