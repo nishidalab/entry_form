@@ -22,3 +22,6 @@
 
 # Ignore Rubymine file
 .idea/
+
+# Ignore GemFile.lock
+Gemfile.lock
