@@ -3,15 +3,15 @@
 one:
   member_id: 1
   zisshi_ukagai_date: 2017-02-17
-  zisshi_sekininsha: MyString
-  zisshi_place: MyString
-  yosankamoku: MyString
-  busho_code: MyString
+  project_owner: MyString
+  place: MyString
+  budget: MyString
+  department_code: MyString
   project_num: MyString
   project_name: MyString
-  saishu_code: MyString
-  boshu_yotei_count: 1
-  zikansuu: 1
+  creditor_code: MyString
+  expected_participant_count: 1
+  duration: 1
   name: MyString
   description: MyString
   schedule_from: 2017-02-17
@@ -21,15 +21,15 @@ one:
 two:
   member_id: 1
   zisshi_ukagai_date: 2017-02-17
-  zisshi_sekininsha: MyString
-  zisshi_place: MyString
-  yosankamoku: MyString
-  busho_code: MyString
+  project_owner: MyString
+  place: MyString
+  budget: MyString
+  department_code: MyString
   project_num: MyString
   project_name: MyString
-  saishu_code: MyString
-  boshu_yotei_count: 1
-  zikansuu: 1
+  creditor_code: MyString
+  expected_participant_count: 1
+  duration: 1
   name: MyString
   description: MyString
   schedule_from: 2017-02-17
