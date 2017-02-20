@@ -1,8 +1,8 @@
 class Participant < ApplicationRecord
   has_many :schedules
   has_many :applications, dependent: :destroy
-  has_many :experiments, through: :applications
-  has_many :slots, through: :applications
+  has_many :schedules, through: :applications
+  has_many :experiments, through: :schedules
 
   attr_accessor :remember_token
 
