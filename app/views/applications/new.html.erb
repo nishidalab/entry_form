@@ -17,18 +17,18 @@
 <%= hidden_field_tag :experiment, @experiment[:id] %>
 
 <%= button_tag '参加申請', onclick: "submit('#{applications_path}')", class: "form-control btn btn-primary" %>
-<%= debug(@slots) %>
+<%= debug(@schedules) %>
 
 <script type="text/javascript">
   // カレンダーに表示する日時候補
   events = [
-    <% @slots.each_with_index do |slot, idx| %>
+    <% @schedules.each_with_index do |schedule, idx| %>
       {
         id:       '<%= idx %>',
         selected: false,
-        title:    '<%= "#{slot[:start].to_s(:time)} ～ #{slot[:end].to_s(:time)}" %>',
-        start:    '<%= slot[:start].to_s %>',
-        end:      '<%= slot[:end].to_s %>',
+        title:    '<%= "#{schedule[:start].to_s(:time)} ～ #{schedule[:end].to_s(:time)}" %>',
+        start:    '<%= schedule[:start].to_s %>',
+        end:      '<%= schedule[:end].to_s %>',
         color:    'gray',
       },
     <% end %>

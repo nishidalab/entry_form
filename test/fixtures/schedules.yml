@@ -1,11 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  id: 1
   experiment_id: 1
   participant_id: 1
-  datetime: 2017-02-17 23:25:14
+  start: 2017-02-17 12:00:00
+  end: 2017-02-17 14:00:00
 
 two:
+  id: 2
   experiment_id: 1
   participant_id: 1
-  datetime: 2017-02-17 23:25:14
+  start: 2017-02-18 14:00:00
+  end: 2017-02-18 18:00:00

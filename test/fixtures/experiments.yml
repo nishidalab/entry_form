@@ -1,6 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  id: 1
   member_id: 1
   zisshi_ukagai_date: 2017-02-17
   project_owner: MyString
@@ -19,6 +20,7 @@ one:
   final_report_date: 2017-02-17
 
 two:
+  id: 2
   member_id: 1
   zisshi_ukagai_date: 2017-02-17
   project_owner: MyString

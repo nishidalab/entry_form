@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SessionsHelperTest < ActionView::TestCase
   def setup
-    @participant = participants(:test)
+    @participant = participants(:one)
   end
 
   test "current_participant returns right participant when session is nil" do

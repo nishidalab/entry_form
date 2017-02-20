@@ -4,6 +4,6 @@ one:
   id: 1
   experiment: one
   participant: one
-  slot: one
+  schedule: one
   status: 1
 
