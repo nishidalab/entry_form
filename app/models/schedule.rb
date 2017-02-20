@@ -1,6 +1,6 @@
 class Schedule < ApplicationRecord
-  has_one :experiment
-  has_one :participant
+  belongs_to :experiment
+  belongs_to :participant
   has_many :applications
 
   validate :validate_experiment_id

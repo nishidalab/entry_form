@@ -4,15 +4,19 @@ class ApplicationsController < ApplicationController
   def index
     @experiments = Experiment.all
     @participant = current_participant
+    @applied_ids = Application.where(participant_id: current_participant.id).map { |a| a.schedule.experiment.id }
   end
 
   def new
-    experiment_id = params['experiment']
-    if experiment_id.nil? || Experiment.find_by(id: experiment_id).nil?
+    if params['experiment'].nil? || (@experiment = Experiment.find_by(id: params['experiment'])).nil?
       redirect_to applications_url
       return
     end
-    @experiment = Experiment.find_by(id: experiment_id)
+    applied_ids = Application.where(participant_id: current_participant.id).map { |a| a.schedule.experiment.id }
+    if applied_ids.include?(@experiment.id)
+      redirect_to applications_url
+      return
+    end
     @schedules = @experiment.schedules.where(participant_id: nil)
     @times = []
     @schedules.each do |s|
