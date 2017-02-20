@@ -8,9 +8,10 @@ class ParticipantsApplyTest < ActionDispatch::IntegrationTest
     @max_schedule_id = Schedule.maximum(:id)
   end
 
-  def apply(schedules = nil)
+  def apply(schedules = nil, experiment_id = nil)
     schedules = @schedules if schedules.nil?
-    post applications_path, params: { experiment: @experiment_id, schedules: schedules }
+    experiment_id = @experiment_id if experiment_id.nil?
+    post applications_path, params: { experiment: experiment_id, schedules: schedules }
   end
 
   test "should reject when not logged in" do
@@ -48,13 +49,23 @@ class ParticipantsApplyTest < ActionDispatch::IntegrationTest
   end
 
   test "multi apply" do
+    experiment_id = Schedule.find_by_id(@max_schedule_id).experiment.id
+    new_path = new_application_path + "?experiment=#{experiment_id}"
     log_in_as_participant(@participant)
+    get applications_path
+    assert_select "a[href=?]", new_path
+    get new_path
+    assert_response :success
     assert_difference 'Application.count', 1 do
       apply [@max_schedule_id]
     end
     assert_redirected_to applications_url
     follow_redirect!
     assert_select 'div.alert-success'
+    assert_select "a[href=?]", new_path, count: 0
+    get new_application_path, params: { experiment: experiment_id }
+    assert_redirected_to applications_url
+    follow_redirect!
     assert_no_difference 'Application.count' do
       apply [@max_schedule_id]
     end
