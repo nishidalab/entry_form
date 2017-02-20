@@ -76,6 +76,7 @@ Experiment.create!([
     duration: 2,
     name: "ほげ実験",
     description: "あれをこうしてそうする。",
+    requirement: "特になし",
     schedule_from: Date.new(2017, 2, 20),
     schedule_to: Date.new(2017, 2, 26),
     final_report_date: Date.new(2017, 2, 28)
@@ -93,6 +94,7 @@ Experiment.create!([
     duration: 1,
     name: "ふが実験",
     description: "それをああしてこうする。",
+    requirement: "・女性\n・外国人学生",
     schedule_from: Date.new(2017, 2, 18),
     schedule_to: Date.new(2017, 2, 24),
     final_report_date: Date.new(2017, 2, 25)
@@ -110,6 +112,7 @@ Experiment.create!([
     duration: 1,
     name: "ぴよ実験",
     description: "ほげほげげー。",
+    requirement: "・男性\n・日本人学生",
     schedule_from: Date.new(2017, 1, 18),
     schedule_to: Date.new(2017, 1, 24),
     final_report_date: Date.new(2017, 1, 25)
@@ -122,18 +125,20 @@ participants = Participant.all
 Schedule.create!([
   { experiment_id: experiments[0].id,
     participant_id: nil,
-    datetime: DateTime.new(2017, 2, 24, 13, 00, 00),
+    datetime: DateTime.new(2017, 2, 24, 13, 0, 0, "+0900"),
   },
   { experiment_id: experiments[1].id,
     participant_id: participants[0].id,
-    datetime: DateTime.new(2017, 2, 26, 15, 00, 00),
+    datetime: DateTime.new(2017, 2, 26, 15, 0, 0, "+0900"),
   },
   { experiment_id: experiments[1].id,
     participant_id: participants[1].id,
-    datetime: DateTime.new(2017, 2, 27, 9, 00, 00),
+    datetime: DateTime.new(2017, 2, 27, 9, 0, 0, "+0900"),
   },
   { experiment_id: experiments[2].id,
     participant_id: participants[2].id,
-    datetime: DateTime.new(2017, 1, 27, 9, 00, 00),
+    datetime: DateTime.new(2017, 1, 27, 9, 0, 0, "+0900"),
   },
 ])
+
+Application.delete_all

@@ -2,15 +2,15 @@
 <h1><%= yield(:title)%></h1>
 <% @experiments.each do |ex| %>
 <div class="panel panel-primary">
-  <div class="panel-heading"><%= simple_format(h(ex[:title])) %></div>
+  <div class="panel-heading"><%= simple_format(h(ex.name)) %></div>
   <div class="panel-body">
     <b>応募条件</b><br>
-    <%= simple_format(h(ex[:requirement])) %>
+    <%= simple_format(h(ex.requirement)) %>
     <hr>
-    <%= simple_format(h(ex[:describe])) %>
+    <%= simple_format(h(ex.description)) %>
   </div>
   <div class="panel-footer">
-    <%= link_to "参加する", new_application_path(experiment: ex[:id]),
+    <%= link_to "参加する", new_application_path(experiment: ex.id),
                 class: 'btn btn-primary' %>
   </div>
 </div>

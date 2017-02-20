@@ -13,31 +13,32 @@ class ApplicationsController < ApplicationController
       return
     end
     @experiment = Experiment.find_by(id: experiment_id)
-    @schedules = @experiment.schedules.all
-    @schedules.each_with_index do |s, idx|
-      @schedules[idx]['start'] = s.datetime
-      @schedules[idx]['end']   = s.datetime + Rational(s.experiment.duration, 24)
+    @schedules = @experiment.schedules.where(participant_id: nil)
+    @times = []
+    @schedules.each do |s|
+      @times.push({ start: s.datetime, end: s.datetime + s.experiment.duration * 3600 })
     end
     @participant = Participant.find_by(id: 1)
   end
 
   def create
     participant_id = current_participant.id
+    experiment_id = params['experiment']
     schedule_ids = params['schedules']
-    if schedule_ids.nil?
-      create_error '実験日時パラメータがありません。'
+    if experiment_id.nil? || schedule_ids.nil?
+      create_error 'パラメータが不足しています。', experiment_id
       return
     end
-    schedules = Schedule.where(id: schedule_ids.map(&:to_i))
+    schedules = Schedule.where(id: schedule_ids)
     applications = []
     schedules.each do |schedule|
       unless schedule.participant_id.nil?
-        create_error '希望日時の一部が既に埋まっています。'
+        create_error '希望日時の一部が既に埋まっています。', experiment_id
         return
       end
-      a = schedule.applications.build(participant_id: participant_id, schedule_id: schedule.id, status: 0)
+      a = schedule.applications.build(participant_id: participant_id, status: 0)
       unless a.valid?
-        create_error '実験日時パラメータに不正なものが含まれています。'
+        create_error '実験日時パラメータに不正なものが含まれています。', experiment_id
         return
       end
       applications.push(a)
@@ -47,10 +48,10 @@ class ApplicationsController < ApplicationController
         applications.each { |a| a.save! }
       end
     rescue
-      create_error '参加申し込み受付中にエラーが発生しました。'
+      create_error '参加申し込み受付中にエラーが発生しました。', experiment_id
       return
     end
-    flash.now[:success] = '参加申込みを受け付けました。'
+    flash[:success] = '参加申込みを受け付けました。'
     redirect_to applications_url
   end
 
@@ -69,9 +70,9 @@ class ApplicationsController < ApplicationController
   private
 
     # create アクションでのエラー
-    def create_error(message)
-      flash.now[:danger] = message
-      redirect_to new_application_url
+    def create_error(message, experiment_id)
+      flash[:danger] = message
+      redirect_to new_application_url + "?experiment=#{experiment_id}"
     end
 
     # ログインしていない場合ログインページへリダイレクトする

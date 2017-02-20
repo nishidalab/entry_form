@@ -3,11 +3,9 @@
 one:
   id: 1
   experiment_id: 1
-  participant_id: 1
   datetime: 2017-02-17 12:00:00
 
 two:
   id: 2
-  experiment_id: 1
-  participant_id: 1
+  experiment_id: 2
   datetime: 2017-02-18 14:00:00
