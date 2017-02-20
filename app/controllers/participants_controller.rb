@@ -21,6 +21,7 @@ class ParticipantsController < ApplicationController
 
   def show
     @participant = current_participant
+    @applications = Application.where(participant_id: @participant.id, status: 0..1)
   end
 
   private

@@ -1,0 +1,39 @@
+// カレンダーに表示する日時
+var events = [
+  <% applications.each do |application| %>
+    <% start_time = application.schedule.datetime %>
+    <% end_time = start_time + application.schedule.experiment.duration * 3600 %>
+    <% title, color = get_title_and_color(application.status, application.schedule.experiment.name) %>
+    {
+      title: '<%= title %>',
+      start: '<%= start_time.to_s %>',
+      end:   '<%= end_time.to_s %>',
+      color: '<%= color %>',
+    },
+  <% end %>
+];
+
+$(function(){
+    // カレンダー要素の削除(「戻る」でのカレンダー重複表示対策)
+    $('#calendar').html('');
+
+    // カレンダーの表示
+    $('#calendar').fullCalendar({
+        // 日本語表記にする
+        lang: 'ja',
+        // イベントソース
+        eventSources: [{ events: events }],
+        // ヘッダーのタイトルとボタン
+        header: {
+            left: 'today prev,next',
+            center: 'title',
+            right: 'agendaWeek month',
+        },
+        // 週・日表示での時間フォーマット
+        slotLabelFormat: 'H:mm',
+        // イベントの時間表示フォーマット(イベント名で時間を指定するため空文字列にする)
+        timeFormat: 'H:mm',
+        // 「終日」を非表示
+        allDaySlot: false,
+    });
+});

@@ -1,5 +1,11 @@
 <% provide(:title, 'マイページ') %>
 <h1><%= yield(:title) %></h1>
-<div class="row">
-  <%= "id: #{@participant.id}, 名前: #{@participant.name}" %>
-</div>
+<div id="calendar"></div>
+<script type="text/javascript">
+  <%= render 'participants/javascripts/show.js', applications: @applications %>
+</script>
+<% if Rails.env.test? %>
+  <% @applications.each do |a| %>
+    <div class='<%= "#{a.schedule.experiment.name}#{a.status}" %>'></div>
+  <% end %>
+<% end %>
