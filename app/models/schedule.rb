@@ -1,12 +1,12 @@
 class Schedule < ApplicationRecord
   has_one :experiment
   has_one :participant
+  has_many :applications
 
   validate :validate_experiment_id
   validate :validate_participant_id
 
   validates :experiment_id, presence: true
-  validates :participant_id, presence: true
   validates :datetime, presence: true
 
 
@@ -22,10 +22,12 @@ class Schedule < ApplicationRecord
 
   # 指定されたparticipant_idのparticipantが存在するかチェック
   def validate_participant_id
-      participant = Participant.find_by_id(participant_id)
+      unless participant_id.nil?
+          participant = Participant.find_by_id(participant_id)
 
-      if !participant
-          errors.add(:participant_id)
+          if !participant
+              errors.add(:participant_id)
+          end
       end
   end
 

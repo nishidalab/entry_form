@@ -22,7 +22,7 @@ class Experiment < ApplicationRecord
   private
   # 指定されたmember_idのmemberが存在するかチェック
   def validate_member_id
-      member = Member.find_by_id(:member_id)
+      member = Member.find_by_id(member_id)
 
       if !member
           errors.add(:member_id)

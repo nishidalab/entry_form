@@ -21,9 +21,9 @@ module SessionsHelper
   # ログインしている被験者を返す。ログインしていないなら nil を返す。
   def current_participant
     if id = session[:participant_id]
-      @participant ||= Participant.find(id)
+      @participant ||= Participant.find_by(id: id)
     elsif id = cookies.signed[:participant_id]
-      participant = Participant.find(id)
+      participant = Participant.find_by(id: id)
       if participant && participant.authenticated?(cookies[:remember_token])
         log_in_participant participant
         @participant = participant
