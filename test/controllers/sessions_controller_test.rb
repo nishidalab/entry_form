@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @participant = participants(:test)
+    @participant = participants(:one)
   end
 
   test "login page should have a link to register page" do

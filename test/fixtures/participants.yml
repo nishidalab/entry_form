@@ -1,11 +1,25 @@
-test:
-  email: "test@example.com"
+one:
+  id: 1
+  email: "one@example.com"
   password_digest: <%= Participant.digest("password") %>
-  name: "test試験"
-  yomi: "てすとしけん"
+  name: "test試験1"
+  yomi: "てすとしけんいち"
   gender: 1
   birth: 1995-01-01
   classification: 1
   grade: 1
   faculty: 1
   address: "京都市左京区吉田本町"
+
+two:
+  id: 2
+  email: "two@example.com"
+  password_digest: <%= Participant.digest("password") %>
+  name: "test試験2"
+  yomi: "てすとしけんに"
+  gender: 2
+  birth: 1992-02-02
+  classification: 2
+  grade: 2
+  faculty: 2
+  address: "地球"

@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ParticipantsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @test = participants(:test)
+    @test = participants(:one)
   end
 
   test "register should get register when not logged in" do

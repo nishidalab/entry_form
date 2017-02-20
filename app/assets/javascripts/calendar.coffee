@@ -3,5 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 # コーヒースクリプトで書かないといけないらしい
-$(document).ready ->
- $('#calendar').fullCalendar()
+# 前ページで読み込まれてしまうのでとりあえずコメントアウトしときます…
+#$(document).ready ->
+# $('#calendar').fullCalendar()

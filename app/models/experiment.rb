@@ -1,5 +1,8 @@
 class Experiment < ApplicationRecord
   belongs_to :member
+  has_many :schedules, dependent: :destroy
+  has_many :applications, dependent: :destroy
+  has_many :participants, through: :applications
 
   validate :validate_member_id
 
@@ -19,7 +22,7 @@ class Experiment < ApplicationRecord
   private
   # 指定されたmember_idのmemberが存在するかチェック
   def validate_member_id
-      member = Member.find_by_id(:member_id)
+      member = Member.find_by_id(member_id)
 
       if !member
           errors.add(:member_id)

@@ -1,5 +1,9 @@
 class Participant < ApplicationRecord
   has_many :schedules
+  has_many :applications, dependent: :destroy
+  has_many :schedules, through: :applications
+  has_many :experiments, through: :schedules
+
   attr_accessor :remember_token
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
