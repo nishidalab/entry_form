@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   root 'static_pages#home'
 
-  # アカウント登録用ページ
+  # アカウント登録用ページ(for 被験者)
   get  '/register', to: 'participants#new'
   post '/register', to: 'participants#create'
 
@@ -23,4 +23,9 @@ Rails.application.routes.draw do
 
   # カレンダー確認ページ
   get   '/calendar', to: 'calendar#index'
+
+  # アカウント登録用ページ(for 実験者)
+  get  '/member/register', to: 'member#new'
+  post '/member/register', to: 'member#create'
+
 end
