@@ -4,7 +4,7 @@
 
 実験へのご応募のためのアカウントを有効化するには、以下のURLへアクセスしてください。
 
-<%= edit_participant_activation_url(@participant.activation_token, email: @participant.email) %>
+<%= activate_url(t: @participant.activation_token, e: @participant.email) %>
 
 ※このメールは送信専用です。このメールに返信をいただきましても対応や回答返信は行っておりません。
 ※ご不明な点は、別途記載の担当者連絡先までお願いいたします。

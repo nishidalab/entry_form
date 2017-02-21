@@ -8,4 +8,10 @@ class ParticipantMailerPreview < ActionMailer::Preview
     ParticipantMailer.account_activation(participant)
   end
 
+  # Preview this email at http://localhost:3000/rails/mailers/participant_mailer/account_activated
+  def account_activated
+    participant = Participant.first
+    ParticipantMailer.account_activated(participant)
+  end
+
 end

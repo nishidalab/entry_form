@@ -8,7 +8,7 @@
 <p>
   実験へのご応募のためのアカウントを有効化するには、以下のURLをクリックしてください。
 </p>
-<% url = edit_participant_activation_url(@participant.activation_token, email: @participant.email) %>
+<% url = activate_url(t: @participant.activation_token, e: @participant.email) %>
 <%= link_to url, url %>
 <br>
 <p>

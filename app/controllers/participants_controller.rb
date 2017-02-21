@@ -44,6 +44,7 @@ class ParticipantsController < ApplicationController
     # ログインしていない場合ログインページへリダイレクトする
     def redirect_to_login
       unless logged_in_participant?
+        store_location
         redirect_to login_url
       end
     end
