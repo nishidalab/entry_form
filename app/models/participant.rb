@@ -4,13 +4,14 @@ class Participant < ApplicationRecord
   has_many :schedules, through: :applications
   has_many :experiments, through: :schedules
 
-  attr_accessor :remember_token
+  attr_accessor :remember_token, :activation_token
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   VALID_YOMI_REGEX = /[ぁ-んー－\s]+/
   has_secure_password
 
   before_save { email.downcase! }
+  before_create :create_activation_token_and_digest
 
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX },
                     uniqueness:  { case_sensitive: false }
@@ -51,6 +52,12 @@ class Participant < ApplicationRecord
   def authenticated?(remember_token)
     return false if remember_digest.nil?
     BCrypt::Password.new(remember_digest).is_password?(remember_token)
+  end
+
+  # 有効化トークンとダイジェストを作成する
+  def create_activation_token_and_digest
+    self.activation_token = Participant.new_token
+    self.activation_digest = Participant.digest(activation_token)
   end
 
   # 渡された文字列のハッシュ値を返す

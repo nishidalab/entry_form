@@ -1,0 +1,2 @@
+class ParticipantActivationsController < ApplicationController
+end

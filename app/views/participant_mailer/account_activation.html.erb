@@ -1,0 +1,17 @@
+<p>
+  <%= @participant.name %> 様
+</p>
+
+<p>
+  京都大学 情報学研究科 西田研究室の実験担当者です。
+</p>
+<p>
+  実験へのご応募のためのアカウントを有効化するには、以下のURLをクリックしてください。
+</p>
+<% url = edit_participant_activation_url(@participant.activation_token, email: @participant.email) %>
+<%= link_to url, url %>
+<br>
+<p>
+  ※このメールは送信専用です。このメールに返信をいただきましても対応や回答返信は行っておりません。<br>
+  ※ご不明な点は、別途記載の担当者連絡先までお願いいたします。
+</p>

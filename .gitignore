@@ -28,3 +28,6 @@ Gemfile.lock
 
 # Ignore db/schema.rb
 db/schema.rb
+
+# Ignore secret settings
+config/settings/*
