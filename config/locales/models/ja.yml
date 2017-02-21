@@ -2,6 +2,7 @@ ja:
   activerecord:
     models:
       participant: 参加者
+      inquiry: お問い合わせ
     attributes:
       participant:
         id: ID
@@ -20,3 +21,11 @@ ja:
         grade: 学年
         faculty: 学部・研究科
         address: 住所
+      inquiry:
+        id: ID
+        created_at: 登録日時
+        updated_at: 更新日時
+        experiment_id: お問い合わせ先(実験)ID
+        participant_id: 参加者ID
+        subject: 件名
+        body: 本文

@@ -1,6 +1,7 @@
 class Participant < ApplicationRecord
   has_many :schedules
   has_many :applications, dependent: :destroy
+  has_many :inquiries, dependent: :destroy
   has_many :schedules, through: :applications
   has_many :experiments, through: :schedules
 
