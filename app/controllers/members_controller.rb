@@ -1,4 +1,4 @@
-class MemberController < ApplicationController
+class MembersController < ApplicationController
 #  before_action :redirect_to_login, only: :show
 #  before_action :redirect_to_mypage, only: [:new, :create]
 
@@ -11,7 +11,7 @@ class MemberController < ApplicationController
         :name, :yomi, :email,
         :password, :password_confirmation))
     if @member.save
-      redirect_to member_url
+#      redirect_to members_login_url
     else
       render 'new'
     end

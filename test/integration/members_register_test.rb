@@ -7,7 +7,7 @@ class MembersRegisterTest < ActionDispatch::IntegrationTest
       post member_register_path, params: { member: {
           name: "", yomi: "", email: "hoge@fuga", password: "foo", password_confirmation: "bar" } }
     end
-    assert_template 'member/new'
+    assert_template 'members/new'
     # TODO google assert_template
     assert_select 'div#error_explanation'
   end

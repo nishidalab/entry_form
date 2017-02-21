@@ -25,8 +25,7 @@ Rails.application.routes.draw do
   get   '/calendar', to: 'calendar#index'
 
   # アカウント登録用ページ(for 実験者)
-  get  '/member/register', to: 'member#new'
-  post '/member/register', to: 'member#create'
-  get  '/member/', to: 'member#show'
+  get  '/member/register', to: 'members#new'
+  post '/member/register', to: 'members#create'
 
 end
