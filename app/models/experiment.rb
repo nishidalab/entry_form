@@ -2,6 +2,7 @@ class Experiment < ApplicationRecord
   belongs_to :member
   has_many :schedules, dependent: :destroy
   has_many :applications, dependent: :destroy
+  has_many :inquiries, dependent: :destroy
   has_many :participants, through: :applications
 
   validate :validate_member_id

@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'sessions/new'
-
   root 'static_pages#home'
 
   # アカウント登録用ページ(for 被験者)
@@ -30,4 +28,10 @@ Rails.application.routes.draw do
 
   # アカウント有効化ページ(for 被験者)
   get '/activate', to: 'participant_activations#edit'
+
+  # 問い合わせフォーム(for 被験者)
+  get  '/inquire',     to: 'inquiries#index'
+  post '/inquire/new', to: 'inquiries#create'
+  get  '/inquire/new', to: 'inquiries#new'
+  get  '/inquire/:id', to: 'inquiries#show', as: 'inquiry'
 end

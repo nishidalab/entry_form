@@ -1,0 +1,15 @@
+one:
+  id: 1
+  subject: 件名1
+  body: 本文1
+  unread: true
+  participant_id: 1
+  experiment_id: 1
+
+two:
+  id: 2
+  subject: 件名2
+  body: 本文2
+  unread: false
+  participant_id: 1
+  experiment_id: 2

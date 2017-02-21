@@ -24,12 +24,14 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_template 'applications/index'
     assert_select "a[href=?]", login_path, count: 0
+    assert_select "a[href=?]", applications_path
     assert_select "a[href=?]", mypage_path
     assert_select "a[href=?]", logout_path
     delete logout_path
     assert_redirected_to login_url
     follow_redirect!
     assert_select "a[href=?]", login_path
+    assert_select "a[href=?]", applications_path, count: 0
     assert_select "a[href=?]", mypage_path, count: 0
     assert_select "a[href=?]", logout_path, count: 0
   end

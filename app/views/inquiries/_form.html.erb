@@ -1,0 +1,40 @@
+<%= form_for(inquiry, url: inquire_new_path) do |f| %>
+  <%= render 'shared/error_messages', object: f.object %>
+
+  <%= f.hidden_field :confirming %>
+
+  <% if inquiry.confirming.blank? %>
+    <%= f.label :experiment_id, "問い合わせ先" %>
+    <br>
+    <%= f.select :experiment_id,
+                 options_for_select(experiments, selected: inquiry.experiment_id), class: 'form-control' %>
+    <br>
+    <%= f.label :subject, "件名" %>
+    <%= f.text_field :subject, class: 'form-control' %>
+    <%= f.label :body, "本文" %>
+    <%= f.text_area :body, class: 'form-control' %>
+    <%= submit_tag "内容を確認する", class: "form-control btn btn-primary" %>
+
+  <% else %>
+    <table>
+      <tr>
+        <th>問い合わせ先</th>
+        <td><%= name %></td>
+      </tr>
+      <tr>
+        <th>件名</th>
+        <td><%= inquiry.subject %></td>
+      </tr>
+      <tr>
+        <th>本文</th>
+        <td><%= inquiry.body %></td>
+      </tr>
+    </table>
+    <%= f.hidden_field :experiment_id %>
+    <%= f.hidden_field :subject %>
+    <%= f.hidden_field :body %>
+    <br>
+    <p>以上の内容で問い合わせをします。</p>
+    <%= submit_tag "送信する", class: "form-control btn btn-primary" %>
+  <% end %>
+<% end %>

@@ -1,0 +1,25 @@
+<% provide(:title, "問い合わせ ##{@inquiry.id}") %>
+<h1><%= yield(:title) %></h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <table>
+      <tr>
+        <th>問い合わせした人</th>
+        <td><%= @participant.name %></td>
+      </tr>
+      <tr>
+        <th>問い合わせ先</th>
+        <td><%= @experiment.name %></td>
+      </tr>
+      <tr>
+        <th>件名</th>
+        <td><%= @inquiry.subject %></td>
+      </tr>
+      <tr>
+        <th>本文</th>
+        <td><%= @inquiry.body %></td>
+      </tr>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<% provide(:title, '問い合わせフォーム') %>
+<h1><%= yield(:title) %></h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= render partial: 'form',
+               locals: { inquiry: @inquiry, experiments: @experiments, name: @experiment_name } %>
+  </div>
+</div>
