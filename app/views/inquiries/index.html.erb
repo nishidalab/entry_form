@@ -1,2 +1,16 @@
-<h1>Inquiries#index</h1>
-<p>Find me in app/views/inquiries/index.html.erb</p>
+<% provide(:title, '送信メッセージ一覧') %>
+<h1><%= yield(:title)%></h1>
+<% @inquiries.each do |q| %>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <p><%= h(q.experiment.name) %></p>
+        <h3><%= h(q.subject) %></h3>
+      </div>
+      <div class="panel-body">
+        <p><%= h(q.body) %></p>
+      </div>
+      <div class="panel-footer">
+        <p>送信日時: <%= h(q.created_at) %></p>
+      </div>
+    </div>
+<% end %>

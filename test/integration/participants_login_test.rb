@@ -11,7 +11,7 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     post login_path params: { session: { email: "", password: "" } }
     assert_template 'sessions/new'
     assert_not flash.empty?
-    get root_path
+    get login_path
     assert flash.empty?
     assert_select "a[href=?]", login_path
     assert_select "a[href=?]", mypage_path, count: 0
@@ -25,6 +25,8 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     assert_template 'applications/index'
     assert_select "a[href=?]", login_path, count: 0
     assert_select "a[href=?]", applications_path
+    assert_select "a[href=?]", inquiries_new_path
+    assert_select "a[href=?]", inquiries_path
     assert_select "a[href=?]", mypage_path
     assert_select "a[href=?]", logout_path
     delete logout_path
@@ -32,6 +34,8 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select "a[href=?]", login_path
     assert_select "a[href=?]", applications_path, count: 0
+    assert_select "a[href=?]", inquiries_new_path, count: 0
+    assert_select "a[href=?]", inquiries_path, count: 0
     assert_select "a[href=?]", mypage_path, count: 0
     assert_select "a[href=?]", logout_path, count: 0
   end

@@ -30,8 +30,8 @@ Rails.application.routes.draw do
   get '/activate', to: 'participant_activations#edit'
 
   # 問い合わせフォーム(for 被験者)
-  get  '/inquire',     to: 'inquiries#index'
-  post '/inquire/new', to: 'inquiries#create'
-  get  '/inquire/new', to: 'inquiries#new'
-  get  '/inquire/:id', to: 'inquiries#show', as: 'inquiry'
+  get  '/inquiries',     to: 'inquiries#index'
+  post '/inquiries/new', to: 'inquiries#create'
+  get  '/inquiries/new', to: 'inquiries#new'
+  #get  '/inquire/:id', to: 'inquiries#show', as: 'inquiry'
 end

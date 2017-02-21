@@ -2,12 +2,13 @@ class InquiriesController < ApplicationController
   before_action :redirect_to_login
 
   def index
+    @inquiries = current_participant.inquiries.order("created_at DESC")
   end
 
   def show
     @inquiry = Inquiry.find_by_id(params[:id])
-    if @inquiry.nil?
-      redirect_to inquire_url
+    if @inquiry.nil? || current_participant != @inquiry.participant
+      redirect_to inquiries_url
       return
     end
     @experiment = @inquiry.experiment
@@ -16,7 +17,7 @@ class InquiriesController < ApplicationController
 
   def new
     @experiments = Experiment.all.map { |e| ["#{e.name}", e.id] }
-    @inquiry = Inquiry.new(participant_id: current_participant.id, experiment_id: params['experiment'])
+    @inquiry = Inquiry.new(participant_id: current_participant.id)
   end
 
   def create
@@ -28,7 +29,7 @@ class InquiriesController < ApplicationController
       if @inquiry.save
         format.html do
           flash[:info] = 'お問い合わせを送信しました。'
-          redirect_to inquiry_url(@inquiry)
+          redirect_to inquiries_url
         end
       else
         @experiment_name = @inquiry.experiment.name unless @inquiry.experiment.nil?

@@ -1,7 +1,7 @@
 one:
   id: 1
   subject: 件名1
-  body: 本文1
+  body: 本文あああ1
   unread: true
   participant_id: 1
   experiment_id: 1
@@ -9,7 +9,15 @@ one:
 two:
   id: 2
   subject: 件名2
-  body: 本文2
+  body: 本文いいい2
   unread: false
   participant_id: 1
   experiment_id: 2
+
+three:
+  id: 3
+  subject: 件名3
+  body: 本文ううう3
+  unread: false
+  participant_id: 2
+  experiment_id: 1
