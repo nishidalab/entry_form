@@ -27,5 +27,6 @@ Rails.application.routes.draw do
   # アカウント登録用ページ(for 実験者)
   get  '/member/register', to: 'member#new'
   post '/member/register', to: 'member#create'
+  get  '/member/', to: 'member#show'
 
 end

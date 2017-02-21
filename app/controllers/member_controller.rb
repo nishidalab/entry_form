@@ -8,10 +8,10 @@ class MemberController < ApplicationController
 
   def create
     @member = Member.new(params.require(:member).permit(
-        :name, :yomi, :gender, :classification, :email,
+        :name, :yomi, :email,
         :password, :password_confirmation))
     if @member.save
-#      redirect_to member_login_url
+      redirect_to member_url
     else
       render 'new'
     end
