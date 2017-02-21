@@ -28,4 +28,6 @@ Rails.application.routes.draw do
   get  '/member/register', to: 'members#new'
   post '/member/register', to: 'members#create'
 
+  # アカウント有効化ページ(for 被験者)
+  get '/activate', to: 'participant_activations#edit'
 end

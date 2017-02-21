@@ -7,9 +7,14 @@ class SessionsController < ApplicationController
   def create
     participant = Participant.find_by(email: params[:session][:email].downcase)
     if participant && participant.authenticate(params[:session][:password])
-      log_in_participant participant
-      params[:session][:remember_me] == '1' ? remember_participant(participant) : forget_participant(participant)
-      redirect_to mypage_url
+      if participant.activated?
+        log_in_participant participant
+        params[:session][:remember_me] == '1' ? remember_participant(participant) : forget_participant(participant)
+        redirect_back_or applications_url
+      else
+        flash[:warning] = 'アカウントが有効化されていません。メールを確認してください。'
+        redirect_to login_url
+      end
     else
       flash.now[:danger] = 'メールアドレスかパスワードが違います。'
       render 'new'

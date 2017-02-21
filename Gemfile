@@ -52,3 +52,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # カレンダー表示
 gem 'fullcalendar-rails', '3.1.0.0'
 gem 'momentjs-rails', '2.17.1'
+
+# 秘密情報を入れとくやつ
+gem 'config', '1.4.0'

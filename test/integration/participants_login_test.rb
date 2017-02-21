@@ -22,7 +22,7 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     get login_path
     log_in_as_participant @participant
     follow_redirect!
-    assert_template 'participants/show'
+    assert_template 'applications/index'
     assert_select "a[href=?]", login_path, count: 0
     assert_select "a[href=?]", mypage_path
     assert_select "a[href=?]", logout_path

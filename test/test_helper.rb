@@ -15,4 +15,9 @@ class ActionDispatch::IntegrationTest
                                           password: password,
                                           remember_me: remember_me } }
   end
+
+  # テスト被験者がログイン中の場合に true を返す
+  def is_logged_in_participant?
+    !session[:participant_id].nil?
+  end
 end

@@ -32,7 +32,9 @@ Participant.create!([
     classification: 1,
     grade: 3,
     faculty: 1,
-    address: "百万遍"
+    address: "百万遍",
+    activated: true,
+    activated_at: DateTime.now,
   },
   { email: "satoshi@b.c",
     password: 'password',
@@ -44,7 +46,9 @@ Participant.create!([
     classification: 2,
     grade: 1,
     faculty: 2,
-    address: "出町柳"
+    address: "出町柳",
+    activated: true,
+    activated_at: DateTime.now,
   },
   { email: "rika@b.c",
     password: 'password',
@@ -56,7 +60,9 @@ Participant.create!([
     classification: 2,
     grade: 1,
     faculty: 1,
-    address: "元田中"
+    address: "元田中",
+    activated: true,
+    activated_at: DateTime.now,
   },
 ])
 
@@ -124,7 +130,6 @@ experiments = Experiment.all
 participants = Participant.all
 Schedule.create!([
   { experiment_id: experiments[0].id,
-    participant_id: nil,
     datetime: DateTime.new(2017, 2, 24, 13, 0, 0, "+0900"),
   },
   { experiment_id: experiments[1].id,

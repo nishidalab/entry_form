@@ -13,6 +13,8 @@ class ParticipantsController < ApplicationController
         :name, :yomi, :gender, :classification, :grade, :faculty, :address, :birth, :email,
         :password, :password_confirmation))
     if @participant.save
+      ParticipantMailer.account_activation(@participant).deliver_now
+      flash[:info] = "アカウント有効化のためのメールを送信しました。"
       redirect_to login_url
     else
       render 'new'
@@ -42,6 +44,7 @@ class ParticipantsController < ApplicationController
     # ログインしていない場合ログインページへリダイレクトする
     def redirect_to_login
       unless logged_in_participant?
+        store_location
         redirect_to login_url
       end
     end
