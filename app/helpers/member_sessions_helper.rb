@@ -21,9 +21,9 @@ module MemberSessionsHelper
   # ログインしている実験者を返す。ログインしていないなら nil を返す。
   def current_member
     if id = session[:member_id]
-      @member ||= member.find_by(id: id)
+      @member ||= Member.find_by(id: id)
     elsif id = cookies.signed[:member_id]
-      member = member.find_by(id: id)
+      member = Member.find_by(id: id)
       if member && member.authenticated?(cookies[:remember_token])
         log_in_member member
         @member = member
