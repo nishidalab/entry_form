@@ -34,4 +34,10 @@ Rails.application.routes.draw do
   post '/inquiries/new', to: 'inquiries#create'
   get  '/inquiries/new', to: 'inquiries#new'
   #get  '/inquire/:id', to: 'inquiries#show', as: 'inquiry'
+
+  # パスワードリセットフォーム(for 被験者)
+  get    '/reset',     to: 'participant_password_resets#new'
+  post   '/reset',     to: 'participant_password_resets#create'
+  get    '/reset/:id', to: 'participant_password_resets#edit',   as: 'edit_reset'
+  patch  '/reset/:id', to: 'participant_password_resets#update', as: 'update_reset'
 end

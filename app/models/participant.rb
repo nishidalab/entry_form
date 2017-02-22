@@ -5,7 +5,7 @@ class Participant < ApplicationRecord
   has_many :schedules, through: :applications
   has_many :experiments, through: :schedules
 
-  attr_accessor :remember_token, :activation_token
+  attr_accessor :remember_token, :activation_token, :reset_token
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   VALID_YOMI_REGEX = /[ぁ-んー－\s]+/
@@ -62,10 +62,32 @@ class Participant < ApplicationRecord
     BCrypt::Password.new(activation_digest).is_password?(activation_token)
   end
 
+  # 渡されたパスワードリセットトークンがダイジェストと一致したら true を返す。
+  def reset_authenticated?(reset_token)
+    return false if reset_digest.nil?
+    BCrypt::Password.new(reset_digest).is_password?(reset_token)
+  end
+
   # 有効化トークンとダイジェストを作成する
   def create_activation_token_and_digest
     self.activation_token = Participant.new_token
     self.activation_digest = Participant.digest(activation_token)
+  end
+
+  # パスワード再設定用の属性を設定する
+  def create_reset_digest
+    self.reset_token = Participant.new_token
+    update(reset_digest: Participant.digest(reset_token), reset_sent_at: Time.zone.now)
+  end
+
+  # パスワード再設定のメールを送信する
+  def send_password_reset_email
+    ParticipantMailer.password_reset(self).deliver_now
+  end
+
+  # パスワード再設定の期限が切れている場合は true を返す
+  def password_reset_expired?
+    reset_sent_at < 1.hours.ago
   end
 
   # 渡された文字列のハッシュ値を返す

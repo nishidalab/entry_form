@@ -15,4 +15,9 @@ class ParticipantMailer < ApplicationMailer
     @participant = participant
     mail to: @participant.email, subject: "#{@experiment.name}への応募が完了しました"
   end
+
+  def password_reset(participant)
+    @participant = participant
+    mail to: @participant.email, subject: "パスワードの再設定"
+  end
 end
