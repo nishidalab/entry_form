@@ -6,22 +6,41 @@ class ParticipantsInquireTest < ActionDispatch::IntegrationTest
     @other = participants(:two)
     @max_experiment_id = Experiment.maximum(:id)
     log_in_as_participant @participant
+    ActionMailer::Base.deliveries.clear
   end
 
-  def inquire(experiment_id, body, confirming)
+  def inquire(experiment_id, subject, body, confirming)
     post inquiries_new_path,
-         params: { inquiry: { experiment_id: experiment_id, subject: '', body: body, confirming: confirming } }
+         params: { inquiry: { experiment_id: experiment_id, subject: subject, body: body, confirming: confirming } }
+  end
+
+  test "subject is blank" do
+    assert_no_difference 'Inquiry.count' do
+      inquire(@max_experiment_id, '', '本文', '1')
+    end
+  end
+
+  test "subject is too long" do
+    assert_no_difference 'Inquiry.count' do
+      inquire(@max_experiment_id, 'a' * 256, '本文', '1')
+    end
   end
 
   test "body is blank" do
     assert_no_difference 'Inquiry.count' do
-      inquire(@max_experiment_id, '', '1')
+      inquire(@max_experiment_id, '件名', '', '1')
+    end
+  end
+
+  test "body is too long" do
+    assert_no_difference 'Inquiry.count' do
+      inquire(@max_experiment_id, '件名', 'a' * 1024, '1')
     end
   end
 
   test "experiment_id is invalid" do
     assert_no_difference 'Inquiry.count' do
-      inquire(@max_experiment_id + 1, '内容', '1')
+      inquire(@max_experiment_id + 1, '件名', '本文', '1')
     end
   end
 
@@ -30,12 +49,13 @@ class ParticipantsInquireTest < ActionDispatch::IntegrationTest
     assert_response :success
     # 「内容を確認する」
     assert_no_difference 'Inquiry.count' do
-      inquire(@max_experiment_id, '内容', '')
+      inquire(@max_experiment_id, '件名', '本文', '')
     end
     # 「送信する」
     assert_difference 'Inquiry.count', 1 do
-      inquire(@max_experiment_id, '内容', '1')
+      inquire(@max_experiment_id, '件名', '本文', '1')
     end
+    assert_equal 1, ActionMailer::Base.deliveries.size
     assert_redirected_to inquiries_url
   end
 end

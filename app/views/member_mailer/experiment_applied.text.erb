@@ -1,0 +1,22 @@
+<%= @member.name %> さん
+
+お疲れ様です。
+西田研究室の実験担当者(自動送信)です。
+
+実験への応募があったので連絡差し上げます。
+なるべく早く、承認または拒否ボタンを押して日程調整を行ってください。
+
+【実験名】
+<%= @experiment.name %>
+【希望日時】
+<% @schedules.each do |s| %>
+<%= "#{s.datetime} ～ #{s.datetime + @experiment.duration * 3600}" %>
+<% end %>
+
+(参加者情報)
+【氏名】<%= "#{@participant.name} (#{@participant.yomi})" %>
+【性別】<%= Participant.gender_to_s(@participant.gender) %>
+【生年月日】<%= @participant.birth %>
+
+
+※このメールは送信専用です。

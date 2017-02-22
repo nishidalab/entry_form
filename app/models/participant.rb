@@ -78,4 +78,9 @@ class Participant < ApplicationRecord
   def self.new_token
     SecureRandom.urlsafe_base64
   end
+
+  # 性別番号を文字列に変換する
+  def self.gender_to_s(gender)
+    gender == 1 ? '男性' : '女性'
+  end
 end

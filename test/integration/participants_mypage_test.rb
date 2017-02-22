@@ -17,19 +17,19 @@ class ParticipantsMypageTest < ActionDispatch::IntegrationTest
     assert_select 'div.test', count: 0
 
     # 実験参加申請をする(申請中・確定・拒否を1件ずつ)
-    apply(schedules(:one), 0)
-    apply(schedules(:two), 1)
-    apply(schedules(:three), 2)
+    apply(schedules(:two), 0)
+    apply(schedules(:three), 1)
+    apply(schedules(:four), 2)
     get mypage_path
     assert_template 'participants/show'
 
     # 申請中の予定がカレンダーに表示される
-    assert_select 'div[class=?]', "#{schedules(:one).experiment.name}0"
+    assert_select 'div[class=?]', "#{schedules(:two).experiment.name}0"
 
     # 確定した予定がカレンダーに表示される
-    assert_select 'div[class=?]', "#{schedules(:two).experiment.name}1"
+    assert_select 'div[class=?]', "#{schedules(:three).experiment.name}1"
 
     # 拒否した予定がカレンダーに表示されない
-    assert_select 'div[class=?]', "#{schedules(:three).experiment.name}2", count: 0
+    assert_select 'div[class=?]', "#{schedules(:four).experiment.name}2", count: 0
   end
 end

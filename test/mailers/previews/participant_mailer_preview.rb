@@ -14,4 +14,10 @@ class ParticipantMailerPreview < ActionMailer::Preview
     ParticipantMailer.account_activated(participant)
   end
 
+  # Preview this email at http://localhost:3000/rails/mailers/participant_mailer/experiment_applied
+  def experiment_applied
+    application = Application.first
+    ParticipantMailer.experiment_applied(application.participant, [application.schedule])
+  end
+
 end

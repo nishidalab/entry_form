@@ -55,6 +55,8 @@ class ApplicationsController < ApplicationController
       create_error '参加申し込み受付中にエラーが発生しました。', experiment_id
       return
     end
+    ParticipantMailer.experiment_applied(current_participant, schedules).deliver_now
+    MemberMailer.experiment_applied(current_participant, schedules).deliver_now
     flash[:success] = '参加申込みを受け付けました。'
     redirect_to applications_url
   end
@@ -76,7 +78,7 @@ class ApplicationsController < ApplicationController
     # create アクションでのエラー
     def create_error(message, experiment_id)
       flash[:danger] = message
-      redirect_to new_application_url + "?experiment=#{experiment_id}"
+      redirect_to new_application_url(experiment: experiment_id)
     end
 
     # ログインしていない場合ログインページへリダイレクトする
