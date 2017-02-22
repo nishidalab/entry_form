@@ -55,3 +55,6 @@ gem 'momentjs-rails', '2.17.1'
 
 # 秘密情報を入れとくやつ
 gem 'config', '1.4.0'
+
+# Bootstrap
+gem 'twitter-bootstrap-rails'

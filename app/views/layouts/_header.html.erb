@@ -1,7 +1,15 @@
-<header class="navbar navbar-fixed-top navbar-inverse">
-  <div class="container">
-    <%= link_to "Nishida Lab.", root_path, id: "logo" %>
-    <nav>
+<div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <%= link_to "Nishida Lab.", root_path, id: "logo", class: "navbar-brand" %>
+    </div>
+    <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-right">
         <% if logged_in_participant? %>
           <li><%= link_to "マイページ", mypage_path %></li>
@@ -16,6 +24,6 @@
           <li><%= link_to "ログイン", login_path %></li>
         <% end %>
       </ul>
-    </nav>
+    </div>
   </div>
-</header>
+</div>

@@ -1,0 +1,56 @@
+/* 学年・学部の変更 */
+
+var head_id = "participant_";
+var grade_id = "#" + head_id + "grade";
+var classification_id = "#" + head_id + "classification";
+var faculty_id = "#" + head_id + "faculty";
+
+// 学生区分が変更されたら学年や学部・研究科の選択肢を変える
+function changeGradeFaculty() {
+    // 学年の選択肢変更
+    $(grade_id).children().remove();
+    $(grade_id).append($('<option>').attr({ value: '' }).text('選択してください'));
+    $(grade_id).val('');
+    var classification = $(classification_id).val()
+    var max = 4;
+    if(classification == 2)       max = 2;
+    else if(classification == 3)  max = 3;
+    for(var i = 1; i <= max; i++) {
+        $(grade_id).append($('<option>').attr({ value: i }).text(i));
+    }
+    validation($(grade_id));
+
+    // 学部・研究科の選択肢変更
+    $(faculty_id).children().remove();
+    $(faculty_id).append($('<option>').attr({ value: '' }).text('選択してください'));
+    $(faculty_id).val('');
+    if(classification == 1) {
+        <% faculties.each do |faculty, idx| %>
+        $(faculty_id).append($('<option>').attr({ value: <%= idx %> }).text('<%= faculty %>'));
+        <% end %>
+    }
+    else {
+        <% courses.each do |course, idx| %>
+        $(faculty_id).append($('<option>').attr({ value: <%= idx %> }).text('<%= course %>'));
+        <% end %>
+    }
+    validation($(faculty_id));
+}
+
+// 必須フィールドが入力されていなければ背景を赤くする
+function validation(elm) {
+    if(elm.val() == '') elm.css("background-color","#ffebeb");
+    else                elm.css("background-color","#ffffff");
+}
+
+/* 読み込み終了時に実行 */
+$(function() {
+    $(changeGradeFaculty);
+    $(classification_id).change(changeGradeFaculty);
+    $('.validation').each(function(index, element) {
+        validation($(element));
+        $(element).on('change keyup', function() {
+            validation($(element));
+        });
+    });
+});
