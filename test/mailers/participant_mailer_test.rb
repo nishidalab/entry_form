@@ -52,4 +52,18 @@ class ParticipantMailerTest < ActionMailer::TestCase
       assert_match mypage_url, body
     end
   end
+
+  test "password_reset" do
+    participant = participants(:one)
+    participant.reset_token = Participant.new_token
+    mail = ParticipantMailer.password_reset(participant)
+    assert_equal "パスワードの再設定", mail.subject
+    assert_equal [participant.email], mail.to
+    assert_equal ["no-reply@ii.ist.i.kyoto-u.ac.jp"], mail.from
+    [mail.text_part.body.encoded, mail.html_part.body.encoded].each do |body|
+      assert_match participant.name, body
+      assert_match participant.reset_token, body
+      assert_match CGI.escape(participant.email), body
+    end
+  end
 end

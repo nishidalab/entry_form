@@ -5,9 +5,10 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     @participant = participants(:one)
   end
 
-  test "login page should have a link to register page" do
+  test "login page should have links" do
     get login_path
     assert_response :success
+    assert_select "a[href=?]", reset_path
     assert_select "a[href=?]", register_path
   end
 
