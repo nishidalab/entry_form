@@ -3,9 +3,10 @@ require 'test_helper'
 class ParticipantsApplyTest < ActionDispatch::IntegrationTest
   def setup
     @participant = participants(:one)
-    @schedules = [schedules(:one).id, schedules(:two).id]
-    @experiment_id = schedules(:one).experiment_id
+    @schedules = [schedules(:two).id, schedules(:three).id]
+    @experiment_id = schedules(:two).experiment_id
     @max_schedule_id = Schedule.maximum(:id)
+    ActionMailer::Base.deliveries.clear
   end
 
   def apply(schedules = nil, experiment_id = nil)
@@ -17,16 +18,6 @@ class ParticipantsApplyTest < ActionDispatch::IntegrationTest
   test "should reject when not logged in" do
     apply
     assert_redirected_to login_url
-  end
-
-  test "valid schedules" do
-    log_in_as_participant(@participant)
-    assert_difference 'Application.count', 2 do
-      apply
-    end
-    assert_redirected_to applications_url
-    follow_redirect!
-    assert_select 'div.alert-success'
   end
 
   test "schedule is empty" do
@@ -48,17 +39,18 @@ class ParticipantsApplyTest < ActionDispatch::IntegrationTest
     assert_select 'div.alert-success'
   end
 
-  test "multi apply" do
-    experiment_id = Schedule.find_by_id(@max_schedule_id).experiment.id
+  test "valid apply and multi apply" do
+    experiment_id = schedules(:two).experiment.id
     new_path = new_application_path + "?experiment=#{experiment_id}"
     log_in_as_participant(@participant)
     get applications_path
     assert_select "a[href=?]", new_path
     get new_path
     assert_response :success
-    assert_difference 'Application.count', 1 do
-      apply [@max_schedule_id]
+    assert_difference 'Application.count', 2 do
+      apply [schedules(:two).id, schedules(:three).id], experiment_id
     end
+    assert_equal 2, ActionMailer::Base.deliveries.size
     assert_redirected_to applications_url
     follow_redirect!
     assert_select 'div.alert-success'
@@ -67,9 +59,8 @@ class ParticipantsApplyTest < ActionDispatch::IntegrationTest
     assert_redirected_to applications_url
     follow_redirect!
     assert_no_difference 'Application.count' do
-      apply [@max_schedule_id]
+      apply [schedules(:two).id], experiment_id
     end
-    follow_redirect!
-    assert_select 'div.alert-danger'
+    assert_equal 2, ActionMailer::Base.deliveries.size
   end
 end

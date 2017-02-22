@@ -133,7 +133,7 @@ Schedule.create!([
     datetime: DateTime.new(2017, 2, 24, 13, 0, 0, "+0900"),
   },
   { experiment_id: experiments[1].id,
-    participant_id: participants[0].id,
+    participant_id: nil,
     datetime: DateTime.new(2017, 2, 26, 15, 0, 0, "+0900"),
   },
   { experiment_id: experiments[1].id,
@@ -147,3 +147,20 @@ Schedule.create!([
 ])
 
 Application.delete_all
+schedules = Schedule.all
+Application.create!([
+   { participant_id: participants[0].id,
+     schedule_id: schedules[0].id,
+     status: 0,
+   },
+])
+
+Inquiry.delete_all
+Inquiry.create!([
+    { subject: '実験についての質問',
+      body: 'この実験は楽しいですか？',
+      unread: true,
+      participant_id: participants[0].id,
+      experiment_id: experiments[0].id,
+    },
+])

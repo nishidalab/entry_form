@@ -8,4 +8,11 @@ class ParticipantMailer < ApplicationMailer
     @participant = participant
     mail to: participant.email, subject: "アカウント登録が完了しました"
   end
+
+  def experiment_applied(participant, schedules)
+    @schedules = schedules
+    @experiment = schedules[0].experiment
+    @participant = participant
+    mail to: @participant.email, subject: "#{@experiment.name}への応募が完了しました"
+  end
 end

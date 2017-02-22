@@ -4,7 +4,7 @@ class Inquiry < ApplicationRecord
 
   validate :validate_participant_id
   validate :validate_experiment_id
-  validates :subject, length: { maximum: 255 }
+  validates :subject, length: { maximum: 255 }, presence: true
   validates :body, length: { maximum: 1023 }, presence: true
 
   validates_acceptance_of :confirming

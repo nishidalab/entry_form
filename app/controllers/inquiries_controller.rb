@@ -27,6 +27,7 @@ class InquiriesController < ApplicationController
 
     respond_to do |format|
       if @inquiry.save
+        MemberMailer.inquired(@inquiry).deliver_now
         format.html do
           flash[:info] = 'お問い合わせを送信しました。'
           redirect_to inquiries_url
