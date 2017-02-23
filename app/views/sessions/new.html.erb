@@ -1,37 +1,18 @@
 <% if @user_class == :member  %>
   <% title_str =  "実験者ログイン"%>
-  <% form_for_url = member_login_path %>
-  <% register_link_url = member_register_path %>
+  <% form_for_path = member_login_path %>
+  <% register_link_path = member_register_path %>
 <% elsif @user_class == :participant %>
-  <% title_str =  "実験参加者ログイン"%>
-  <% form_for_url = login_path %>
-  <% register_link_url = register_path %>
+  <% title_str =  "ログイン"%>
+  <% form_for_path = login_path %>
+  <% register_link_path = register_path %>
 <% end %>
 
-<% provide(:title, title_str) %>
-<h1><%= yield(:title) %></h1>
+<% provide(:title, 'ログイン') %>
+<h2><%= yield(:title) %></h2>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <%= form_for(:session, url: form_for_url) do |f| %>
+<p>
+  アカウントをお持ちでない方は<%= link_to 'こちら', register_link_path %>。
+</p>
 
-        <%= f.label :email, "メールアドレス" %>
-        <%= f.email_field :email, class: 'form-control' %>
-
-        <%= f.label :password, "パスワード" %>
-        <%= link_to "(パスワードを忘れた)", reset_path %>
-        <%= f.password_field :password, class: 'form-control' %>
-
-        <div class="checkbox inline">
-          <%= f.label :remember_me, class: "checkbox inline" do %>
-            <%= f.check_box :remember_me %>
-            <span>ログイン状態を保存する</span>
-          <% end %>
-        </div>
-
-        <%= f.submit "ログイン", class: "btn btn-primary" %>
-    <% end %>
-
-    <p><%= link_to "アカウントを作成する", register_link_url %></p>
-  </div>
-</div>
+<%= render partial: 'form', locals: { form_for_path: form_for_path } %>

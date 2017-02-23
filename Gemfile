@@ -57,4 +57,7 @@ gem 'momentjs-rails', '2.17.1'
 gem 'config', '1.4.0'
 
 # Bootstrap
-gem 'twitter-bootstrap-rails'
+gem 'twitter-bootstrap-rails', '4.0.0'
+
+# JQueryが上手く動かないことがあるので
+gem 'jquery-turbolinks', '2.1.0'
