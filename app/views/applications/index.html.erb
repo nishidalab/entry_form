@@ -1,19 +1,23 @@
-<% provide(:title, '実験一覧') %>
-<h1><%= yield(:title)%></h1>
+<% provide(:title, '実験応募') %>
+<h2><%= yield(:title)%></h2>
+<p>
+  現在応募可能な実験の一覧です。
+</p>
 <% @experiments.each do |ex| %>
 <div class="panel panel-primary">
   <div class="panel-heading"><%= simple_format(h(ex.name)) %></div>
   <div class="panel-body">
-    <b>応募条件</b><br>
+    <b>応募条件</b>
     <%= simple_format(h(ex.requirement)) %>
     <hr>
+    <b>実験内容</b>
     <%= simple_format(h(ex.description)) %>
   </div>
   <div class="panel-footer">
     <% if @applied_ids.include?(ex.id) %>
-      <%= link_to "応募済み", '', class: 'btn btn-primary', disabled: true %>
+      <%= button_tag "応募済み", class: 'form-control btn btn-default', disabled: true %>
     <% else %>
-      <%= link_to "参加する", new_application_path(experiment: ex.id), class: 'btn btn-primary' %>
+      <%= link_to "参加する", new_application_path(experiment: ex.id), class: 'form-control btn btn-success' %>
     <% end %>
   </div>
 </div>

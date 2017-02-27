@@ -1,20 +1,72 @@
-<% provide(:title, '実験参加申請') %>
-<h1><%= yield(:title) %></h1>
+<% provide(:title, "#{@experiment.name}応募") %>
+<h2><%= yield(:title) %></h2>
 
 <div class="panel panel-primary">
   <div class="panel-heading"><%= simple_format(h(@experiment.name)) %></div>
   <div class="panel-body">
-    <b>応募条件</b><br>
+    <b>応募条件</b>
     <%= simple_format(h(@experiment.requirement)) %>
     <hr>
+    <b>実験内容</b>
     <%= simple_format(h(@experiment.description)) %>
   </div>
 </div>
 
-<p>希望日時を選択し、「参加申請」をクリックしてください。</p>
-<div id="calendar"></div>
+<p>参加希望日時を以下のカレンダーから選択し、「応募する」をクリック(タップ)してください。</p>
 
-<%= button_tag '参加申請', onclick: "submit('#{applications_path}')", class: "form-control btn btn-primary" %>
+<div class="custom-calendar-wrap custom-calendar-full">
+  <div class="custom-header clearfix">
+    <h3 class="custom-month-year">
+      <span id="custom-year" class="custom-year"></span>
+      <span id="custom-month" class="custom-month"></span>
+      <nav>
+        <span id="custom-prev" class="custom-prev"></span>
+        <span id="custom-next" class="custom-next"></span>
+      </nav>
+    </h3>
+  </div>
+  <div id="calendario" class="fc-calendar-container"></div>
+</div>
+
+<div class="custom-submit">
+  <%= button_tag '応募する', onclick: "submit('#{applications_path}')", class: "form-control btn btn-primary" %>
+</div>
+
+<script type="text/javascript">
+    // 表示データ例
+    var codropsEvents = {
+        '11-23-2012' : '<a href="http://tympanus.net/codrops/2012/11/23/three-script-updates/">Three Script Updates</a>',
+    };
+
+    $(function() {
+        var cal = $('#calendario').calendario({
+                weeks: ['日', '月', '火', '水', '木', '金', '土'],
+                weekabbrs: ['日', '月', '火', '水', '木', '金', '土'],
+                months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                monthabbrs: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                zone: '+09:00',
+                fillEmpty: false,
+                caldata: codropsEvents    // 表示データ
+            }),
+            $year = $( '#custom-year' ).html( cal.getYear() + '年' );
+            $month = $( '#custom-month' ).html( cal.getMonthName() ),
+        $( '#custom-next' ).on( 'click', function() {
+            cal.gotoNextMonth( updateMonthYear );
+        } );
+        $( '#custom-prev' ).on( 'click', function() {
+            cal.gotoPreviousMonth( updateMonthYear );
+        } );
+
+        function updateMonthYear() {
+            $year.html( cal.getYear() + '年' );
+            $month.html( cal.getMonthName() );
+        }
+    });
+</script>
+
+<!--
+
+<div id="calendar"></div>
 
 <script type="text/javascript">
   // カレンダーに表示する日時候補
@@ -91,3 +143,4 @@
     });
   }
 </script>
+-->
