@@ -12,9 +12,9 @@ Rails.application.routes.draw do
   put   '/mypage/edit', to: 'participants#update'
 
   # 認証ページ(for 実験参加者)
-  get    '/login',  to: 'sessions#new'
-  post   '/login',  to: 'sessions#create'
-  delete '/logout', to: 'sessions#destroy'
+  get    '/login',  to: 'sessions#new_participant'
+  post   '/login',  to: 'sessions#create_participant'
+  delete '/logout', to: 'sessions#destroy_participant'
 
   # 実験応募ページ
   resources :applications
@@ -48,8 +48,8 @@ Rails.application.routes.draw do
   put   '/member/mypage/edit', to: 'members#update'
 
   # 認証ページ(for 実験者)
-  get    'member/login',  to: 'member_sessions#new'
-  post   'member/login',  to: 'member_sessions#create'
-  delete 'member/logout', to: 'member_sessions#destroy'
+  get    'member/login',  to: 'sessions#new_member'
+  post   'member/login',  to: 'sessions#create_member'
+  delete 'member/logout', to: 'sessions#destroy_member'
 
 end

@@ -1,15 +1,33 @@
 class SessionsController < ApplicationController
-  before_action :logged_in, only: [:new, :create]
+  before_action :logged_in, only: [:new_participant, :new_member, :create_participant, :create_member]
 
-  def new
+  def new_participant
+    new('Participant', :participant)
   end
 
-  def create
-    participant = Participant.find_by(email: params[:session][:email].downcase)
-    if participant && participant.authenticate(params[:session][:password])
-      if participant.activated?
-        log_in_participant participant
-        params[:session][:remember_me] == '1' ? remember_participant(participant) : forget_participant(participant)
+  def new_member
+    new('Member', :member)
+  end
+
+  def new(model_class, user_classification)
+    @user_class = user_classification
+    render 'new'
+  end
+
+  def create_participant
+    create('Participant', :participant)
+  end
+
+  def create_member
+    create('Member', :member)
+  end
+
+  def create(model_class, user_classification)
+    user = Object.const_get(model_class).find_by(email: params[:session][:email].downcase)
+    if user && user.authenticate(params[:session][:password])
+      if user_classification == :member || user.activated?
+        self.send("log_in_#{user_classification}", user)
+        params[:session][:remember_me] == '1' ? self.send("remember_#{user_classification}", user) : self.send("forget_#{user_classification}", user)
         redirect_back_or applications_url
       else
         flash[:warning] = 'アカウントが有効化されていません。メールを確認してください。'
@@ -21,8 +39,16 @@ class SessionsController < ApplicationController
     end
   end
 
-  def destroy
-    log_out_participant if logged_in_participant?
+  def destroy_participant
+    destroy('Participant', :participant)
+  end
+
+  def destroy_member
+    destroy('Member', :member)
+  end
+
+  def destroy(model_class, user_classification)
+    self.send("log_out_#{user_classification}") if self.send("logged_in_#{user_classification}?")
     redirect_to login_url
   end
 
@@ -32,6 +58,8 @@ class SessionsController < ApplicationController
     def logged_in
       if logged_in_participant?
         redirect_to mypage_url
+      elsif logged_in_member?
+        redirect_to member_mypage_url
       end
     end
 end
