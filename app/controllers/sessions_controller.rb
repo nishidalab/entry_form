@@ -28,10 +28,14 @@ class SessionsController < ApplicationController
       if user_classification == :member || user.activated?
         self.send("log_in_#{user_classification}", user)
         params[:session][:remember_me] == '1' ? self.send("remember_#{user_classification}", user) : self.send("forget_#{user_classification}", user)
-        redirect_back_or applications_url
+        if user_classification == :participant
+          redirect_back_or applications_url
+        elsif user_classification == :member
+          redirect_to member_mypage_path
+        end
       else
         flash[:warning] = 'アカウントが有効化されていません。メールを確認してください。'
-        redirect_to login_url
+        redirect_to eval("#{user_classification}_login_path")
       end
     else
       flash.now[:danger] = 'メールアドレスかパスワードが違います。'

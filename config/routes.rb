@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get    '/login',  to: 'sessions#new_participant'
   post   '/login',  to: 'sessions#create_participant'
   delete '/logout', to: 'sessions#destroy_participant'
+  get    '/participant/login', to: redirect('/login')
 
   # 実験応募ページ
   resources :applications
