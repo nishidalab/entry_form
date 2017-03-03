@@ -53,7 +53,7 @@ class SessionsController < ApplicationController
 
   def destroy(model_class, user_classification)
     self.send("log_out_#{user_classification}") if self.send("logged_in_#{user_classification}?")
-    redirect_to login_url
+    redirect_to self.send("#{user_classification}_login_url")
   end
 
   private

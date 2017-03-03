@@ -49,8 +49,8 @@ Rails.application.routes.draw do
   put   '/member/mypage/edit', to: 'members#update'
 
   # 認証ページ(for 実験者)
-  get    'member/login',  to: 'sessions#new_member'
-  post   'member/login',  to: 'sessions#create_member'
-  delete 'member/logout', to: 'sessions#destroy_member'
+  get    '/member/login',  to: 'sessions#new_member'
+  post   '/member/login',  to: 'sessions#create_member'
+  delete '/member/logout', to: 'sessions#destroy_member'
 
 end

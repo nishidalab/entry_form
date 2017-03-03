@@ -30,6 +30,8 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", mypage_path
     assert_select "a[href=?]", logout_path
     delete logout_path
+    assert_redirected_to participant_login_url
+    follow_redirect!
     assert_redirected_to login_url
     follow_redirect!
     assert_select "a[href=?]", login_path
