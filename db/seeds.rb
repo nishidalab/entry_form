@@ -133,7 +133,6 @@ Schedule.create!([
     datetime: DateTime.new(2017, 2, 24, 13, 0, 0, "+0900"),
   },
   { experiment_id: experiments[1].id,
-    participant_id: nil,
     datetime: DateTime.new(2017, 2, 26, 15, 0, 0, "+0900"),
   },
   { experiment_id: experiments[1].id,
@@ -143,6 +142,9 @@ Schedule.create!([
   { experiment_id: experiments[2].id,
     participant_id: participants[2].id,
     datetime: DateTime.new(2017, 1, 27, 9, 0, 0, "+0900"),
+  },
+  { experiment_id: experiments[1].id,
+    datetime: DateTime.new(2017, 2, 25, 10, 0, 0, "+0900"),
   },
 ])
 

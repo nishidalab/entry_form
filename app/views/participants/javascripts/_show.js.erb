@@ -1,39 +1,61 @@
-// カレンダーに表示する日時
-var events = [
-  <% applications.each do |application| %>
-    <% start_time = application.schedule.datetime %>
-    <% end_time = start_time + application.schedule.experiment.duration * 3600 %>
-    <% title, color = get_title_and_color(application.status, application.schedule.experiment.name) %>
-    {
-      title: '<%= title %>',
-      start: '<%= start_time.to_s %>',
-      end:   '<%= end_time.to_s %>',
-      color: '<%= color %>',
-    },
-  <% end %>
+// コントローラから渡されるイベント情報
+var schedules = [
+    <% applications.each_with_index do |application| %>
+        <% start_time = application.schedule.datetime %>
+        <% end_time = start_time + application.schedule.experiment.duration * 3600 %>
+        {
+            date:     '<%= application.schedule.datetime.strftime('%m-%d-%Y') %>',
+            title:    '<%= get_title(application.status, application.schedule.experiment.name) %>',
+            start:    '<%= application.schedule.datetime.to_s(:time) %>',
+            end:      '<%= (start_time + application.schedule.experiment.duration * 3600).to_s(:time) %>',
+        },
+    <% end %>
 ];
 
-$(function(){
+// カレンダーに表示するイベント情報を日付ごとにまとめる
+var dated_schedules = (function() {
+    var ret = {};
+    for(var s of schedules) {
+        var e = {
+            content:
+            '<button type="button" disabled="true" class="form-control btn btn-default">' + s.title + '</button>',
+            startTime: s.start,
+            endTime:   s.end,
+        };
+        if(ret[s.date]) {
+            ret[s.date].push(e);
+        }
+        else {
+            ret[s.date] = [e];
+        }
+    }
+    return ret;
+})();
+
+$(function() {
     // カレンダー要素の削除(「戻る」でのカレンダー重複表示対策)
     $('#calendar').html('');
 
-    // カレンダーの表示
-    $('#calendar').fullCalendar({
-        // 日本語表記にする
-        lang: 'ja',
-        // イベントソース
-        eventSources: [{ events: events }],
-        // ヘッダーのタイトルとボタン
-        header: {
-            left: 'today prev,next',
-            center: 'title',
-            right: 'agendaWeek month',
-        },
-        // 週・日表示での時間フォーマット
-        slotLabelFormat: 'H:mm',
-        // イベントの時間表示フォーマット(イベント名で時間を指定するため空文字列にする)
-        timeFormat: 'H:mm',
-        // 「終日」を非表示
-        allDaySlot: false,
+    var cal = $('#calendar').calendario({
+        weeks: ['日', '月', '火', '水', '木', '金', '土'],
+        weekabbrs: ['日', '月', '火', '水', '木', '金', '土'],
+        months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        monthabbrs: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        zone: '+09:00',
+        fillEmpty: false,
+        caldata: dated_schedules,
+        checkUpdate: false,
     });
+    updateMonthYear();
+    $('#custom-next').on('click', function() {
+        cal.gotoNextMonth(updateMonthYear);
+    });
+    $('#custom-prev').on('click', function() {
+        cal.gotoPreviousMonth(updateMonthYear);
+    });
+
+    function updateMonthYear() {
+        $('#custom-year').html(cal.getYear() + '年');
+        $('#custom-month').html(cal.getMonthName());
+    }
 });

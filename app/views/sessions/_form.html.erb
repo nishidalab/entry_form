@@ -1,0 +1,35 @@
+<%= form_for(:session, url: form_for_path, html: { class: "form-horizontal" }) do |f| %>
+
+  <div class="form-group">
+    <%= f.label :email, "メールアドレス", class: "col-sm-2 control-label" %>
+    <div class="col-sm-8">
+      <%= f.email_field :email, class: 'form-control validation', required: true %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :password, "パスワード", class: "col-sm-2 control-label" %>
+    <div class="col-sm-8">
+      <%= f.password_field :password, class: 'form-control validation', required: true %>
+      <span class="help-block"><%= link_to "(パスワードを忘れた)", reset_path %></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+      <div class="checkbox">
+        <%= f.label :remember_me, class: "checkbox inline" do %>
+          <%= f.check_box :remember_me %>
+          ログイン状態を保存する
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-offset-2 col-sm-8">
+    <%= f.submit "ログイン", class: "form-control btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= javascript_include_tag 'validation' %>

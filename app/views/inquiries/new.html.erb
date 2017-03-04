@@ -1,9 +1,7 @@
-<% provide(:title, '問い合わせフォーム') %>
-<h1><%= yield(:title) %></h1>
+<% provide(:title, 'お問い合わせフォーム') %>
+<h2><%= yield(:title) %></h2>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <%= render partial: 'form',
-               locals: { inquiry: @inquiry, experiments: @experiments, name: @experiment_name } %>
-  </div>
-</div>
+<p>実験担当者に直接メッセージを送信することができます。</p>
+
+<%= render partial: 'form',
+           locals: { inquiry: @inquiry, experiments: @experiments, name: @experiment_name } %>

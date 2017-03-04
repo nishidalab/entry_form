@@ -1,11 +1,7 @@
 <% provide(:title, '実験者登録フォーム') %>
-<h1><%= yield(:title) %></h1>
+<h2><%= yield(:title) %></h2>
 
 <p>実験実施にはアカウント登録が必要です。</p>
+<p>ログインは<%= link_to 'こちら', member_login_path %>。</p>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <%= render partial: 'form' %>
-  </div>
-</div>
-
+<%= render partial: 'form' %>

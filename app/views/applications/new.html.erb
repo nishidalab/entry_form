@@ -1,93 +1,38 @@
-<% provide(:title, '実験参加申請') %>
-<h1><%= yield(:title) %></h1>
+<% provide(:title, "#{@experiment.name}応募") %>
+<h2><%= yield(:title) %></h2>
 
 <div class="panel panel-primary">
   <div class="panel-heading"><%= simple_format(h(@experiment.name)) %></div>
   <div class="panel-body">
-    <b>応募条件</b><br>
+    <b>応募条件</b>
     <%= simple_format(h(@experiment.requirement)) %>
     <hr>
+    <b>実験内容</b>
     <%= simple_format(h(@experiment.description)) %>
   </div>
 </div>
 
-<p>希望日時を選択し、「参加申請」をクリックしてください。</p>
-<div id="calendar"></div>
+<p>参加希望日時を以下のカレンダーから選択し、「応募する」をクリック(タップ)してください。</p>
 
-<%= button_tag '参加申請', onclick: "submit('#{applications_path}')", class: "form-control btn btn-primary" %>
+<div class="custom-calendar-wrap custom-calendar-full">
+  <div class="custom-header clearfix">
+    <h3 class="custom-month-year">
+      <span id="custom-year" class="custom-year"></span>
+      <span id="custom-month" class="custom-month"></span>
+      <nav>
+        <span id="custom-prev" class="custom-prev"></span>
+        <span id="custom-next" class="custom-next"></span>
+      </nav>
+    </h3>
+  </div>
+  <div id="calendar" class="fc-calendar-container"></div>
+</div>
+
+<div class="custom-submit">
+  <%= button_tag '応募する', onclick: "submit(this, '#{applications_path}')", class: "form-control btn btn-primary" %>
+</div>
 
 <script type="text/javascript">
-  // カレンダーに表示する日時候補
-  var events = [
-    <% @schedules.each_with_index do |schedule, idx| %>
-      {
-        index:    '<%= idx %>',
-        id:       '<%= schedule.id %>',
-        selected: false,
-        title:    '<%= "#{@times[idx][:start].to_s(:time)} ～ #{@times[idx][:end].to_s(:time)}" %>',
-        start:    '<%= @times[idx][:start].to_s %>',
-        end:      '<%= @times[idx][:end].to_s %>',
-        color:    'gray',
-      },
-    <% end %>
-  ];
-
-  $(function(){
-    // カレンダー要素の削除(「戻る」でのカレンダー重複表示対策)
-    $('#calendar').html('');
-
-    // カレンダーの表示
-    $('#calendar').fullCalendar({
-      // 日本語表記にする
-      lang: 'ja',
-      // イベントソース
-      eventSources: [{ events: events }],
-      // ヘッダーのタイトルとボタン
-      header: {
-        left: 'today prev,next',
-        center: 'title',
-        right: 'agendaWeek month',
-      },
-      // 週・日表示での時間フォーマット
-      slotLabelFormat: 'H:mm',
-      // イベントの時間表示フォーマット(イベント名で時間を指定するため空文字列にする)
-      timeFormat: ' ',
-      // 「終日」を非表示
-      allDaySlot: false,
-      // イベントクリックイベント
-      eventClick: function(event) {
-        var idx = event.index;
-        events[idx]['selected'] = !events[idx]['selected'];
-        event.selected = events[idx]['selected'];
-        if(event.selected) {
-          event.title = "【選択】" + events[idx]['title'];
-          event.color = '#428bca';
-        }
-        else {
-          event.title = events[idx]['title'];
-          event.color = 'gray';
-        }
-        $(this).text(event.title);
-        $(this).css('background-color', event.color);
-        $(this).css('border-color', event.color);
-      },
-    });
-  });
-
-  function submit (url){
-    var selected = false;
-    events.forEach(function(event) {
-      if(event['selected']) {
-        selected = true;
-      }
-    });
-    if(!selected) {
-      alert("日時を選択してください。");
-      return;
-    }
-    $.post(url, {
-      'experiment': <%= @experiment.id %>,
-      'schedules[]': events.filter(function(e) { return e['selected']; }).map(function(e) { return e['id']; })
-    });
-  }
+    <%= render partial: 'applications/javascripts/new.js',
+               locals: { schedules: @schedules, times: @times, experiment: @experiment } %>
 </script>
