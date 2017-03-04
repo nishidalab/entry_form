@@ -1,1 +1,5 @@
-<% provide(:title, 'マイページ') %>
+<% provide(:title, '実験者マイページ') %>
+<h1><%= yield(:title) %></h1>
+<div class="row">
+  <%= "id: #{@member.id}, 名前: #{@member.name}" %>
+</div>

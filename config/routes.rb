@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'static_pages#home'
 
-  # アカウント登録用ページ(for 被験者)
+  # アカウント登録用ページ(for 実験参加者)
   get  '/register', to: 'participants#new'
   post '/register', to: 'participants#create'
 
@@ -11,10 +11,11 @@ Rails.application.routes.draw do
   patch '/mypage/edit', to: 'participants#update'
   put   '/mypage/edit', to: 'participants#update'
 
-  # 認証ページ
-  get    '/login',  to: 'sessions#new'
-  post   '/login',  to: 'sessions#create'
-  delete '/logout', to: 'sessions#destroy'
+  # 認証ページ(for 実験参加者)
+  get    '/login',  to: 'sessions#new_participant'
+  post   '/login',  to: 'sessions#create_participant'
+  delete '/logout', to: 'sessions#destroy_participant'
+  get    '/participant/login', to: redirect('/login')
 
   # 実験応募ページ
   resources :applications
@@ -40,4 +41,16 @@ Rails.application.routes.draw do
   post   '/reset',     to: 'participant_password_resets#create'
   get    '/reset/:id', to: 'participant_password_resets#edit',   as: 'edit_reset'
   patch  '/reset/:id', to: 'participant_password_resets#update', as: 'update_reset'
+
+  # 実験者マイページ
+  get   '/member/mypage',      to: 'members#show'
+  get   '/member/mypage/edit', to: 'members#edit'
+  patch '/member/mypage/edit', to: 'members#update'
+  put   '/member/mypage/edit', to: 'members#update'
+
+  # 認証ページ(for 実験者)
+  get    '/member/login',  to: 'sessions#new_member'
+  post   '/member/login',  to: 'sessions#create_member'
+  delete '/member/logout', to: 'sessions#destroy_member'
+
 end

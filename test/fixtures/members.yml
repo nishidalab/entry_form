@@ -2,11 +2,10 @@
 
 one:
   id: 1
-  name: MyString
-  yomi: MyString
-  email: MyString
-  password_digest: MyString
-  remember_digest: MyString
+  name: メンバー１
+  yomi: いち
+  email: one@example.com
+  password_digest: <%= Member.digest("password") %>
 
 two:
   id: 2
@@ -14,4 +13,3 @@ two:
   yomi: MyString
   email: MyString
   password_digest: MyString
-  remember_digest: MyString
