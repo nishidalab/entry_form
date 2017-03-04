@@ -2,7 +2,7 @@
 <h2><%= yield(:title) %></h2>
 
 <p>実験参加にはアカウント登録が必要です。</p>
-<p>ログインは<%= link_to 'こちら', login_url %>。</p>
+<p>ログインは<%= link_to 'こちら', login_path %>。</p>
 
 <%= render partial: 'form',
            locals: { classifications: @classifications, faculties: @faculties, courses: @courses } %>
