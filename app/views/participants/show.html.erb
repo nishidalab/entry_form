@@ -1,9 +1,26 @@
 <% provide(:title, 'マイページ') %>
-<h1><%= yield(:title) %></h1>
-<div id="calendar"></div>
+<h2><%= yield(:title) %></h2>
+
+<p><%= @participant.name %> さんの予定表です。</p>
+
+<div class="custom-calendar-wrap custom-calendar-full">
+  <div class="custom-header clearfix">
+    <h3 class="custom-month-year">
+      <span id="custom-year" class="custom-year"></span>
+      <span id="custom-month" class="custom-month"></span>
+      <nav>
+        <span id="custom-prev" class="custom-prev"></span>
+        <span id="custom-next" class="custom-next"></span>
+      </nav>
+    </h3>
+  </div>
+  <div id="calendar" class="fc-calendar-container"></div>
+</div>
+
 <script type="text/javascript">
   <%= render 'participants/javascripts/show.js', applications: @applications %>
 </script>
+
 <% if Rails.env.test? %>
   <% @applications.each do |a| %>
     <div class='<%= "#{a.schedule.experiment.name}#{a.status}" %>'></div>
