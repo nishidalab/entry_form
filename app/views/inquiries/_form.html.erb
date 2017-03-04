@@ -5,7 +5,7 @@
 
   <% if inquiry.confirming.blank? %>
     <div class="form-group">
-      <%= f.label :experiment_id, "問い合わせ先", class: "col-sm-2 control-label" %>
+      <%= f.label :experiment_id, "お問い合わせ先", class: "col-sm-2 control-label" %>
       <div class="col-sm-8">
         <%= f.select :experiment_id,
                      options_for_select(experiments, selected: inquiry.experiment_id), {}, { class: 'form-control' } %>
@@ -35,7 +35,7 @@
   <% else %>
     <table>
       <tr>
-        <th>問い合わせ先</th>
+        <th>お問い合わせ先</th>
         <td><%= name %></td>
       </tr>
       <tr>

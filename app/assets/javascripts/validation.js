@@ -1,8 +1,13 @@
 // 必須フィールドが入力されていなければ背景を赤くする
-function validation(elm) {
-    if(elm.val() == '') elm.css("background-color","#ffebeb");
-    else                elm.css("background-color","#ffffff");
-}
+function validation(element) {
+    if(element.val() == '') element.css("background-color","#ffebeb");
+    else                    element.css("background-color","#ffffff");
+};
+
+// button に onclick="clicked(this)" で二重クリック防止する
+function clicked(element) {
+    element.disabled = true;
+};
 
 // 読み込み終了時に実行
 $(function() {

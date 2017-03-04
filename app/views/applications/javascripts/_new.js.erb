@@ -53,7 +53,7 @@ function scheduleClicked(index) {
 };
 
 // スケジュールを登録する
-function submit (url){
+function submit (elem, url){
     var selected = false;
     schedules.forEach(function(s) {
         if(s['selected']) {
@@ -64,6 +64,7 @@ function submit (url){
         alert("日時を選択してください。");
         return;
     }
+    clicked(elem);
     $.post(url, {
         'experiment': <%= experiment.id %>,
         'schedules[]': schedules.filter(function(e) { return e['selected']; }).map(function(e) { return e['id']; })
