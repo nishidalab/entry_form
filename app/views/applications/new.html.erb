@@ -25,7 +25,7 @@
       </nav>
     </h3>
   </div>
-  <div id="calendario" class="fc-calendar-container"></div>
+  <div id="calendar" class="fc-calendar-container"></div>
 </div>
 
 <div class="custom-submit">
@@ -33,114 +33,6 @@
 </div>
 
 <script type="text/javascript">
-    // 表示データ例
-    var codropsEvents = {
-        '11-23-2012' : '<a href="http://tympanus.net/codrops/2012/11/23/three-script-updates/">Three Script Updates</a>',
-    };
-
-    $(function() {
-        var cal = $('#calendario').calendario({
-                weeks: ['日', '月', '火', '水', '木', '金', '土'],
-                weekabbrs: ['日', '月', '火', '水', '木', '金', '土'],
-                months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-                monthabbrs: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-                zone: '+09:00',
-                fillEmpty: false,
-                caldata: codropsEvents    // 表示データ
-            }),
-            $year = $( '#custom-year' ).html( cal.getYear() + '年' );
-            $month = $( '#custom-month' ).html( cal.getMonthName() ),
-        $( '#custom-next' ).on( 'click', function() {
-            cal.gotoNextMonth( updateMonthYear );
-        } );
-        $( '#custom-prev' ).on( 'click', function() {
-            cal.gotoPreviousMonth( updateMonthYear );
-        } );
-
-        function updateMonthYear() {
-            $year.html( cal.getYear() + '年' );
-            $month.html( cal.getMonthName() );
-        }
-    });
+    <%= render partial: 'applications/javascripts/new.js',
+               locals: { schedules: @schedules, times: @times, experiment: @experiment } %>
 </script>
-
-<!--
-
-<div id="calendar"></div>
-
-<script type="text/javascript">
-  // カレンダーに表示する日時候補
-  var events = [
-    <% @schedules.each_with_index do |schedule, idx| %>
-      {
-        index:    '<%= idx %>',
-        id:       '<%= schedule.id %>',
-        selected: false,
-        title:    '<%= "#{@times[idx][:start].to_s(:time)} ～ #{@times[idx][:end].to_s(:time)}" %>',
-        start:    '<%= @times[idx][:start].to_s %>',
-        end:      '<%= @times[idx][:end].to_s %>',
-        color:    'gray',
-      },
-    <% end %>
-  ];
-
-  $(function(){
-    // カレンダー要素の削除(「戻る」でのカレンダー重複表示対策)
-    $('#calendar').html('');
-
-    // カレンダーの表示
-    $('#calendar').fullCalendar({
-      // 日本語表記にする
-      lang: 'ja',
-      // イベントソース
-      eventSources: [{ events: events }],
-      // ヘッダーのタイトルとボタン
-      header: {
-        left: 'today prev,next',
-        center: 'title',
-        right: 'agendaWeek month',
-      },
-      // 週・日表示での時間フォーマット
-      slotLabelFormat: 'H:mm',
-      // イベントの時間表示フォーマット(イベント名で時間を指定するため空文字列にする)
-      timeFormat: ' ',
-      // 「終日」を非表示
-      allDaySlot: false,
-      // イベントクリックイベント
-      eventClick: function(event) {
-        var idx = event.index;
-        events[idx]['selected'] = !events[idx]['selected'];
-        event.selected = events[idx]['selected'];
-        if(event.selected) {
-          event.title = "【選択】" + events[idx]['title'];
-          event.color = '#428bca';
-        }
-        else {
-          event.title = events[idx]['title'];
-          event.color = 'gray';
-        }
-        $(this).text(event.title);
-        $(this).css('background-color', event.color);
-        $(this).css('border-color', event.color);
-      },
-    });
-  });
-
-  function submit (url){
-    var selected = false;
-    events.forEach(function(event) {
-      if(event['selected']) {
-        selected = true;
-      }
-    });
-    if(!selected) {
-      alert("日時を選択してください。");
-      return;
-    }
-    $.post(url, {
-      'experiment': <%= @experiment.id %>,
-      'schedules[]': events.filter(function(e) { return e['selected']; }).map(function(e) { return e['id']; })
-    });
-  }
-</script>
--->

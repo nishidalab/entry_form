@@ -1,0 +1,99 @@
+// コントローラから渡されるイベント情報
+var schedules = [
+    <% schedules.each_with_index do |schedule, idx| %>
+    {
+        index:    '<%= idx %>',
+        id:       '<%= schedule.id %>',
+        selected: false,
+        date:     '<%= times[idx][:start].strftime('%m-%d-%Y') %>',
+        title:    '<%= "#{times[idx][:start].to_s(:time)} ～ #{times[idx][:end].to_s(:time)}" %>',
+        start:    '<%= times[idx][:start].to_s(:time) %>',
+        end:      '<%= times[idx][:end].to_s(:time) %>',
+    },
+    <% end %>
+];
+
+// カレンダーに表示するイベント情報を日付ごとにまとめる
+var dated_schedules = (function() {
+    var ret = {};
+    for(var s of schedules) {
+        var e = {
+            content:
+                '<button type="button" id="b' + s.index +
+                '" class="form-control btn btn-default" onclick="scheduleClicked(' +
+                s.index + ')">' + s.title + '</button>',
+            startTime: s.start,
+            endTime:   s.end,
+        };
+        if(ret[s.date]) {
+            ret[s.date].push(e);
+        }
+        else {
+            ret[s.date] = [e];
+        }
+    }
+    return ret;
+})();
+
+// スケジュールの選択状態を反転させる
+$(".schedule")
+function scheduleClicked(index) {
+    schedules[index].selected = !schedules[index].selected;
+    var id = '#b' + index
+    if(schedules[index].selected) {
+        $(id).text('【選択】' + schedules[index].title);
+        $(id).removeClass('btn-default');
+        $(id).addClass('btn-primary');
+    }
+    else {
+        $(id).text(schedules[index].title);
+        $(id).removeClass('btn-primary');
+        $(id).addClass('btn-default');
+    }
+};
+
+// スケジュールを登録する
+function submit (url){
+    var selected = false;
+    schedules.forEach(function(s) {
+        if(s['selected']) {
+            selected = true;
+        }
+    });
+    if(!selected) {
+        alert("日時を選択してください。");
+        return;
+    }
+    $.post(url, {
+        'experiment': <%= experiment.id %>,
+        'schedules[]': schedules.filter(function(e) { return e['selected']; }).map(function(e) { return e['id']; })
+    });
+}
+
+$(function() {
+    // カレンダー要素の削除(「戻る」でのカレンダー重複表示対策)
+    $('#calendar').html('');
+
+    var cal = $('#calendar').calendario({
+        weeks: ['日', '月', '火', '水', '木', '金', '土'],
+        weekabbrs: ['日', '月', '火', '水', '木', '金', '土'],
+        months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        monthabbrs: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        zone: '+09:00',
+        fillEmpty: false,
+        caldata: dated_schedules,
+        checkUpdate: false,
+    });
+    updateMonthYear();
+    $('#custom-next').on('click', function() {
+        cal.gotoNextMonth(updateMonthYear);
+    });
+    $('#custom-prev').on('click', function() {
+        cal.gotoPreviousMonth(updateMonthYear);
+    });
+
+    function updateMonthYear() {
+        $('#custom-year').html(cal.getYear() + '年');
+        $('#custom-month').html(cal.getMonthName());
+    }
+});
