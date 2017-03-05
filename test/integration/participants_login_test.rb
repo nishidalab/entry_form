@@ -14,7 +14,11 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     get login_path
     assert flash.empty?
     assert_select "a[href=?]", login_path
+    assert_select "a[href=?]", applications_path, count: 0
+    assert_select "a[href=?]", inquiries_new_path, count: 0
+    assert_select "a[href=?]", inquiries_path, count: 0
     assert_select "a[href=?]", mypage_path, count: 0
+    assert_select "a[href=?]", settings_path, count: 0
     assert_select "a[href=?]", logout_path, count: 0
   end
 
@@ -28,6 +32,7 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", inquiries_new_path
     assert_select "a[href=?]", inquiries_path
     assert_select "a[href=?]", mypage_path
+    assert_select "a[href=?]", settings_path
     assert_select "a[href=?]", logout_path
     delete logout_path
     assert_redirected_to participant_login_url
@@ -39,6 +44,7 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", inquiries_new_path, count: 0
     assert_select "a[href=?]", inquiries_path, count: 0
     assert_select "a[href=?]", mypage_path, count: 0
+    assert_select "a[href=?]", settings_path, count: 0
     assert_select "a[href=?]", logout_path, count: 0
   end
 

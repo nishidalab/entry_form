@@ -26,4 +26,15 @@ class ParticipantsControllerTest < ActionDispatch::IntegrationTest
     get mypage_path
     assert_template 'participants/show'
   end
+
+  test "settings should redirect to login when not logged in" do
+    get settings_path
+    assert_redirected_to login_url
+  end
+
+  test "settings should get mypage when logged in" do
+    log_in_as_participant @test
+    get settings_path
+    assert_template 'participants/edit'
+  end
 end

@@ -26,6 +26,18 @@ class ParticipantsController < ApplicationController
     @applications = Application.where(participant_id: @participant.id, status: 0..1)
   end
 
+  def edit
+
+  end
+
+  def update_profile
+
+  end
+
+  def update_password
+
+  end
+
   private
 
     def get_options_info
