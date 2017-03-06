@@ -5,16 +5,8 @@
 </p>
 
 <%= form_for(:password_reset, url: reset_path, html: { class: "form-horizontal" }) do |f| %>
-  <div class="form-group">
-    <%= f.label :email, "メールアドレス", class: "col-sm-2 control-label" %>
-    <div class="col-sm-8">
-      <%= f.email_field :email, class: 'form-control validation', required: true %>
-    </div>
-  </div>
-
-  <div class="col-sm-offset-2 col-sm-8">
-    <%= f.submit "送信する", class: "form-control btn btn-primary" %>
-  </div>
+  <%= form_email_field f, :email, 'メールアドレス' %>
+  <%= form_submit f, '送信する' %>
 <% end %>
 
 <%= javascript_include_tag 'validation' %>
