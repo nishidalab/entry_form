@@ -5,4 +5,5 @@
 <p>ログインは<%= link_to 'こちら', login_path %>。</p>
 
 <%= render partial: 'form',
-           locals: { classifications: @classifications, faculties: @faculties, courses: @courses } %>
+           locals: { form_for_url: register_path, participant: @participant, classifications: @classifications,
+                     faculties: @faculties, courses: @courses } %>
