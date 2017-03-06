@@ -1,7 +1,7 @@
 class ParticipantActivationsController < ApplicationController
   def edit
     participant = Participant.find_by_email(params[:e])
-    if participant && !participant.activated? && participant.activation_authenticated?(params[:t])
+    if participant && !participant.activated? && participant.activation_authenticated?(params[:t]) && !participant.activation_token_expired?
       participant.update(activated: true, activated_at: DateTime.now)
       log_in_participant participant
       flash[:success] = "本登録が完了しました。"

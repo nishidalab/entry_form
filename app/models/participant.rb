@@ -68,10 +68,11 @@ class Participant < ApplicationRecord
     BCrypt::Password.new(reset_digest).is_password?(reset_token)
   end
 
-  # 有効化トークンとダイジェストを作成する
+  # 有効化トークンとダイジェストを作成する。作成した時刻を記録しておく
   def create_activation_token_and_digest
     self.activation_token = Participant.new_token
     self.activation_digest = Participant.digest(activation_token)
+    self.set_activation_token_at = Time.zone.now
   end
 
   # パスワード再設定用の属性を設定する
@@ -88,6 +89,11 @@ class Participant < ApplicationRecord
   # パスワード再設定の期限が切れている場合は true を返す
   def password_reset_expired?
     reset_sent_at < 1.hours.ago
+  end
+
+  # アカウント有効化トークンの期限が切れている場合は true を返す
+  def activation_token_expired?
+    set_activation_token_at < 24.hours.ago
   end
 
   # 渡された文字列のハッシュ値を返す
