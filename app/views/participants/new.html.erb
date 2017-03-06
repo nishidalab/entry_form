@@ -6,4 +6,4 @@
 
 <%= render partial: 'form',
            locals: { form_for_url: register_path, participant: @participant, classifications: @classifications,
-                     faculties: @faculties, courses: @courses } %>
+                     faculties: @faculties, courses: @courses, submit_label: '仮登録する', type: 'all', show_errors: true } %>

@@ -72,6 +72,18 @@ module ApplicationHelper
     "</div>".html_safe
   end
 
+  # Bootstrap の Panel となる HTML を返します。
+  def panel(type: 'primary', header: nil, body: nil, footer: nil)
+    "<div class='panel panel-#{type}'>".html_safe +
+      (header ?
+        "<div class='panel-heading'>#{header}</div>" : "").html_safe +
+      (body ?
+          "<div class='panel-body'>#{body}</div>" : "").html_safe +
+      (footer ?
+          "<div class='panel-footer'>#{footer}</div>" : "").html_safe +
+    "</div>".html_safe
+  end
+
   private
 
     # form_xxxx (form_text_field や form_text_area) で呼び出されるメソッドです。

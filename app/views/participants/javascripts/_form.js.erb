@@ -41,4 +41,10 @@ function changeGradeFaculty() {
 $(function() {
     $(changeGradeFaculty);
     $(classification_id).change(changeGradeFaculty);
+  <% if participant %>
+    $(classification_id).val(<%= participant.classification %>);
+    changeGradeFaculty();
+    $(faculty_id).val(<%= participant.faculty %>);
+    $(grade_id).val(<%= participant.grade %>);
+  <% end %>
 });
