@@ -9,11 +9,9 @@ Rails.application.routes.draw do
   get   '/mypage',      to: 'participants#show'
 
   # 被験者設定ページ
-  get   '/settings',          to: 'participants#edit'
-  patch '/settings_profile',  to: 'participants#update_profile'
-  put   '/settings_profile',  to: 'participants#update_profile'
-  patch '/settings_password', to: 'participants#update_password'
-  put   '/settings_password', to: 'participants#update_password'
+  get   '/settings',  to: 'participants#edit'
+  patch '/settings',  to: 'participants#update'
+  put   '/settings',  to: 'participants#update'
 
   # 認証ページ(for 実験参加者)
   get    '/login',  to: 'sessions#new_participant'

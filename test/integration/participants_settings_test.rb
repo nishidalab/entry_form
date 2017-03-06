@@ -6,14 +6,14 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
   end
 
   def update_profile(participant)
-    patch settings_profile_path, params: { participant: {
+    patch settings_path, params: { type: 'profile', participant: {
         name: participant.name, yomi: participant.yomi, gender: participant.gender,
         classification: participant.classification, grade: participant.grade, faculty: participant.faculty,
         address: participant.address, birth: participant.birth } }
   end
 
   def update_password(password, password_confirmation)
-    patch settings_password_path, params: { participant: {
+    patch settings_path, params: { type: 'password', participant: {
         password: password, password_confirmation: password_confirmation } }
   end
 
@@ -26,11 +26,11 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     assert_equal name, @participant.name
 
     # settings_password
-    password = @participant.password
-    new_password = "#{password}changed"
-    update_password(new_password, new_password)
+    old_password_digest = @participant.password_digest
+    password = 'hogehoge'
+    update_password(password, password)
     @participant.reload
-    assert_equal password, @participant.password
+    assert_equal old_password_digest, @participant.password_digest
   end
 
   test "invalid profiles" do
@@ -38,36 +38,36 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     @participant.name = ""
     update_profile(@participant)
     assert_template 'participants/edit'
-    assert_select 'div#error_explanation'
+    assert_select 'div#error_explanation', 1
   end
 
   test "invalid password" do
     log_in_as_participant @participant
-    password = ""
+    password = 'hoge'
     update_password(password, password)
     assert_template 'participants/edit'
-    assert_select 'div#error_explanation'
+    assert_select 'div#error_explanation', 1
   end
 
   test "invalid password_confirmation" do
     log_in_as_participant @participant
-    password = "#{@participant.password}changed"
-    password_confirmation = @participant.password
+    password = 'hogehoge'
+    password_confirmation = 'fugafuga'
     update_password(password, password_confirmation)
     assert_template 'participants/edit'
-    assert_select 'div#error_explanation'
+    assert_select 'div#error_explanation', 1
   end
 
   test "valid profiles" do
     log_in_as_participant @participant
-    name = "更新"
-    yomi = "こうしん"
+    name = '更新'
+    yomi = 'こうしん'
     gender = 2
     classification = 2
     grade = 2
     faculty = 2
-    address = "更新"
-    birth = "1990-12-31"
+    address = '更新'
+    birth = '1990-12-31'
     @participant.name = name
     @participant.yomi = yomi
     @participant.gender = gender
@@ -85,16 +85,19 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     assert_equal grade, @participant.grade
     assert_equal faculty, @participant.faculty
     assert_equal address, @participant.address
-    assert_equal birth, @participant.birth
+    assert_equal birth, @participant.birth.strftime('%Y-%m-%d')
     assert_template 'participants/edit'
   end
 
   test "valid password" do
     log_in_as_participant @participant
-    password = "#{@participant.password}changed"
+    password = 'hogehoge'
     update_password(password, password)
-    @participant.reload
-    assert_equal password, @participant.password
     assert_template 'participants/edit'
+
+    # 新しいパスワードでログインできるか？
+    delete logout_path
+    log_in_as_participant @participant, password: password
+    assert is_logged_in_participant?
   end
 end

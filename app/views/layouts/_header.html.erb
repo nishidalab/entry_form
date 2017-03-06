@@ -16,6 +16,7 @@
           <li><%= link_to "実験応募", applications_path %></li>
           <li><%= link_to "お問い合わせ", inquiries_new_path %></li>
           <li><%= link_to "送信履歴", inquiries_path %></li>
+          <li><%= link_to "設定", settings_path %></li>
           <li><%= link_to "ログアウト", logout_path, method: "delete" %></li>
         <% elsif logged_in_member? %>
           <li><%= link_to "マイページ", member_mypage_path %></li>

@@ -1,5 +1,5 @@
 class ParticipantsController < ApplicationController
-  before_action :redirect_to_login, only: :show
+  before_action :redirect_to_login, only: [:show, :edit, :update]
   before_action :redirect_to_mypage, only: [:new, :create]
 
   def new
@@ -27,15 +27,31 @@ class ParticipantsController < ApplicationController
   end
 
   def edit
-
+    get_options_info
+    @participant = current_participant
+    @type = 'all'
   end
 
-  def update_profile
-
-  end
-
-  def update_password
-
+  def update
+    get_options_info
+    @participant = current_participant
+    @type = params[:type]
+    participant_params = nil
+    if @type == 'profile'
+      participant_params = params.require(:participant).permit(
+          :name, :yomi, :gender, :classification, :grade, :faculty, :address, :birth)
+    elsif @type == 'password'
+      participant_params = params.require(:participant).permit(
+          :password, :password_confirmation)
+    end
+    if @participant.update_attributes(participant_params)
+      flash.now[:success] = 'プロフィールを更新しました。' if @type == 'profile'
+      flash.now[:success] = 'アカウント情報を更新しました。' if @type == 'password'
+    else
+      flash.now[:danger] = 'プロフィールの更新に失敗しました。' if @type == 'profile'
+      flash.now[:danger] = 'アカウント情報の更新に失敗しました。' if @type == 'password'
+    end
+    render 'edit'
   end
 
   private
