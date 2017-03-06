@@ -1,104 +1,23 @@
-<%= form_for(@participant, url: register_path, html: { class: "form-horizontal" }) do |f| %>
+<%= form_for(participant, url: form_for_url, html: { class: "form-horizontal" }) do |f| %>
   <%= render 'shared/error_messages', object: f.object %>
 
-  <div class="form-group">
-    <%= f.label :name, "お名前(漢字)", class: "col-sm-2 control-label" %>
-    <div class="col-sm-8">
-      <%= f.text_field :name, class: 'form-control validation', required: true %>
-      <span class="help-block"><span class="label label-default">例</span>西田 豊明</span>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :yomi, "お名前(ひらがな)", class: "col-sm-2 control-label" %>
-    <div class="col-sm-8">
-      <%= f.text_field :yomi, class: 'form-control validation', required: true %>
-      <span class="help-block"><span class="label label-default">例</span>にしだ とよあき</span>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :gender, "性別", class: "col-sm-2 control-label" %>
-    <div class="col-sm-2">
-      <%= f.select :gender, options_for_select({ "男性" => 1, "女性" => 2 }), { prompt: '選択してください' },
-                   { class: 'form-control validation', required: true } %>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :classification, "学生区分", class: "col-sm-2 control-label" %>
-    <div class="col-sm-4">
-      <%= f.select :classification, options_for_select(@classifications), { prompt: '選択してください' },
-                   { class: 'form-control validation', required: true } %>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :grade, "学年", class: "col-sm-2 control-label" %>
-    <div class="col-sm-4">
-      <%= f.select :grade, '', {}, { class: 'form-control validation', required: true } %>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :faculty, "学部・研究科", class: "col-sm-2 control-label" %>
-    <div class="col-sm-4">
-      <%= f.select :faculty, '', {}, { class: 'form-control validation', required: true } %>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :address, "住所", class: "col-sm-2 control-label" %>
-    <div class="col-sm-8">
-      <%= f.text_field :address, class: 'form-control validation', required: true %>
-      <span class="help-block"><span class="label label-default">例</span>京都市左京区吉田本町</span>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :birth, "生年月日", class: "col-sm-2 control-label" %>
-    <div class="col-sm-4">
-      <%= raw sprintf(
-            f.date_select(
-              :birth,
-              { start_year: 1970, end_year: Date.today.year - 17, use_month_numbers: true,
-                prompt: '----', date_separator: '%s' },
-              { class: 'form-control bootstrap-date validation', required: true }),
-                '年 ', '月 ') + '日' %>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :email, "メールアドレス", class: "col-sm-2 control-label" %>
-    <div class="col-sm-8">
-      <%= f.email_field :email, class: 'form-control validation', required: true %>
-      <span class="help-block">ログインや連絡に用いるため、普段お使いのメールアドレスをご入力ください</span>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :password, "パスワード", class: "col-sm-2 control-label" %>
-    <div class="col-sm-8">
-      <%= f.password_field :password, class: 'form-control validation', required: true %>
-      <span class="help-block">半角英数字と記号を組み合わせて、8文字以上の推測されにくいものをご入力ください</span>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <%= f.label :password_confirmation, "パスワード(確認)", class: "col-sm-2 control-label" %>
-    <div class="col-sm-8">
-      <%= f.password_field :password_confirmation, class: 'form-control validation', required: true %>
-    </div>
-  </div>
-
-  <div class="col-sm-offset-2 col-sm-8">
-    <%= submit_tag "仮登録する", class: "form-control btn btn-primary" %>
-  </div>
+  <%= form_text_field f, :name, 'お名前(漢字)', example: '西田 豊明' %>
+  <%= form_text_field f, :yomi, 'お名前(ひらがな)', example: 'にしだ とよあき' %>
+  <%= form_select f, :gender, '性別', { '男性' => 1, '女性' => 2 }, size: 2 %>
+  <%= form_select f, :classification, '学生区分', classifications %>
+  <%= form_select f, :grade, '学年', {} %>
+  <%= form_select f, :faculty, '学部・研究科', {} %>
+  <%= form_text_field f, :address, '住所', example: '京都市左京区吉田本町' %>
+  <%= form_date f, :birth, '生年月日', 1970, Date.today.year - 17 %>
+  <%= form_email_field f, :email, 'メールアドレス', description: 'ログインや連絡に用いるため、普段お使いのメールアドレスをご入力ください。' %>
+  <%= form_password_field f, :password, 'パスワード', description: '半角英数字と記号を組み合わせて、8文字以上の推測されにくいものをご入力ください。' %>
+  <%= form_password_field f, :password_confirmation, 'パスワード(確認)' %>
+  <%= form_submit f, '仮登録する' %>
 <% end %>
 
 <script type="text/javascript">
   <%= render partial: 'participants/javascripts/form.js',
-             locals: { faculties: @faculties, courses: @courses } %>
+             locals: { faculties: faculties, courses: courses } %>
 </script>
 
 <%= javascript_include_tag 'validation' %>
