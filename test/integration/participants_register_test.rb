@@ -36,6 +36,12 @@ class ParticipantsRegisterTest < ActionDispatch::IntegrationTest
     # トークンは正しいがメールアドレスが無効な場合
     get activate_url(t: participant.activation_token, e: "invalid")
     assert_not is_logged_in_participant?
+    # トークンの有効期限が切れている場合
+    participant.update(set_activation_token_at: participant.set_activation_token_at - 86401)
+    get activate_url(t: participant.activation_token, e: participant.email)
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    assert_redirected_to login_url
+    participant.update(set_activation_token_at: participant.set_activation_token_at + 86401)
     # 両方正しい場合
     get activate_url(t: participant.activation_token, e: participant.email)
     assert_equal 2, ActionMailer::Base.deliveries.size
