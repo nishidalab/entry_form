@@ -18,11 +18,15 @@
 </div>
 
 <script type="text/javascript">
-  <%= render 'participants/javascripts/show.js', applications: @applications %>
+  <%= render partial: 'participants/javascripts/show.js',
+             locals: { applications: @applications, events: @events } %>
 </script>
 
 <% if Rails.env.test? %>
   <% @applications.each do |a| %>
     <div class='<%= "#{a.schedule.experiment.name}#{a.status}" %>'></div>
+  <% end %>
+  <% @events.each do |e| %>
+      <div class='<%= "#{e.name}#{e.experiment.name}" %>'></div>
   <% end %>
 <% end %>
