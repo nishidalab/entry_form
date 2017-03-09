@@ -4,6 +4,7 @@ class Experiment < ApplicationRecord
   has_many :applications, dependent: :destroy
   has_many :inquiries, dependent: :destroy
   has_many :participants, through: :applications
+  has_many :events, dependent: :destroy
 
   validate :validate_member_id
 

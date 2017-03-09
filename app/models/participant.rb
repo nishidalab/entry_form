@@ -4,6 +4,7 @@ class Participant < ApplicationRecord
   has_many :inquiries, dependent: :destroy
   has_many :schedules, through: :applications
   has_many :experiments, through: :schedules
+  has_many :events, dependent: :destroy
 
   attr_accessor :remember_token, :activation_token, :reset_token
 
