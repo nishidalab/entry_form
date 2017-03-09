@@ -2,12 +2,12 @@
 var schedules = [
     <% applications.each_with_index do |application| %>
         <% start_time = application.schedule.datetime %>
-        <% end_time = start_time + application.schedule.experiment.duration * 3600 %>
+        <% end_time = start_time + application.schedule.experiment.duration * 60 %>
         {
             date:     '<%= application.schedule.datetime.strftime('%m-%d-%Y') %>',
             title:    '<%= get_title(application.status, application.schedule.experiment.name) %>',
             start:    '<%= application.schedule.datetime.to_s(:time) %>',
-            end:      '<%= (start_time + application.schedule.experiment.duration * 3600).to_s(:time) %>',
+            end:      '<%= (start_time + application.schedule.experiment.duration * 60).to_s(:time) %>',
         },
     <% end %>
 ];

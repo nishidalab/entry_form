@@ -38,7 +38,7 @@ class ParticipantMailerTest < ActionMailer::TestCase
     schedule = application.schedule
     experiment = schedule.experiment
     start_at = schedule.datetime
-    end_at = schedule.datetime + experiment.duration * 3600
+    end_at = schedule.datetime + experiment.duration * 60
     mail = ParticipantMailer.experiment_applied(participant, [schedule])
     assert_equal "#{experiment.name}への応募が完了しました", mail.subject
     assert_equal [participant.email], mail.to
