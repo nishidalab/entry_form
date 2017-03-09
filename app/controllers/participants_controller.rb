@@ -1,5 +1,5 @@
 class ParticipantsController < ApplicationController
-  before_action :redirect_to_login, only: [:show, :edit, :update]
+  before_action :redirect_to_login, only: [:show, :edit, :update, :destroy]
   before_action :redirect_to_mypage, only: [:new, :create]
 
   def new
@@ -55,7 +55,14 @@ class ParticipantsController < ApplicationController
   end
 
   def destroy
-
+    @participant = current_participant
+    if @participant.update_attributes(deactivated: true)
+      flash[:success] = 'アカウントを削除しました。'
+    else
+      flash[:danger] = 'アカウントの削除に失敗しました。'
+    end
+    log_out_participant
+    redirect_to login_url
   end
 
   private

@@ -48,7 +48,7 @@ class ParticipantPasswordResetsController < ApplicationController
 
     # 正しい被験者か確認する
     def valid_participant
-      unless (@participant && @participant.activated? && @participant.reset_authenticated?(params[:id]))
+      unless (@participant && @participant.activated? && !@participant.deactivated? && @participant.reset_authenticated?(params[:id]))
         redirect_to login_url
       end
     end

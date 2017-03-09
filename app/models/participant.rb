@@ -14,8 +14,8 @@ class Participant < ApplicationRecord
   before_save { email.downcase! }
   before_create :create_activation_token_and_digest
 
-  validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX },
-                    uniqueness:  { case_sensitive: false }
+  validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }
+  validate  :validate_email_uniqueness
   validates :password, presence: true, length: { minimum: 8, maximum: 32 }, allow_nil: true
 
   validates :name, presence: true, length: { maximum: 50 }
@@ -37,6 +37,12 @@ class Participant < ApplicationRecord
     end
     boundary = Date.today.years_ago(18)
     errors.add(:birth, "は#{boundary.to_s}以前である必要があります") if birth > boundary
+  end
+
+  # アクティブ被験者のメールアドレスのユニーク性バリデーション
+  def validate_email_uniqueness
+    participant = Participant.find_by(deactivated: false, email: email.downcase)
+    errors.add(:email, "は既に登録済みです") if participant && (id.nil? || participant.id != id)
   end
 
   # 永続セッションのためにトークンをデータベースに記憶する。
@@ -110,5 +116,10 @@ class Participant < ApplicationRecord
   # 性別番号を文字列に変換する
   def self.gender_to_s(gender)
     gender == 1 ? '男性' : '女性'
+  end
+
+  # メールアドレスから非退会被験者を取得する(既存メソッドのオーバーライド)
+  def self.find_by_email(email)
+    Participant.find_by(email: email, deactivated: false)
   end
 end

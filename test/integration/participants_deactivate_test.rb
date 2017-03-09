@@ -15,7 +15,7 @@ class ParticipantsDeactivateTest < ActionDispatch::IntegrationTest
   end
 
   test "get settings and deactivate" do
-    log_in_as_participant(@participant)
+    log_in_as_participant @participant
     get settings_path
     assert_select "a[href=?]", deactivate_path
     deactivate
@@ -24,7 +24,7 @@ class ParticipantsDeactivateTest < ActionDispatch::IntegrationTest
     assert_not flash.empty?
     assert_not is_logged_in_participant?
     @participant.reload
-    assert @participant.deactivate
+    assert @participant.deactivated
     get login_path
     assert flash.empty?
   end
