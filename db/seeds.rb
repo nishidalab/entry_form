@@ -166,3 +166,16 @@ Inquiry.create!([
       experiment_id: experiments[0].id,
     },
 ])
+
+Event.delete_all
+Event.create!([
+    { name: '事前手続き',
+      requirement: '印鑑(シャチハタは不可)',
+      description: '事前手続きです。',
+      place: '総合研究7号館207号室',
+      start_at: DateTime.new(2017, 2, 24, 11, 0, 0, "+0900"),
+      duration: 10,
+      participant_id: participants[0].id,
+      experiment_id: experiments[0].id,
+    },
+])
