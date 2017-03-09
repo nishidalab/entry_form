@@ -38,11 +38,17 @@ class ParticipantTest < ActiveSupport::TestCase
     end
   end
 
-  test "email should be unique" do
+  test "email in active participants should be unique" do
+    # アクティブな被験者と同一のメールアドレスでは登録できない
     dup = @participant.dup
     dup.email.upcase!
     @participant.save
     assert_not dup.valid?
+
+    # 退会済み被験者と同一のメールアドレスでは登録できる
+    @participant.deactivated = true
+    @participant.save
+    assert dup.valid?
   end
 
   test "email should be saved as lower-case" do
