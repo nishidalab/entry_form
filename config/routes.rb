@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   patch '/settings',  to: 'participants#update'
   put   '/settings',  to: 'participants#update'
 
+  # 被験者アカウント削除ページ
+  delete '/deactivate', to: 'participants#destroy'
+
   # 認証ページ(for 実験参加者)
   get    '/login',  to: 'sessions#new_participant'
   post   '/login',  to: 'sessions#create_participant'

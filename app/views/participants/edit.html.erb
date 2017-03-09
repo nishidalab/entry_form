@@ -14,3 +14,8 @@
                        locals: { form_for_url: settings_path, participant: @participant,
                                  classifications: @classifications, faculties: @faculties,
                                  courses: @courses, submit_label: '更新する', type: 'profile', show_errors: @type == 'profile' })) %>
+
+<%= panel(type: 'danger',
+          header: '<h3>アカウント削除</h3>',
+          body: render(partial: 'destroy',
+                       locals: { participant: @participant })) %>

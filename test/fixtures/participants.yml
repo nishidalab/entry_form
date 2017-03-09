@@ -12,6 +12,7 @@ one:
   address: "京都市左京区吉田本町"
   activated: true
   activated_at: DateTime.now
+  deactivated: false
 
 two:
   id: 2
@@ -27,3 +28,20 @@ two:
   address: "地球"
   activated: true
   activated_at: DateTime.now
+  deactivated: false
+
+three:
+  id: 3
+  email: "three@example.com"
+  password_digest: <%= Participant.digest("password") %>
+  name: "退会済み"
+  yomi: "たいかいずみ"
+  gender: 1
+  birth: 1989-03-03
+  classification: 3
+  grade: 3
+  faculty: 1
+  address: "どこか"
+  activated: true
+  activated_at: DateTime.now
+  deactivated: true
