@@ -8,7 +8,7 @@ class MemberMailerTest < ActionMailer::TestCase
     experiment = schedule.experiment
     member = experiment.member
     start_at = schedule.datetime
-    end_at = schedule.datetime + experiment.duration * 3600
+    end_at = schedule.datetime + experiment.duration * 60
     mail = MemberMailer.experiment_applied(participant, [schedule])
     assert_equal "#{experiment.name}応募(#{participant.name})", mail.subject
     assert_equal [member.email], mail.to
