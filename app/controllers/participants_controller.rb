@@ -54,6 +54,10 @@ class ParticipantsController < ApplicationController
     render 'edit'
   end
 
+  def destroy
+
+  end
+
   private
 
     def get_options_info
