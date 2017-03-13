@@ -4,7 +4,7 @@ class EventTest < ActiveSupport::TestCase
   def setup
     @participant = Participant.new(
         email: "test@example.com", name: "テスト", yomi: "てすと",  gender: 1, birth: Date.new(1992, 7, 31),
-        classification: 1, grade: 1, faculty: 1, address: "京都市左京区吉田本町",
+        classification: 1, grade: 1, faculty_id: 1, address: "京都市左京区吉田本町",
         password: "password", password_confirmation: "password")
     @participant.save
     @member = Member.new(

@@ -10,7 +10,7 @@ class ParticipantsController < ApplicationController
   def create
     get_options_info
     @participant = Participant.new(params.require(:participant).permit(
-        :name, :yomi, :gender, :classification, :grade, :faculty, :address, :birth, :email,
+        :name, :yomi, :gender, :classification, :grade, :faculty_id, :address, :birth, :email,
         :password, :password_confirmation))
     if @participant.save
       ParticipantMailer.account_activation(@participant).deliver_now
@@ -40,7 +40,7 @@ class ParticipantsController < ApplicationController
     participant_params = nil
     if @type == 'profile'
       participant_params = params.require(:participant).permit(
-          :name, :yomi, :gender, :classification, :grade, :faculty, :address, :birth)
+          :name, :yomi, :gender, :classification, :grade, :faculty_id, :address, :birth)
     elsif @type == 'password'
       participant_params = params.require(:participant).permit(
           :password, :password_confirmation)

@@ -8,7 +8,7 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
   def update_profile(participant)
     patch settings_path, params: { type: 'profile', participant: {
         name: participant.name, yomi: participant.yomi, gender: participant.gender,
-        classification: participant.classification, grade: participant.grade, faculty: participant.faculty,
+        classification: participant.classification, grade: participant.grade, faculty_id: participant.faculty_id,
         address: participant.address, birth: participant.birth } }
   end
 
@@ -65,7 +65,7 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     gender = 2
     classification = 2
     grade = 2
-    faculty = 2
+    faculty_id = 2
     address = '更新'
     birth = '1990-12-31'
     @participant.name = name
@@ -73,7 +73,7 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     @participant.gender = gender
     @participant.classification = classification
     @participant.grade = grade
-    @participant.faculty = faculty
+    @participant.faculty_id = faculty_id
     @participant.address = address
     @participant.birth = birth
     update_profile(@participant)
@@ -83,7 +83,7 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     assert_equal gender, @participant.gender
     assert_equal classification, @participant.classification
     assert_equal grade, @participant.grade
-    assert_equal faculty, @participant.faculty
+    assert_equal faculty_id, @participant.faculty_id
     assert_equal address, @participant.address
     assert_equal birth, @participant.birth.strftime('%Y-%m-%d')
     assert_template 'participants/edit'

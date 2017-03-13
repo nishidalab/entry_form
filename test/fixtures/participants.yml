@@ -8,7 +8,7 @@ one:
   birth: 1995-01-01
   classification: 1
   grade: 1
-  faculty: 1
+  faculty_id: 1
   address: "京都市左京区吉田本町"
   activated: true
   activated_at: DateTime.now
@@ -24,7 +24,7 @@ two:
   birth: 1992-02-02
   classification: 2
   grade: 2
-  faculty: 2
+  faculty_id: 2
   address: "地球"
   activated: true
   activated_at: DateTime.now
@@ -40,7 +40,7 @@ three:
   birth: 1989-03-03
   classification: 3
   grade: 3
-  faculty: 1
+  faculty_id: 1
   address: "どこか"
   activated: true
   activated_at: DateTime.now
