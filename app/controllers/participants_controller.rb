@@ -1,5 +1,5 @@
 class ParticipantsController < ApplicationController
-  before_action :redirect_to_login, only: [:show, :edit, :update]
+  before_action :redirect_to_login, only: [:show, :edit, :update, :destroy]
   before_action :redirect_to_mypage, only: [:new, :create]
 
   def new
@@ -24,6 +24,7 @@ class ParticipantsController < ApplicationController
   def show
     @participant = current_participant
     @applications = Application.where(participant_id: @participant.id, status: 0..1)
+    @events = Event.where(participant_id: @participant.id)
   end
 
   def edit
@@ -52,6 +53,17 @@ class ParticipantsController < ApplicationController
       flash.now[:danger] = 'アカウント情報の更新に失敗しました。' if @type == 'password'
     end
     render 'edit'
+  end
+
+  def destroy
+    @participant = current_participant
+    if @participant.update_attributes(deactivated: true)
+      flash[:success] = 'アカウントを削除しました。'
+    else
+      flash[:danger] = 'アカウントの削除に失敗しました。'
+    end
+    log_out_participant
+    redirect_to login_url
   end
 
   private

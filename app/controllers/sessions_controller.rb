@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
   end
 
   def create(model_class, user_classification)
-    user = Object.const_get(model_class).find_by(email: params[:session][:email].downcase)
+    user = Object.const_get(model_class).find_by_email(params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
       if user_classification == :member || user.activated?
         self.send("log_in_#{user_classification}", user)

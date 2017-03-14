@@ -3,6 +3,7 @@ require 'test_helper'
 class ParticipantsLoginTest < ActionDispatch::IntegrationTest
   def setup
     @participant = participants(:one)
+    @deactivated_participant = participants(:three)
   end
 
   test "login with invalid information" do
@@ -56,5 +57,21 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
   test "login without remembering" do
     log_in_as_participant @participant, remember_me: '0'
     assert_nil cookies['remember_token']
+  end
+
+  test "login as deactivated participant" do
+    get login_path
+    log_in_as_participant @deactivated_participant
+    assert_template 'sessions/new'
+    assert_not flash.empty?
+    get login_path
+    assert flash.empty?
+    assert_select "a[href=?]", login_path
+    assert_select "a[href=?]", applications_path, count: 0
+    assert_select "a[href=?]", inquiries_new_path, count: 0
+    assert_select "a[href=?]", inquiries_path, count: 0
+    assert_select "a[href=?]", mypage_path, count: 0
+    assert_select "a[href=?]", settings_path, count: 0
+    assert_select "a[href=?]", logout_path, count: 0
   end
 end

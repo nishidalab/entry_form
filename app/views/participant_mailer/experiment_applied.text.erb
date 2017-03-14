@@ -11,7 +11,7 @@
 
 【実験日時】
 <% @schedules.each do |s| %>
-<%= "#{s.datetime} ～ #{s.datetime + @experiment.duration * 3600}" %>
+<%= "#{s.datetime} ～ #{s.datetime + @experiment.duration * 60}" %>
 <% end %>
 
 実験担当者が調整後、改めて採用に関するご連絡を差し上げます。

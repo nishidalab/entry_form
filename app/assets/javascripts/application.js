@@ -18,4 +18,5 @@
 //= require moment
 //= require fullcalendar
 //= require fullcalendar/lang/ja
+//= require data-confirm-modal
 //= require_tree .

@@ -2,12 +2,20 @@
 var schedules = [
     <% applications.each_with_index do |application| %>
         <% start_time = application.schedule.datetime %>
-        <% end_time = start_time + application.schedule.experiment.duration * 3600 %>
+        <% end_time = start_time + application.schedule.experiment.duration * 60 %>
         {
             date:     '<%= application.schedule.datetime.strftime('%m-%d-%Y') %>',
             title:    '<%= get_title(application.status, application.schedule.experiment.name) %>',
             start:    '<%= application.schedule.datetime.to_s(:time) %>',
-            end:      '<%= (start_time + application.schedule.experiment.duration * 3600).to_s(:time) %>',
+            end:      '<%= (start_time + application.schedule.experiment.duration * 60).to_s(:time) %>',
+        },
+    <% end %>
+    <% events.each_with_index do |event| %>
+        {
+            date:     '<%= event.start_at.strftime('%m-%d-%Y') %>',
+            title:    '<%= "#{event.name}【#{event.experiment.name}】" %>',
+            start:    '<%= event.start_at.to_s(:time) %>',
+            end:      '<%= (event.start_at + event.duration * 60).to_s(:time) %>',
         },
     <% end %>
 ];
@@ -23,7 +31,14 @@ var dated_schedules = (function() {
             endTime:   s.end,
         };
         if(ret[s.date]) {
-            ret[s.date].push(e);
+            ret[s.date].push(e)
+            ret[s.date].sort(function(a, b) {
+                var aDate = Date.parse('2017/01/01 ' + a.startTime + ':00');
+                var bDate = Date.parse('2017/01/01 ' + b.startTime + ':00');
+                if(aDate < bDate)      return -1;
+                else if(aDate > bDate) return 1;
+                else                   return 0;
+            });
         }
         else {
             ret[s.date] = [e];
