@@ -6,7 +6,7 @@ class Application < ApplicationRecord
 
   validate   :validate_unique_record
   validate   :validate_double_booking
-  validates  :status, inclusion: { in: 0..2 }  # 0: 申請中、1: 許可、2: 拒否
+  validates  :status, inclusion: { in: 0..3 }  # 0: 申請中、1: 許可、2: 拒否、 3: 強い拒否
 
   # 既存のデータが存在するか確認する(二重 post などの検証)
   def validate_unique_record

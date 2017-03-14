@@ -4,21 +4,24 @@
   現在応募可能な実験の一覧です。
 </p>
 <% @experiments.each do |ex| %>
-<div class="panel panel-primary">
-  <div class="panel-heading"><%= simple_format(h(ex.name)) %></div>
-  <div class="panel-body">
-    <b>応募条件</b>
-    <%= simple_format(h(ex.requirement)) %>
-    <hr>
-    <b>実験内容</b>
-    <%= simple_format(h(ex.description)) %>
+<% apps = Application.where(participant_id: current_participant.id).where(schedule_id: Schedule.where(experiment_id: ex.id))%>
+<% if apps.where(status: 3).empty? %>
+  <div class="panel panel-primary">
+    <div class="panel-heading"><%= simple_format(h(ex.name)) %></div>
+    <div class="panel-body">
+      <b>応募条件</b>
+      <%= simple_format(h(ex.requirement)) %>
+      <hr>
+      <b>実験内容</b>
+      <%= simple_format(h(ex.description)) %>
+    </div>
+    <div class="panel-footer">
+       <% if apps.length != apps.where(status: 2).length %>
+         <%= button_tag "応募済み", class: 'form-control btn btn-default', disabled: true %>
+       <% else %>
+         <%= link_to "参加する", new_application_path(experiment: ex.id), class: 'form-control btn btn-success' %>
+       <% end %>
+    </div>
   </div>
-  <div class="panel-footer">
-    <% if @applied_ids.include?(ex.id) %>
-      <%= button_tag "応募済み", class: 'form-control btn btn-default', disabled: true %>
-    <% else %>
-      <%= link_to "参加する", new_application_path(experiment: ex.id), class: 'form-control btn btn-success' %>
-    <% end %>
-  </div>
-</div>
+<% end %>
 <% end %>
