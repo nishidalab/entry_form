@@ -46,6 +46,23 @@ module ApplicationHelper
     "</div>".html_safe
   end
 
+  # form_for の入力フィールド(collection_select)となる HTML を返します。
+  def form_collection_select(form, attribute, label, object_array, value, name, options, selected: nil, size: 4, description: nil, example: nil, required: true)
+    html_option = required ?
+        { class: 'form-control validation', required: true } :
+        { class: 'form-control' }
+    "<div class='form-group'>".html_safe +
+      form.label(attribute, label, class: 'col-sm-2 control-label') +
+      "<div class='col-sm-#{size}'>".html_safe +
+      form.collection_select(attribute, object_array, value, name, options, html_option) +
+        (description ?
+          "<span class='help-block'>#{description}</span>" : "").html_safe +
+        (example ?
+          "<span class='help-block'><span class='label label-default'>例</span>#{example}</span>" : "").html_safe +
+      "</div>".html_safe +
+    "</div>".html_safe
+  end
+
   # form_for の入力フィールド(年・月・日)となる HTML を返します。
   def form_date(form, attribute, label, start_year, end_year, size: 4, description: nil, example: nil, required: true)
     html_option = required ?
