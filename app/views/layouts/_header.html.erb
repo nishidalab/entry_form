@@ -20,6 +20,7 @@
           <li><%= link_to "ログアウト", logout_path, method: "delete" %></li>
         <% elsif logged_in_member? %>
           <li><%= link_to "マイページ", member_mypage_path %></li>
+          <li><%= link_to "実験募集", new_experiment_path %></li>
           <li><%= link_to "ログアウト", member_logout_path, method: "delete" %></li>
         <% else %>
           <li><%= link_to "ログイン", login_path %></li>

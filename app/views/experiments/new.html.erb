@@ -1,0 +1,5 @@
+<% provide(:title, '実験募集フォーム') %>
+<h2><%= yield(:title) %></h2>
+
+<%= render partial: 'form',
+           locals: { form_for_url: member_recruit_path, experiment: @experiment, submit_label: '募集する', type: 'all', show_errors: true } %>

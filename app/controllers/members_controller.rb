@@ -20,6 +20,7 @@ class MembersController < ApplicationController
 
   def show
     @member = current_member
+    @experiments = Experiment.where(member_id: @member.id)
   end
 
   private

@@ -9,7 +9,7 @@ module MembersCommon
       end
     end
 
-    # ログインしていない場合メンバーのログインページへリダイレクトする
+    # メンバーとしてログインしている場合、特定のページにリダイレクトする
     def redirect_member_logged_in(redirect_path)
       if logged_in_member?
         redirect_to redirect_path

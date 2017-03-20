@@ -27,12 +27,14 @@ class MembersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", login_path, count: 0
     assert_select "a[href=?]", member_mypage_path
     assert_select "a[href=?]", member_logout_path
+    assert_select "a[href=?]", new_experiment_path
     delete member_logout_path
     assert_redirected_to member_login_url
     follow_redirect!
     assert_select "a[href=?]", login_path
     assert_select "a[href=?]", member_mypage_path, count: 0
     assert_select "a[href=?]", member_logout_path, count: 0
+    assert_select "a[href=?]", new_experiment_path, count: 0
   end
 
   test "login with remembering" do

@@ -49,13 +49,16 @@ Rails.application.routes.draw do
 
   # 実験者マイページ
   get   '/member/mypage',      to: 'members#show'
-  get   '/member/mypage/edit', to: 'members#edit'
-  patch '/member/mypage/edit', to: 'members#update'
-  put   '/member/mypage/edit', to: 'members#update'
+  #get   '/member/mypage/edit', to: 'members#edit'
+  #patch '/member/mypage/edit', to: 'members#update'
+  #put   '/member/mypage/edit', to: 'members#update'
 
   # 認証ページ(for 実験者)
   get    '/member/login',  to: 'sessions#new_member'
   post   '/member/login',  to: 'sessions#create_member'
   delete '/member/logout', to: 'sessions#destroy_member'
+
+  # 実験募集ページ
+  resources :experiments
 
 end
