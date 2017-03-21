@@ -9,7 +9,7 @@ one:
 
 two:
   id: 2
-  name: MyString
-  yomi: MyString
-  email: MyString
-  password_digest: MyString
+  name: メンバー２
+  yomi: に
+  email: two@example.com
+  password_digest: <%= Member.digest("password") %>
