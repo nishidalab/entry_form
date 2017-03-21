@@ -7,6 +7,8 @@ class Experiment < ApplicationRecord
   has_many :events, dependent: :destroy
 
   validate :validate_member_id
+  validate :validate_same_name
+  validate :validate_schedule
 
   validates :member_id, presence: true
   validates :project_owner, presence: true
@@ -24,10 +26,39 @@ class Experiment < ApplicationRecord
   private
   # 指定されたmember_idのmemberが存在するかチェック
   def validate_member_id
-      member = Member.find_by_id(member_id)
+    member = Member.find_by_id(member_id)
 
-      if !member
-          errors.add(:member_id)
-      end
+    if !member
+      errors.add(:member_id)
+    end
+  end
+
+  # 同名の実験が既に存在するかをチェック
+  def validate_same_name
+    experiment = Experiment.find_by(name: name)
+
+    if !experiment.nil?
+      errors.add(:name, "同名の実験が存在します。")
+    end
+  end
+
+  # 実験予定がfromからtoまでで正しい期間になっているかをチェック
+  def validate_schedule
+    nil_check = false
+    if schedule_from.nil?
+      errors.add(:schedule_from, "実験予定の開始日を入力してください")
+      nil_check = true
+    end
+    if schedule_to.nil?
+      errors.add(:schedule_to, "実験予定の終了日を入力してください")
+      nil_check = true
+    end
+    if nil_check
+      return
+    end
+
+    if schedule_from > schedule_to
+      errors.add(:schedule_to, "実験予定の終了日を開始日より後にしてください。")
+    end
   end
 end
