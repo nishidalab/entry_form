@@ -26,4 +26,12 @@ class MemberControllerTest < ActionDispatch::IntegrationTest
     get member_mypage_path
     assert_template 'members/show'
   end
+
+  test "member mypage should have links to his experiments" do
+    log_in_as_member @test
+    get member_mypage_path
+    Experiment.where(member_id: @test.id).each do |experiment|
+      assert_select "a[href=?]", experiment_path(experiment)
+    end
+  end
 end

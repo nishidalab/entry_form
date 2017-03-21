@@ -22,7 +22,7 @@ one:
 
 two:
   id: 2
-  member_id: 1
+  member_id: 2
   zisshi_ukagai_date: 2017-02-17
   project_owner: MyString
   place: MyString

@@ -37,6 +37,10 @@ class ExperimentsController < ApplicationController
   end
 
   def show
+    if params[:id].nil?
+      redirect_to experiments_url
+    end
+
     @member = current_member
     @experiment = Experiment.find_by_id(params[:id])
 

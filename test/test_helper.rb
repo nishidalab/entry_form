@@ -21,6 +21,11 @@ class ActionDispatch::IntegrationTest
     !session[:participant_id].nil?
   end
 
+  # テスト被験者がログアウトする
+  def log_out_as_participant
+    delete logout_path
+  end
+
   # テスト実験者としてログインする
   def log_in_as_member(member, password: 'password', remember_me: '1')
     post member_login_path, params: { session: { email: member.email,
@@ -31,5 +36,10 @@ class ActionDispatch::IntegrationTest
   # テスト実験者がログイン中の場合に true を返す
   def is_logged_in_member?
     !session[:member_id].nil?
+  end
+
+  # テスト実験者がログアウトする
+  def log_out_as_member
+    delete member_logout_path
   end
 end
