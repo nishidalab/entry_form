@@ -26,15 +26,5 @@ five:
 <<<<<<< HEAD
   datetime: 2017-02-15 14:00:00
 =======
-  datetime: 2017-02-16 11:00:00
-
-six:
-  id: 6
-  experiment_id: 3
-  datetime: 2017-02-16 14:00:00
-
-seven:
-  id: 7
-  experiment_id: 3
   datetime: 2017-02-15 14:00:00
 >>>>>>> [ref #20] 応募のステータスに「強い拒否」を加える
