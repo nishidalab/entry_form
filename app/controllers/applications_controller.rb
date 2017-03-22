@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class ApplicationsController < ApplicationController
   before_action :redirect_to_login
 
@@ -13,7 +14,8 @@ class ApplicationsController < ApplicationController
       return
     end
     applied_ids = Application.where(participant_id: current_participant.id).map { |a| a.schedule.experiment.id }
-    if applied_ids.include?(@experiment.id)
+    apps = Application.where(participant_id: current_participant.id).where(schedule_id: Schedule.where(experiment_id: @experiment.id))
+    if applied_ids.include?(@experiment.id) && apps.length != apps.where(status: 2).length
       redirect_to applications_url
       return
     end

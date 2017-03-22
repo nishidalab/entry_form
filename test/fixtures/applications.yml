@@ -1,29 +1,4 @@
 one:
   participant_id: 1
   schedule_id: 1
-  status: 3
-
-two:
-  participant_id: 1
-  schedule_id: 4
-  status: 1
-
-three:
-  participant_id: 1
-  schedule_id: 2
-  status: 2
-
-four:
-  participant_id: 1
-  schedule_id: 3
-  status: 1
-
-five:
-  participant_id: 1
-  schedule_id: 5
-  status: 2
-
-six:
-  participant_id: 1
-  schedule_id: 6
-  status: 2
+  status: 0
