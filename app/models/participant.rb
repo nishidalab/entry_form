@@ -55,18 +55,6 @@ class Participant < ApplicationRecord
     update_attribute(:remember_digest, nil)
   end
 
-  # 渡された文字列のハッシュ値を返す
-  def self.digest(string)
-    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
-    BCrypt::Password.create(string, cost: cost)
-  end
-
-  # ランダムなトークンを返す
-  def self.new_token
-    SecureRandom.urlsafe_base64
-  end
-
-
   # パスワード再設定のメールを送信する
   def send_password_reset_email
     ParticipantMailer.password_reset(self).deliver_now

@@ -5,15 +5,17 @@ module Account
     before_create :create_activation_token_and_digest
   end
 
-  # 渡された文字列のハッシュ値を返す
-  def digest(string)
-    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
-    BCrypt::Password.create(string, cost: cost)
-  end
+  class_methods do
+    # 渡された文字列のハッシュ値を返す
+    def digest(string)
+      cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
+      BCrypt::Password.create(string, cost: cost)
+    end
 
-  # ランダムなトークンを返す
-  def new_token
-    SecureRandom.urlsafe_base64
+    # ランダムなトークンを返す
+    def new_token
+      SecureRandom.urlsafe_base64
+    end
   end
 
   # 渡されたセッショントークンがダイジェストと一致したら true を返す。
@@ -46,16 +48,16 @@ module Account
 
   # パスワード再設定用の属性を設定する
   def create_reset_digest
-    self.reset_token = self.new_token
-    update(reset_digest: self.digest(reset_token), reset_sent_at: Time.zone.now)
+    self.reset_token = self.class::new_token
+    update(reset_digest: self.class::digest(reset_token), reset_sent_at: Time.zone.now)
   end
 
   private
 
     # 有効化トークンとダイジェストを作成する。作成した時刻を記録しておく
     def create_activation_token_and_digest
-      self.activation_token = self.new_token
-      self.activation_digest = self.digest(activation_token)
+      self.activation_token = self.class::new_token
+      self.activation_digest = self.class::digest(activation_token)
       self.set_activation_token_at = Time.zone.now
     end
 
