@@ -27,10 +27,11 @@ class ParticipantsPasswordResetTest < ActionDispatch::IntegrationTest
     assert_not_equal @participant.reset_digest, @participant.reload.reset_digest
     assert_equal 1, ActionMailer::Base.deliveries.size
     assert_not flash.empty?
+    follow_redirect!
     assert_redirected_to login_url
 
     # パスワード再設定フォーム
-    participant = assigns(:participant)
+    participant = assigns(:user)
     # メールアドレスが無効
     get edit_reset_path(participant.reset_token, e: '')
     assert_redirected_to login_url
