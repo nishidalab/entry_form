@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 class ApplicationsController < ApplicationController
   before_action :redirect_to_login
 
@@ -6,6 +5,11 @@ class ApplicationsController < ApplicationController
     @experiments = Experiment.all
     @participant = current_participant
     @applied_ids = Application.where(participant_id: current_participant.id).map { |a| a.schedule.experiment.id }
+    @status = Array.new(Experiment.maximum(:id))
+    @experiments.each do |ex|
+      exschedules = Schedule.where(experiment_id: ex.id)
+      @status[ex.id - 1] = Application.where(participant_id: current_participant.id).where(schedule_id: exschedules).map{ |a| a.status }
+    end
   end
 
   def new
@@ -14,12 +18,14 @@ class ApplicationsController < ApplicationController
       return
     end
     applied_ids = Application.where(participant_id: current_participant.id).map { |a| a.schedule.experiment.id }
-    apps = Application.where(participant_id: current_participant.id).where(schedule_id: Schedule.where(experiment_id: @experiment.id))
-    if applied_ids.include?(@experiment.id) && apps.length != apps.where(status: 2).length
+    exschedules = Schedule.where(experiment_id: @experiment.id)
+    status = Application.where(participant_id: current_participant.id).where(schedule_id: exschedules).map{ |a| a.status }
+    if applied_ids.include?(@experiment.id) && status.count != status.count(2)
       redirect_to applications_url
       return
     end
-    @schedules = @experiment.schedules.where(participant_id: nil)
+    apps = Application.where(participant_id: current_participant.id).where(status: 2).map { |a| a.schedule_id }
+    @schedules = @experiment.schedules.where(participant_id: nil).where.not(id: apps)
     @times = []
     @schedules.each do |s|
       @times.push({ start: s.datetime, end: s.datetime + s.experiment.duration * 60 })

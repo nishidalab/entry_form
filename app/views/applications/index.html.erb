@@ -4,8 +4,7 @@
   現在応募可能な実験の一覧です。
 </p>
 <% @experiments.each do |ex| %>
-<% apps = Application.where(participant_id: current_participant.id).where(schedule_id: Schedule.where(experiment_id: ex.id))%>
-<% if apps.where(status: 3).empty? %>
+<% if !@status[ex.id - 1].include?(3) %>
   <div class="panel panel-primary">
     <div class="panel-heading"><%= simple_format(h(ex.name)) %></div>
     <div class="panel-body">
@@ -16,7 +15,7 @@
       <%= simple_format(h(ex.description)) %>
     </div>
     <div class="panel-footer">
-       <% if apps.length != apps.where(status: 2).length %>
+       <% if @status[ex.id - 1].count != @status[ex.id - 1].count(2) %>
          <%= button_tag "応募済み", class: 'form-control btn btn-default', disabled: true %>
        <% else %>
          <%= link_to "参加する", new_application_path(experiment: ex.id), class: 'form-control btn btn-success' %>

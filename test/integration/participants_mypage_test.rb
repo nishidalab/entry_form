@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 require 'test_helper'
 
 class ParticipantsMypageTest < ActionDispatch::IntegrationTest
@@ -35,7 +34,7 @@ class ParticipantsMypageTest < ActionDispatch::IntegrationTest
     assert_select 'div[class=?]', "#{schedules(:four).experiment.name}2", count: 0
 
     # 強い拒否をした予定がカレンダーに表示されない
-    assert_select 'div[class=?]', "#{schedules(:four).experiment.name}3", count: 0
+    assert_select 'div[class=?]', "#{schedules(:five).experiment.name}3", count: 0
 
     # 実験外予定がカレンダーに表示される
     assert_select 'div[class=?]', "#{events(:one).name}#{events(:one).experiment.name}"
