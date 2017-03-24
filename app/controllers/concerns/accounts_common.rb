@@ -29,11 +29,11 @@ module AccountsCommon
       if user_class.nil? || email.nil?
         return nil
       else
-        if @user = Object.const_get(user_class.capitalize).find_by_email(email.downcase)
-          @user.create_reset_digest
-          @user.send_password_reset_email
+        if user = Object.const_get(user_class.capitalize).find_by_email(email.downcase)
+          user.create_reset_digest
+          user.send_password_reset_email
           flash[:info] = 'パスワード再設定URLを記載したメールを送信しました。'
-          return @user
+          return user
         else
           return nil
         end
