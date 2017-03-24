@@ -3,7 +3,14 @@
 one:
   id: 1
   name: "工学部"
+  classification: 1
 
 two:
   id: 2
   name: "理学部"
+  classification: 1
+
+three:
+  id: 3
+  name: "情報学研究科"
+  classification: 2

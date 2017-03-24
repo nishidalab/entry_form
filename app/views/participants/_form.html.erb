@@ -8,7 +8,7 @@
     <%= form_select f, :gender, '性別', { '男性' => 1, '女性' => 2 }, size: 2 %>
     <%= form_select f, :classification, '学生区分', classifications %>
     <%= form_select f, :grade, '学年', {} %>
-    <%= form_collection_select f, :faculty_id, '学部・研究科', Faculty.all, :id, :name, :prompt=>true %>
+    <%= form_select f, :faculty_id, '学部・研究科', {} %>
     <%= form_text_field f, :address, '住所', example: '京都市左京区吉田本町' %>
     <%= form_date f, :birth, '生年月日', 1970, Date.today.year - 17 %>
   <% end %>
