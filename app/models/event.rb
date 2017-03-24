@@ -10,5 +10,29 @@ class Event < ApplicationRecord
   validates :duration, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :experiment_id, presence: true
   validates :participant_id, presence: true
+  validate  :validate_double_booking
+
+  # 他の application や event と被っていないかのバリデーション
+  def validate_double_booking
+    return if start_at.nil? || duration.nil? || participant.nil?
+    end_at = start_at + duration * 60
+    error = lambda { errors.add(:start_at, "は無効です。指定した参加者は、拘束時間中に既に確定された予定が入っています。") }
+    participant.applications.where(status: 1).each do |application|
+      application_start_at = application.schedule.datetime
+      application_end_at = application_start_at + application.schedule.experiment.duration * 60
+      if application_start_at < end_at && start_at < application_end_at
+        error.call
+        return
+      end
+    end
+    participant.events.all.each do |event|
+      event_start_at = event.start_at
+      event_end_at = event_start_at + event.duration * 60
+      if event_start_at < end_at && start_at < event_end_at
+        error.call
+        return
+      end
+    end
+  end
 
 end

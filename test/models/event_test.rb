@@ -17,11 +17,12 @@ class EventTest < ActiveSupport::TestCase
         expected_participant_count: 1, duration: 60, name: "ほげ", requirement: "ほげ", description: "ほげ",
         schedule_from: Date.today, schedule_to: Date.today, final_report_date: Date.today)
     @experiment.save
+    @now = DateTime.now
   end
 
   def setup_event
     @event = Event.new(
-        name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: DateTime.now,
+        name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: @now,
         duration: 10, experiment_id: @experiment.id, participant_id: @participant.id)
   end
 
@@ -97,7 +98,7 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "check double booking (conflicting application)" do
-    schedule = Schedule.new(experiment_id: @experiment.id, datetime: DateTime.now + 5 * 60)
+    schedule = Schedule.new(experiment_id: @experiment.id, datetime: @now + Rational(5, 24 * 60))
     schedule.save
     application = Application.new(participant_id: @participant.id, schedule_id: schedule.id, status: 1)
     application.save
@@ -106,7 +107,7 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "check double booking (not conflicting application)" do
-    schedule = Schedule.new(experiment_id: @experiment.id, datetime: DateTime.now + 10 * 60)
+    schedule = Schedule.new(experiment_id: @experiment.id, datetime: @now + Rational(10, 24 * 60))
     schedule.save
     application = Application.new(participant_id: @participant.id, schedule_id: schedule.id, status: 1)
     application.save
@@ -116,7 +117,7 @@ class EventTest < ActiveSupport::TestCase
 
   test "check double booking (conflicting event)" do
     another_event = Event.new(
-        name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: DateTime.now + 5 * 60,
+        name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: @now + Rational(5, 24 * 60),
         duration: 10, experiment_id: @experiment.id, participant_id: @participant.id)
     assert another_event.valid?
     another_event.save
@@ -126,7 +127,7 @@ class EventTest < ActiveSupport::TestCase
 
   test "check double booking (not conflicting event)" do
     another_event = Event.new(
-        name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: DateTime.now + 10 * 60,
+        name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: @now + Rational(10, 24 * 60),
         duration: 10, experiment_id: @experiment.id, participant_id: @participant.id)
     assert another_event.valid?
     another_event.save
