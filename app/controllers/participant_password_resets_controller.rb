@@ -8,7 +8,8 @@ class ParticipantPasswordResetsController < ApplicationController
   end
 
   def create
-    password_reset(user_class: :participant, email: params[:password_reset][:email])
+    @user = password_reset(user_class: :participant, email: params[:password_reset][:email])
+    result_password_reset(user_class: :participant, user: @user)
   end
 
   def edit
