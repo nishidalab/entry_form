@@ -15,19 +15,20 @@ class Event < ApplicationRecord
   # 他の application や event と被っていないかのバリデーション
   def validate_double_booking
     return if start_at.nil? || duration.nil? || participant.nil?
-    end_at = start_at + duration * 60
+    start_at = self.start_at.to_i
+    end_at = (start_at + duration * 60).to_i
     error = lambda { errors.add(:start_at, "は無効です。指定した参加者は、拘束時間中に既に確定された予定が入っています。") }
     participant.applications.where(status: 1).each do |application|
-      application_start_at = application.schedule.datetime
-      application_end_at = application_start_at + application.schedule.experiment.duration * 60
+      application_start_at = application.schedule.datetime.to_i
+      application_end_at = (application_start_at + application.schedule.experiment.duration * 60).to_i
       if application_start_at < end_at && start_at < application_end_at
         error.call
         return
       end
     end
     participant.events.all.each do |event|
-      event_start_at = event.start_at
-      event_end_at = event_start_at + event.duration * 60
+      event_start_at = event.start_at.to_i
+      event_end_at = (event_start_at + event.duration * 60).to_i
       if event_start_at < end_at && start_at < event_end_at
         error.call
         return

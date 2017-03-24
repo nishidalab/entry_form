@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ApplicationTest < ActiveSupport::TestCase
   def setup
-    @now = DateTime.now
+    @now = Time.zone.now
     @participant = Participant.new(
         email: "test@example.com", name: "テスト", yomi: "てすと",  gender: 1, birth: Date.new(1992, 7, 31),
         classification: 1, grade: 1, faculty: 1, address: "京都市左京区吉田本町",
@@ -73,9 +73,9 @@ class ApplicationTest < ActiveSupport::TestCase
         expected_participant_count: 1, duration: 60, name: "ふが", requirement: "ほげ", description: "ほげ",
         schedule_from: Date.today, schedule_to: Date.today, final_report_date: Date.today)
     another_experiment.save
-    bad_schedule = Schedule.new(experiment_id: another_experiment.id, datetime: @now + Rational(10, 24 * 60))
+    bad_schedule = Schedule.new(experiment_id: another_experiment.id, datetime: @now + 10 * 60)
     bad_schedule.save
-    good_schedule = Schedule.new(experiment_id: another_experiment.id, datetime: @now + Rational(60, 24 * 60))
+    good_schedule = Schedule.new(experiment_id: another_experiment.id, datetime: @now + 60 * 60)
     good_schedule.save
 
     # 時間内に既に確定している application が存在する
@@ -96,7 +96,7 @@ class ApplicationTest < ActiveSupport::TestCase
 
     # 時間内に既に確定している event が存在する
     bad_event = Event.new(
-        name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: @now + Rational(10, 24 * 60),
+        name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: @now + 10 * 60,
         duration: 10, experiment_id: @experiment.id, participant_id: @participant.id)
     bad_event.save
     @application.status = 1
@@ -105,7 +105,7 @@ class ApplicationTest < ActiveSupport::TestCase
 
     # 終了時刻と開始時刻が被っているものは OK
     good_event = Event.new(
-        name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: @now + Rational(60, 24 * 60),
+        name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: @now + 60 * 60,
         duration: 10, experiment_id: @experiment.id, participant_id: @participant.id)
     good_event.save
     @application.status = 1
