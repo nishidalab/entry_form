@@ -1,4 +1,5 @@
 class ParticipantPasswordResetsController < ApplicationController
+  include AccountsCommon
   before_action :get_participant,   only: [:edit, :update]
   before_action :valid_participant, only: [:edit, :update]
   before_action :check_expiration,  only: [:edit, :update]
@@ -7,15 +8,8 @@ class ParticipantPasswordResetsController < ApplicationController
   end
 
   def create
-    if @participant = Participant.find_by_email(params[:password_reset][:email].downcase)
-      @participant.create_reset_digest
-      @participant.send_password_reset_email
-      flash[:info] = 'パスワード再設定URLを記載したメールを送信しました。'
-      redirect_to login_url
-    else
-      flash[:danger] = 'ユーザーが見つかりません。'
-      render 'new'
-    end
+    @user = password_reset(user_class: :participant, email: params[:password_reset][:email])
+    result_password_reset(user_class: :participant, user: @user)
   end
 
   def edit

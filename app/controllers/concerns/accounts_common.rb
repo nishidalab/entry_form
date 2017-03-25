@@ -24,5 +24,33 @@ module AccountsCommon
       flash[:danger] = "アカウントの有効化に失敗しました。"
       redirect_to eval("#{user_class}_login_url")
     end
+
+    def password_reset(user_class:, email:)
+      if user_class.nil? || email.nil?
+        return nil
+      else
+        if user = Object.const_get(user_class.capitalize).find_by_email(email.downcase)
+          user.create_reset_digest
+          user.send_password_reset_email
+          flash[:info] = 'パスワード再設定URLを記載したメールを送信しました。'
+          return user
+        else
+          return nil
+        end
+      end
+    end
+
+    def result_password_reset(user_class:, user:)
+      if user_class.nil? || user.nil?
+        failed_password_reset
+      else
+        redirect_to eval("#{user_class}_login_url")
+      end
+    end
+
+    def failed_password_reset
+      flash[:danger] = 'ユーザーが見つかりません。'
+      render 'new'
+    end
 end
 
