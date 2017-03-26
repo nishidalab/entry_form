@@ -1,6 +1,6 @@
 class Faculty < ApplicationRecord
   has_many :participant
 
-  validates :name, presence: true
-  validates :classification, presence: true, inclusion: { in: 1..2 }
+  validates :name, presence: true, length: { maximum: 50 }, uniqueness: true
+  validates :classification, inclusion: { in: 1..2 }
 end

@@ -155,11 +155,6 @@ class ParticipantTest < ActiveSupport::TestCase
     assert_not @participant.valid?, "博士課程4年生は有効な値ではない"
   end
 
-  test "faculty_id should be present" do
-    @participant.faculty_id = 0
-    assert_not @participant.valid?
-  end
-
   test "address should be present" do
     @participant.address = "    "
     assert_not @participant.valid?
