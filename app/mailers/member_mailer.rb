@@ -10,8 +10,8 @@ class MemberMailer < ApplicationMailer
   end
 
   def password_reset(member)
-    @member = member
-    mail to: @member.email, subject: "パスワードの再設定"
+    @user = member
+    mail to: @user.email, subject: "パスワードの再設定"
   end
 
   def experiment_applied(participant, schedules)

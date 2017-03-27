@@ -61,4 +61,13 @@ Rails.application.routes.draw do
   # 実験募集ページ
   resources :experiments
 
+  # アカウント有効化ページ(for 実験者)
+  get '/member/activate', to: 'member_activations#edit'
+
+  # パスワードリセットフォーム(for 実験者)
+  get    '/member/reset',     to: 'member_password_resets#new'
+  post   '/member/reset',     to: 'member_password_resets#create'
+  get    '/member/reset/:id', to: 'member_password_resets#edit',   as: 'member_edit_reset'
+  patch  '/member/reset/:id', to: 'member_password_resets#update', as: 'member_update_reset'
+
 end
