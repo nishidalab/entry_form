@@ -4,9 +4,6 @@ class FacultyTest < ActiveSupport::TestCase
   def setup
     @faculty = Faculty.new(name: "理学研究科", classification: 2)
   end
-  # test "the truth" do
-  #   assert true
-  # end
 
   test "should be valid" do
     assert @faculty.valid?

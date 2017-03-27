@@ -31,7 +31,7 @@ Participant.create!([
     birth: Date.new(1995, 12, 18),
     classification: 1,
     grade: 3,
-    faculty: 1,
+    faculty_id: 1,
     address: "百万遍",
     activated: true,
     activated_at: DateTime.now,
@@ -45,7 +45,7 @@ Participant.create!([
     birth: Date.new(1993, 6, 8),
     classification: 2,
     grade: 1,
-    faculty: 2,
+    faculty_id: 2,
     address: "出町柳",
     activated: true,
     activated_at: DateTime.now,
@@ -59,7 +59,7 @@ Participant.create!([
     birth: Date.new(1991, 9, 17),
     classification: 2,
     grade: 1,
-    faculty: 1,
+    faculty_id: 1,
     address: "元田中",
     activated: true,
     activated_at: DateTime.now,
@@ -178,4 +178,17 @@ Event.create!([
       participant_id: participants[0].id,
       experiment_id: experiments[0].id,
     },
+])
+
+Faculty.delete_all
+Faculty.create!([
+  { name: "工学部",
+    classification: 1,
+  },
+  { name: "理学部",
+    classification: 1,
+  },
+  { name: "情報学研究科",
+    classification: 2,
+  },
 ])
