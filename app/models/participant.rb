@@ -1,4 +1,6 @@
 class Participant < ApplicationRecord
+  belongs_to :faculty
+
   has_many :schedules
   has_many :applications, dependent: :destroy
   has_many :inquiries, dependent: :destroy
@@ -26,7 +28,6 @@ class Participant < ApplicationRecord
   validates :grade, inclusion: { in: 1..4 }, if: Proc.new { |a| a.classification == 1 }
   validates :grade, inclusion: { in: 1..2 }, if: Proc.new { |a| a.classification == 2 }
   validates :grade, inclusion: { in: 1..3 }, if: Proc.new { |a| a.classification == 3 }
-  validates :faculty, inclusion: { in: 1..3 }
   validates :address, presence: true, length: { maximum: 255 }
   validate  :validate_birth
 
