@@ -2,7 +2,7 @@ class Member < ApplicationRecord
   include Account
   has_many :experiment
 
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@(ii\.ist\.)?i\.kyoto\-u\.ac\.jp\z/i
   VALID_YOMI_REGEX = /[ぁ-んー－\s]+/
   has_secure_password
 

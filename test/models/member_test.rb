@@ -2,11 +2,15 @@ require 'test_helper'
 
 class MemberTest < ActiveSupport::TestCase
   def setup
-    @member = Member.new(name: 'ラボ員', yomi: 'らぼいん', email: 'member@example.com', password: 'password')
+    @member = Member.new(name: 'ラボ員', yomi: 'らぼいん', email: 'member@ii.ist.i.kyoto-u.ac.jp', password: 'password')
   end
 
   test "should be valid" do
     assert @member.valid?
+    @member.email = 'member@i.kyoto-u.ac.jp'
+    assert @member.valid?
+    @member.email = 'member@example.com'
+    assert_not @member.valid?
   end
 
   test "email should be present" do
@@ -15,12 +19,12 @@ class MemberTest < ActiveSupport::TestCase
   end
 
   test "email should not be too long" do
-    @member.email = "a" * 244 + "@example.com"
+    @member.email = "a" * 244 + "@ii.ist.i.kyoto-u.ac.jp"
     assert_not @member.valid?
   end
 
   test "email validation should accept valid addresses" do
-    valid_addresses = %w[user@example.com USER@foo.COM A_US-ER@foo.bar.org first.last@foo.jp alice+bob@baz.cn]
+    valid_addresses = %w[user@ii.ist.i.kyoto-u.ac.jp USER@i.kyoto-u.ac.jp A_US-ER@ii.ist.i.kyoto-u.ac.jp first.last@i.kyoto-u.ac.jp alice+bob@ii.ist.i.kyoto-u.ac.jp]
     valid_addresses.each do |valid_address|
       @member.email = valid_address
       assert @member.valid?, "#{valid_address.inspect} should be valid"
@@ -49,7 +53,7 @@ class MemberTest < ActiveSupport::TestCase
   end
 
   test "email should be saved as lower-case" do
-    mixed_case_email = "Foo@Bar.CoM"
+    mixed_case_email = "Foo@Ii.iSt.i.kYoto-u.aC.Jp"
     @member.email = mixed_case_email
     @member.save
     assert_equal mixed_case_email.downcase, @member.reload.email

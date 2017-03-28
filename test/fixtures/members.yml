@@ -4,7 +4,7 @@ one:
   id: 1
   name: メンバー１
   yomi: いち
-  email: one@example.com
+  email: one@ii.ist.i.kyoto-u.ac.jp
   password_digest: <%= Member.digest("password") %>
   activated: true
   activated_at: DateTime.now
@@ -14,7 +14,7 @@ two:
   id: 2
   name: メンバー２
   yomi: に
-  email: two@example.com
+  email: two@i.kyoto-u.ac.jp
   password_digest: <%= Member.digest("password") %>
   activated: true
   activated_at: DateTime.now

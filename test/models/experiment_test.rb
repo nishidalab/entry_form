@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ExperimentTest < ActiveSupport::TestCase
   def setup
-    @member = Member.new(name: 'ラボ員', yomi: 'らぼいん', email: 'member@example.com', password: 'password')
+    @member = Member.new(name: 'ラボ員', yomi: 'らぼいん', email: 'member@ii.ist.i.kyoto-u.ac.jp', password: 'password')
     @member.save
     @experiment = Experiment.new(
       member_id: @member.id, zisshi_ukagai_date: Date.new(2017, 3, 23),
