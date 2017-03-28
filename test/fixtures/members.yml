@@ -6,6 +6,9 @@ one:
   yomi: いち
   email: one@example.com
   password_digest: <%= Member.digest("password") %>
+  activated: true
+  activated_at: DateTime.now
+  deactivated: false
 
 two:
   id: 2
@@ -13,3 +16,6 @@ two:
   yomi: に
   email: two@example.com
   password_digest: <%= Member.digest("password") %>
+  activated: true
+  activated_at: DateTime.now
+  deactivated: false

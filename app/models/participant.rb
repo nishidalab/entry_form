@@ -1,6 +1,7 @@
 class Participant < ApplicationRecord
-  belongs_to :faculty
+  include Account
 
+  belongs_to :faculty
   has_many :schedules
   has_many :applications, dependent: :destroy
   has_many :inquiries, dependent: :destroy
@@ -8,14 +9,11 @@ class Participant < ApplicationRecord
   has_many :experiments, through: :schedules
   has_many :events, dependent: :destroy
 
-  attr_accessor :remember_token, :activation_token, :reset_token
-
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   VALID_YOMI_REGEX = /[ぁ-んー－\s]+/
   has_secure_password
 
   before_save { email.downcase! }
-  before_create :create_activation_token_and_digest
 
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }
   validate  :validate_email_uniqueness
@@ -58,61 +56,9 @@ class Participant < ApplicationRecord
     update_attribute(:remember_digest, nil)
   end
 
-  # 渡されたセッショントークンがダイジェストと一致したら true を返す。
-  def authenticated?(remember_token)
-    return false if remember_digest.nil?
-    BCrypt::Password.new(remember_digest).is_password?(remember_token)
-  end
-
-  # 渡された有効化トークンがダイジェストと一致したら true を返す。
-  def activation_authenticated?(activation_token)
-    return false if activation_digest.nil?
-    BCrypt::Password.new(activation_digest).is_password?(activation_token)
-  end
-
-  # 渡されたパスワードリセットトークンがダイジェストと一致したら true を返す。
-  def reset_authenticated?(reset_token)
-    return false if reset_digest.nil?
-    BCrypt::Password.new(reset_digest).is_password?(reset_token)
-  end
-
-  # 有効化トークンとダイジェストを作成する。作成した時刻を記録しておく
-  def create_activation_token_and_digest
-    self.activation_token = Participant.new_token
-    self.activation_digest = Participant.digest(activation_token)
-    self.set_activation_token_at = Time.zone.now
-  end
-
-  # パスワード再設定用の属性を設定する
-  def create_reset_digest
-    self.reset_token = Participant.new_token
-    update(reset_digest: Participant.digest(reset_token), reset_sent_at: Time.zone.now)
-  end
-
   # パスワード再設定のメールを送信する
   def send_password_reset_email
     ParticipantMailer.password_reset(self).deliver_now
-  end
-
-  # パスワード再設定の期限が切れている場合は true を返す
-  def password_reset_expired?
-    reset_sent_at < 1.hours.ago
-  end
-
-  # アカウント有効化トークンの期限が切れている場合は true を返す
-  def activation_token_expired?
-    set_activation_token_at < 24.hours.ago
-  end
-
-  # 渡された文字列のハッシュ値を返す
-  def self.digest(string)
-    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
-    BCrypt::Password.create(string, cost: cost)
-  end
-
-  # ランダムなトークンを返す
-  def self.new_token
-    SecureRandom.urlsafe_base64
   end
 
   # 性別番号を文字列に変換する

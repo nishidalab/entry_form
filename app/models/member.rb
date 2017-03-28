@@ -1,6 +1,6 @@
 class Member < ApplicationRecord
+  include Account
   has_many :experiment
-  attr_accessor :remember_token
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   VALID_YOMI_REGEX = /[ぁ-んー－\s]+/
@@ -10,7 +10,7 @@ class Member < ApplicationRecord
 
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX },
                     uniqueness:  { case_sensitive: false }
-  validates :password, presence: true, length: { minimum: 8, maximum: 32 }
+  validates :password, presence: true, length: { minimum: 8, maximum: 32 }, allow_nil: true
   validates :name, presence: true, length: { maximum: 50 }
   validates :yomi, presence: true, length: { maximum: 50 }, format: { with: VALID_YOMI_REGEX }
 
@@ -25,21 +25,8 @@ class Member < ApplicationRecord
     update_attribute(:remember_digest, nil)
   end
 
-  # 渡されたトークンがダイジェストと一致したら true を返す。
-  def authenticated?(remember_token)
-    return false if remember_digest.nil?
-    BCrypt::Password.new(remember_digest).is_password?(remember_token)
+  # パスワード再設定のメールを送信する
+  def send_password_reset_email
+    MemberMailer.password_reset(self).deliver_now
   end
-
-  # 渡された文字列のハッシュ値を返す
-  def self.digest(string)
-    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
-    BCrypt::Password.create(string, cost: cost)
-  end
-
-  # ランダムなトークンを返す
-  def self.new_token
-    SecureRandom.urlsafe_base64
-  end
-
 end

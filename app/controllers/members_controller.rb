@@ -12,6 +12,8 @@ class MembersController < ApplicationController
         :name, :yomi, :email,
         :password, :password_confirmation))
     if @member.save
+      #MemberMailer.account_activation(@member).deliver_now
+      #flash[:info] = "アカウント有効化のためのメールを送信しました。"
       redirect_to member_login_url
     else
       render 'new'
@@ -25,7 +27,7 @@ class MembersController < ApplicationController
 
   private
 
-    # $B%m%0%$%s$7$F$$$k>l9g%^%$%Z!<%8$X%j%@%$%l%/%H$9$k(B
+    # ログインしている場合マイページへリダイレクトする
     def redirect_to_member_mypage
       redirect_member_logged_in(member_mypage_url)
     end

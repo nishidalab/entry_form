@@ -40,6 +40,7 @@ class ParticipantsRegisterTest < ActionDispatch::IntegrationTest
     participant.update(set_activation_token_at: participant.set_activation_token_at - 86401)
     get activate_url(t: participant.activation_token, e: participant.email)
     assert_equal 1, ActionMailer::Base.deliveries.size
+    follow_redirect!
     assert_redirected_to login_url
     participant.update(set_activation_token_at: participant.set_activation_token_at + 86401)
     # 両方正しい場合

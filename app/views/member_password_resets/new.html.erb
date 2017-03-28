@@ -1,0 +1,12 @@
+<% provide(:title, "パスワードの再設定") %>
+<h2><%= yield(:title) %></h2>
+<p>
+  登録されたメールアドレスにパスワード再設定URLを送信します。
+</p>
+
+<%= form_for(:member_password_reset, url: member_reset_path, html: { class: "form-horizontal" }) do |f| %>
+  <%= form_email_field f, :email, 'メールアドレス' %>
+  <%= form_submit f, '送信する' %>
+<% end %>
+
+<%= javascript_include_tag 'validation' %>
