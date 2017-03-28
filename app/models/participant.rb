@@ -35,6 +35,17 @@ class Participant < ApplicationRecord
       errors.add(:birth, "を入力してください")
       return
     end
+
+    birth_bc = birth_before_type_cast
+    if birth_bc.kind_of?(Hash) # フォームで入力すると元の型がHashなのでそれを拾ってバリデーション
+      y = birth_bc[1].to_i
+      m = birth_bc[2].to_i
+      d = birth_bc[3].to_i
+      unless Date.valid_date?(y,m,d)
+        errors.add(:birth, "は存在する年月日である必要があります")
+      end
+    end
+
     boundary = Date.today.years_ago(18)
     errors.add(:birth, "は#{boundary.to_s}以前である必要があります") if birth > boundary
   end
