@@ -3,6 +3,8 @@ ja:
     models:
       participant: 参加者
       inquiry: お問い合わせ
+      application: 実験応募
+      event: 実験外予定
     attributes:
       participant:
         id: ID
@@ -29,3 +31,22 @@ ja:
         participant_id: 参加者ID
         subject: 件名
         body: 本文
+      application:
+        id: ID
+        created_at: 登録日時
+        updated_at: 更新日時
+        schedule_id: 実験枠ID
+        participant_id: 参加者ID
+        status: 承認状態
+      event:
+        id: ID
+        created_at: 登録日時
+        updated_at: 更新日時
+        experiment_id: 実験ID
+        participant_id: 参加者ID
+        name: 予定名称
+        requirement: 参加者への要求
+        description: 説明
+        place: 場所
+        start_at: 開始日時
+        duration: 予定時間(分)

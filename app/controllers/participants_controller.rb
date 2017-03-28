@@ -10,7 +10,7 @@ class ParticipantsController < ApplicationController
   def create
     get_options_info
     @participant = Participant.new(params.require(:participant).permit(
-        :name, :yomi, :gender, :classification, :grade, :faculty, :address, :birth, :email,
+        :name, :yomi, :gender, :classification, :grade, :faculty_id, :address, :birth, :email,
         :password, :password_confirmation))
     if @participant.save
       ParticipantMailer.account_activation(@participant).deliver_now
@@ -40,7 +40,7 @@ class ParticipantsController < ApplicationController
     participant_params = nil
     if @type == 'profile'
       participant_params = params.require(:participant).permit(
-          :name, :yomi, :gender, :classification, :grade, :faculty, :address, :birth)
+          :name, :yomi, :gender, :classification, :grade, :faculty_id, :address, :birth)
     elsif @type == 'password'
       participant_params = params.require(:participant).permit(
           :password, :password_confirmation)
@@ -73,12 +73,8 @@ class ParticipantsController < ApplicationController
           "学部生(Bachelor)" => 1,
           "修士課程(Master)" => 2,
           "博士課程(Doctor)" => 3 }
-      @faculties = {
-          "工学部" => 1,
-          "理学部" => 2}
-      @courses = {
-          "情報学研究科" => 1,
-          "理学研究科" => 2}
+      @faculties = Faculty.where("classification == ?",1).pluck(:name,:id)
+      @courses = Faculty.where("classification == ?",2).pluck(:name,:id)
     end
 
     # ログインしていない場合ログインページへリダイレクトする

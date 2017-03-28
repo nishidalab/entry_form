@@ -3,7 +3,7 @@
 var head_id = "participant_";
 var grade_id = "#" + head_id + "grade";
 var classification_id = "#" + head_id + "classification";
-var faculty_id = "#" + head_id + "faculty";
+var faculty_id = "#" + head_id + "faculty_id";
 
 // 学生区分が変更されたら学年や学部・研究科の選択肢を変える
 function changeGradeFaculty() {
@@ -18,7 +18,6 @@ function changeGradeFaculty() {
     for(var i = 1; i <= max; i++) {
         $(grade_id).append($('<option>').attr({ value: i }).text(i));
     }
-    validation($(grade_id));
 
     // 学部・研究科の選択肢変更
     $(faculty_id).children().remove();
@@ -44,7 +43,7 @@ $(function() {
   <% if participant %>
     $(classification_id).val(<%= participant.classification %>);
     changeGradeFaculty();
-    $(faculty_id).val(<%= participant.faculty %>);
+    $(faculty_id).val(<%= participant.faculty_id %>);
     $(grade_id).val(<%= participant.grade %>);
   <% end %>
 });

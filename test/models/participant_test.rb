@@ -4,7 +4,7 @@ class ParticipantTest < ActiveSupport::TestCase
   def setup
     @participant = Participant.new(
         email: "okabi@example.com", name: "御華美", yomi: "おかび",  gender: 1, birth: Date.new(1992, 7, 31),
-        classification: 1, grade: 1, faculty: 1, address: "京都市左京区吉田本町",
+        classification: 1, grade: 1, faculty_id: 1, address: "京都市左京区吉田本町",
         password: "password", password_confirmation: "password")
   end
 
@@ -155,9 +155,9 @@ class ParticipantTest < ActiveSupport::TestCase
     assert_not @participant.valid?, "博士課程4年生は有効な値ではない"
   end
 
-  test "faculty should be present" do
-    @participant.faculty = 0
-    assert_not @participant.valid?
+  test "faculty should be valid" do
+    @participant.faculty_id = 0
+    assert_not @participant.valid?, "0は有効な値ではない"
   end
 
   test "address should be present" do
