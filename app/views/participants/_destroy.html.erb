@@ -1,7 +1,11 @@
 <p>※実験終了後ログインしないまま7日が経過すると自動的にアカウントが削除されます。</p>
 
-<%= link_to '今、アカウントを削除する', deactivate_path, method: :delete, title: '確認',
-            data: { confirm: '本当にアカウントを削除してよろしいですか？',
-                    commit:  '削除する',
-                    cancel:  'キャンセル', },
-            class: 'form-control btn btn-danger' %>
+<% if participant.schedules.blank? || participant.events.blank? %>
+    <%= link_to '今、アカウントを削除する', deactivate_path, method: :delete, title: '確認',
+                data: { confirm: '本当にアカウントを削除してよろしいですか？',
+                        commit:  '削除する',
+                        cancel:  'キャンセル', },
+                        class: 'form-control btn btn-danger' %>
+<% else%>
+    <p> あなたはまだ終了していない応募済みの実験があるためアカウントを削除できません。</p>
+<% end %>
