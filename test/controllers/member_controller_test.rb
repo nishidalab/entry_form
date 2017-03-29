@@ -3,6 +3,7 @@ require 'test_helper'
 class MemberControllerTest < ActionDispatch::IntegrationTest
   def setup
     @test = members(:one)
+    @admin = members(:admin)
   end
 
   test "member register should get member register when not logged in" do
@@ -12,6 +13,11 @@ class MemberControllerTest < ActionDispatch::IntegrationTest
 
   test "member register should get member mypage when logged in" do
     log_in_as_member @test
+    get member_register_path
+    assert_redirected_to member_mypage_url
+
+    log_out_as_member
+    log_in_as_member @admin
     get member_register_path
     assert_redirected_to member_mypage_url
   end
@@ -25,12 +31,24 @@ class MemberControllerTest < ActionDispatch::IntegrationTest
     log_in_as_member @test
     get member_mypage_path
     assert_template 'members/show'
+
+    log_out_as_member
+    log_in_as_member @admin
+    get member_mypage_path
+    assert_template 'members/show'
   end
 
-  test "member mypage should have links to his experiments" do
+  test "only admin member mypage should have links to his experiments" do
     log_in_as_member @test
     get member_mypage_path
     Experiment.where(member_id: @test.id).each do |experiment|
+      assert_select "a[href=?]", experiment_path(experiment), count: 0
+    end
+
+    log_out_as_member
+    log_in_as_member @admin
+    get member_mypage_path
+    Experiment.where(member_id: @admin.id).each do |experiment|
       assert_select "a[href=?]", experiment_path(experiment)
     end
   end

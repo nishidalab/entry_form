@@ -9,6 +9,7 @@ one:
   activated: true
   activated_at: DateTime.now
   deactivated: false
+  admin: false
 
 two:
   id: 2
@@ -19,3 +20,15 @@ two:
   activated: true
   activated_at: DateTime.now
   deactivated: false
+  admin: false
+
+admin:
+  id: 3
+  name: メンバーA
+  yomi: あどみん
+  email: admin@i.kyoto-u.ac.jp
+  password_digest: <%= Member.digest("password") %>
+  activated: true
+  activated_at: DateTime.now
+  deactivated: false
+  admin: true

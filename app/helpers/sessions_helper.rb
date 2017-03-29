@@ -95,6 +95,11 @@ module SessionsHelper
     !current_member.nil?
   end
 
+  # adminとしてログインしていれば true を返す
+  def logged_in_admin_member?
+    logged_in_member? && current_member.admin
+  end
+
   # 実験者をログアウトする。
   def log_out_member
     forget_member(@member)

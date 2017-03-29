@@ -4,6 +4,7 @@ class ExperimentsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @member1 = members(:one)
     @member2 = members(:two)
+    @admin = members(:admin)
     @experiment1 = experiments(:one)
     @experiment2 = experiments(:two)
     @max_experiment_id = Experiment.maximum(:id)
@@ -12,8 +13,12 @@ class ExperimentsControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
     log_in_as_member(@member1)
     get experiments_path
-    follow_redirect!
-    assert_template 'members/show'
+    assertion_normal_member_redirect_to_mypage
+
+    log_out_as_member
+    log_in_as_member(@admin)
+    get experiments_path
+    assertion_mypage
   end
 
   test "index should redirect to member login page when not logged in" do
@@ -29,10 +34,17 @@ class ExperimentsControllerTest < ActionDispatch::IntegrationTest
   test "show should redirect to index when parameter experiment is invalid" do
     log_in_as_member(@member1)
     get experiment_path(@max_experiment_id + 1)
+    assertion_normal_member_redirect_to_mypage
+
+    log_out_as_member
+    log_in_as_member(@admin)
+    get experiment_path(@max_experiment_id + 1)
     assertion_mypage
   end
 
   test "show should redirect to index when parameter experiment is not owned" do
+    @member1.admin = true
+    @member2.admin = true
     log_in_as_member(@member1)
     get experiment_path(@experiment2)
     assertion_mypage
@@ -43,6 +55,8 @@ class ExperimentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get show when parameter experiment is valid and owned" do
+    @member1.admin = true
+    @member2.admin = true
     log_in_as_member(@member1)
     get experiment_path(@experiment1)
     assert_template 'experiments/show'
@@ -53,10 +67,9 @@ class ExperimentsControllerTest < ActionDispatch::IntegrationTest
   end
 
   private
-    # index$B$r<BAu$7$F$$$J$$$N$G%^%$%Z!<%8$X$N(Bassertion$B$rMxMQ$7$F$$$k(B
-    # index$B$r<BAu$7$?$iBP1~$9$kItJ,$O$9$Y$F$=$l$K=q$-49$($h$&(B
+    # indexを実装していないのでマイページへのassertionを利用している
+    # indexを実装したら対応する部分はすべてそれに書き換えよう
     def assertion_mypage
-      assert_redirected_to member_mypage_path
       follow_redirect!
       assert_template 'members/show'
     end

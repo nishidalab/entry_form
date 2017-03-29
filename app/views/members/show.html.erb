@@ -6,9 +6,11 @@
 
 <% if !@experiments.nil? %>
   <h3>実験一覧</h3>
-  <% @experiments.each do |experiment| %>
-    <p>
-      <%= link_to "id: #{experiment.id}, 実験名: #{experiment.name}", experiment_path(experiment) %>
-    </p>
+  <% if @member.admin %>
+    <% @experiments.each do |experiment| %>
+      <p>
+        <%= link_to "id: #{experiment.id}, 実験名: #{experiment.name}", experiment_path(experiment) %>
+      </p>
+    <% end %>
   <% end %>
 <% end %>
