@@ -9,7 +9,7 @@ class ApplicationTest < ActiveSupport::TestCase
         password: "password", password_confirmation: "password")
     @participant.save
     @member = Member.new(
-        email: "test@example.com", name: "テスト", yomi: "てすと",
+        email: "test@ii.ist.i.kyoto-u.ac.jp", name: "テスト", yomi: "てすと",
         password: "password", password_confirmation: "password")
     @member.save
     @experiment = Experiment.new(

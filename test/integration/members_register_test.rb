@@ -16,7 +16,7 @@ class MembersRegisterTest < ActionDispatch::IntegrationTest
     get member_register_path
     assert_difference 'Member.count' do
       post member_register_path, params: { member: {
-          name: "西田豊明", yomi: "にしだとよあき", email: "hoge@fuga.com",
+          name: "西田豊明", yomi: "にしだとよあき", email: "hoge@i.kyoto-u.ac.jp",
           password: "password", password_confirmation: "password" } }
     end
   end
