@@ -18,7 +18,7 @@ module MembersCommon
 
     # adminのメンバーでログインしていない場合マイページへリダイレクトする
     def redirect_to_member_mypage_exclude_admin
-      if logged_in_admin_member?
+      if !logged_in_admin_member?
         redirect_to member_mypage_url
       end
     end

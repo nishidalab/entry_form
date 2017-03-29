@@ -45,6 +45,8 @@ class ExperimentsControllerTest < ActionDispatch::IntegrationTest
   test "show should redirect to index when parameter experiment is not owned" do
     @member1.admin = true
     @member2.admin = true
+    @member1.save
+    @member2.save
     log_in_as_member(@member1)
     get experiment_path(@experiment2)
     assertion_mypage
@@ -57,6 +59,8 @@ class ExperimentsControllerTest < ActionDispatch::IntegrationTest
   test "should get show when parameter experiment is valid and owned" do
     @member1.admin = true
     @member2.admin = true
+    @member1.save
+    @member2.save
     log_in_as_member(@member1)
     get experiment_path(@experiment1)
     assert_template 'experiments/show'
