@@ -1,0 +1,13 @@
+<% provide(:title, '実験者承認ページ') %>
+<h2><%= yield(:title) %></h2>
+
+<% if @normal_members.size > 0 %>
+  <h3>未承認の実験者一覧</h3>
+  <% @normal_members.each do |member| %>
+    <p>
+      <%= link_to "id: #{member.id}, 実験者名: #{member.name}", update_member_admin_path(member.id), method: :patch %>
+    </p>
+  <% end %>
+<% else %>
+  <p>未承認の実験者はいません。</p>
+<% end %>

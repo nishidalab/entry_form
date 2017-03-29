@@ -70,4 +70,8 @@ Rails.application.routes.draw do
   get    '/member/reset/:id', to: 'member_password_resets#edit',   as: 'member_edit_reset'
   patch  '/member/reset/:id', to: 'member_password_resets#update', as: 'member_update_reset'
 
+  # admin付与ページ
+  get    '/member/approve',     to: 'approve_members#show'
+  patch  '/member/approve/:id', to: 'approve_members#update', as: 'update_member_admin'
+
 end
