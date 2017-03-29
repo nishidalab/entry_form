@@ -17,7 +17,11 @@ class ParticipantsDeactivateTest < ActionDispatch::IntegrationTest
   test "get settings and deactivate" do
     log_in_as_participant @participant
     get settings_path
-    assert_select "a[href=?]", deactivate_path
+    if @participant.schedules.blank? && @participant.events.blank?
+      assert_select "a[href=?]", deactivate_path
+    else
+      assert_select "a[href=?]", deactivate_path, false
+    end
     deactivate
     assert_redirected_to login_url
     follow_redirect!
