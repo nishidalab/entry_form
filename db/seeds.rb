@@ -34,7 +34,7 @@ Participant.create!([
   { email: "test@example.com",
     password: 'password',
     password_confirmation: 'password',
-    name: "手酢都",
+    name: "",
     yomi: "てすと",
     gender: 1,
     birth: Date.new(1995, 12, 18),
