@@ -2,21 +2,16 @@ Member.delete_all
 Member.create!([
   { name: "太郎",
     yomi: "たろう",
-    email: "taro@b.c",
+    email: "taro@ii.ist.i.kyoto-u.ac.jp",
     password: 'password',
     password_confirmation: 'password',
   },
-  { name: "博士",
-    yomi: "ひろし",
-    email: "hiroshi@b.c",
+  { name: "アドミン",
+    yomi: "あどみん",
+    email: "admin@i.kyoto-u.ac.jp",
     password: 'password',
     password_confirmation: 'password',
-  },
-  { name: "花子",
-    yomi: "はなこ",
-    email: "hanako@b.c",
-    password: 'password',
-    password_confirmation: 'password',
+    admin: true
   },
 ])
 
