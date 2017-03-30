@@ -70,4 +70,22 @@ class Participant < ApplicationRecord
   def self.find_by_email(email)
     Participant.find_by(email: email, deactivated: false)
   end
+
+  def deactivatable?
+    for s in schedules do
+      if s.datetime > DateTime.now
+        for a in s.applications do
+          if a.status != 2
+            return false
+          end
+        end
+      end
+    end
+    for e in events do
+      if e.start_at > DateTime.now
+        return false
+      end
+    end
+    return true
+  end
 end

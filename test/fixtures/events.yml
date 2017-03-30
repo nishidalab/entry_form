@@ -8,3 +8,14 @@ one:
   duration: 10
   experiment_id: 1
   participant_id: 1
+
+two:
+  id: 2
+  name: 事前手続き
+  requirement: 印鑑(シャチハタ以外)
+  description: 事前手続きです。
+  place: 総合研究7号館207号室
+  start_at: 2100-03-10 12:00:00
+  duration: 10
+  experiment_id: 2
+  participant_id: 2

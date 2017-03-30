@@ -2,3 +2,8 @@ one:
   participant_id: 1
   schedule_id: 1
   status: 0
+
+two:
+  participant_id: 2
+  schedule_id: 5
+  status: 0

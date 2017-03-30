@@ -27,5 +27,19 @@ class ParticipantsDeactivateTest < ActionDispatch::IntegrationTest
     assert @participant.deactivated
     get login_path
     assert flash.empty?
+
+    @participant = participants(:two) # 終了していないイベントやスケジュールのあるアカウント
+    log_in_as_participant @participant
+    get settings_path
+    assert_select "a[href=?]", deactivate_path, false
+    deactivate
+    assert_redirected_to login_url
+    follow_redirect!
+    assert_not flash.empty?
+    assert_not is_logged_in_participant?
+    @participant.reload
+    assert_not @participant.deactivated
+    get login_path
+    assert flash.empty?
   end
 end
