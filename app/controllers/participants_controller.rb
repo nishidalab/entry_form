@@ -57,7 +57,7 @@ class ParticipantsController < ApplicationController
 
   def destroy
     @participant = current_participant
-    if @participant.update_attributes(deactivated: true)
+    if @participant.deactivatable? && @participant.update_attributes(deactivated: true)
       flash[:success] = 'アカウントを削除しました。'
     else
       flash[:danger] = 'アカウントの削除に失敗しました。'
