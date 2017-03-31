@@ -12,8 +12,8 @@ class MembersController < ApplicationController
         :name, :yomi, :email,
         :password, :password_confirmation))
     if @member.save
-      #MemberMailer.account_activation(@member).deliver_now
-      #flash[:info] = "アカウント有効化のためのメールを送信しました。"
+      MemberMailer.account_activation(@member).deliver_now
+      flash[:info] = "アカウント有効化のためのメールを送信しました。"
       redirect_to member_login_url
     else
       render 'new'
