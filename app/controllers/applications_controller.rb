@@ -5,10 +5,22 @@ class ApplicationsController < ApplicationController
     @experiments = Experiment.all
     @participant = current_participant
     @applied_ids = Application.where(participant_id: current_participant.id).map { |a| a.schedule.experiment.id }
-    @status = Array.new(Experiment.maximum(:id))
+    @panel = []
+    @apply = []
     @experiments.each do |ex|
-      exschedules = Schedule.where(experiment_id: ex.id)
-      @status[ex.id - 1] = Application.where(participant_id: current_participant.id).where(schedule_id: exschedules).map{ |a| a.status }
+     exschedules = Schedule.where(experiment_id: ex.id)
+     status = Application.where(participant_id: current_participant.id).where(schedule_id: exschedules).map{ |a| a.status }
+     if status.include?(3)
+       @panel.push(false)
+       @apply.push(false)
+     else
+       @panel.push(true)
+       if status.include?(0) || status.include?(1)
+         @apply.push(false)
+       else
+         @apply.push(true)
+       end
+     end
     end
   end
 
