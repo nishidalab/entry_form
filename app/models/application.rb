@@ -2,8 +2,6 @@ class Application < ApplicationRecord
   belongs_to :participant
   belongs_to :schedule
 
-  before_save :fill_participant_id
-
   validate   :validate_unique_record
   validate   :validate_double_booking
   validates  :status, inclusion: { in: 0..3 }  # 0: 申請中、1: 許可、2: 拒否、 3: 強い拒否
@@ -34,14 +32,6 @@ class Application < ApplicationRecord
         error.call
         return
       end
-    end
-  end
-
-  # status が承認されるとき schedule の participant_id を埋める
-  def fill_participant_id
-    if status == 1
-      self.schedule.participant = participant
-      self.schedule.save
     end
   end
 

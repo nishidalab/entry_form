@@ -2,7 +2,6 @@ class Participant < ApplicationRecord
   include Account
 
   belongs_to :faculty
-  has_many :schedules
   has_many :applications, dependent: :destroy
   has_many :inquiries, dependent: :destroy
   has_many :schedules, through: :applications
