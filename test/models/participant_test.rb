@@ -12,6 +12,16 @@ class ParticipantTest < ActiveSupport::TestCase
     assert @participant.valid?
   end
 
+  test "birth should accept valid date" do
+    @participant.birth = { 1 => 1992, 2 => 2, 3 => 29}
+    assert @participant.valid?
+  end
+
+  test "birth should reject invalid date" do
+    @participant.birth = { 1 => 1990, 2 => 2, 3 => 31}
+    assert_not @participant.valid?
+  end
+
   test "email should be present" do
     @participant.email = "    "
     assert_not @participant.valid?
