@@ -13,7 +13,7 @@ module AccountsCommon
           send("log_in_#{user_class}", user)
           flash[:success] = "本登録が完了しました。"
           Object.const_get("#{user_class.capitalize}Mailer").account_activated(user).deliver_now
-          redirect_to_home_page_after_logged_in user_class
+          redirect_to_home user_class
         else
           failed_activation(user_class: user_class)
         end
@@ -53,11 +53,17 @@ module AccountsCommon
       render 'new'
     end
 
-    def redirect_to_home_page_after_logged_in(user_classification)
-      if user_classification == :participant
+    def redirect_to_home(user_classification)
+      if user_classification == :participant && logged_in_participant?
         redirect_back_or applications_url
       elsif user_classification == :member
-        redirect_back_or member_mypage_path
+        if logged_in_member?
+          redirect_back_or member_mypage_path
+        else
+          redirect_to member_login_path
+        end
+      else
+        redirect_to login_path
       end
     end
 end

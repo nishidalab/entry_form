@@ -29,7 +29,7 @@ class SessionsController < ApplicationController
       if user.activated?
         self.send("log_in_#{user_classification}", user)
         params[:session][:remember_me] == '1' ? self.send("remember_#{user_classification}", user) : self.send("forget_#{user_classification}", user)
-        redirect_to_home_page_after_logged_in(user_classification)
+        redirect_to_home(user_classification)
       else
         flash[:warning] = 'アカウントが有効化されていません。メールを確認してください。'
         redirect_to eval("#{user_classification}_login_path")
