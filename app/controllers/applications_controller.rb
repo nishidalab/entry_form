@@ -33,7 +33,6 @@ class ApplicationsController < ApplicationController
     @schedules.each do |s|
       @times.push({ start: s.datetime, end: s.datetime + s.experiment.duration * 60 })
     end
-    @participant = Participant.find_by(id: 1)
   end
 
   def create
