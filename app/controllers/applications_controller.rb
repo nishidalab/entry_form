@@ -2,8 +2,6 @@ class ApplicationsController < ApplicationController
   before_action :redirect_to_login
 
   def index
-    @participant = current_participant
-    @applied_ids = Application.where(participant_id: current_participant.id).map { |a| a.schedule.experiment.id }
     @draw_experiments = []
     Experiment.find_each do |ex|
       exschedules = Schedule.where(experiment_id: ex.id)
@@ -14,11 +12,7 @@ class ApplicationsController < ApplicationController
         current_ex[:name] = ex.name
         current_ex[:requirement] = ex.requirement
         current_ex[:description] = ex.description
-        if status.include?(0) || status.include?(1)
-          current_ex[:apply] = false
-        else
-          current_ex[:apply] = true
-        end
+        current_ex[:apply] = !(status.include?(0) || status.include?(1))
         @draw_experiments.push(current_ex)
       end
     end
