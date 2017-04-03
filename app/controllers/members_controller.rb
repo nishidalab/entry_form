@@ -28,8 +28,9 @@ class MembersController < ApplicationController
     @times = []
     @schedules.each do |s|
       participant = ''
-      if s.participant
-        participant = s.participant.name
+      my_apps = Application.where(schedule_id: s.id).where(status: [0, 1])
+      if !my_apps.empty?
+        participant = Participant.find_by_id(my_apps[0].participant_id).name
       else
         participant = '空き'
       end
