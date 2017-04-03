@@ -20,6 +20,7 @@ class ParticipantsMypageTest < ActionDispatch::IntegrationTest
     apply(schedules(:two), 0)
     apply(schedules(:three), 1)
     apply(schedules(:four), 2)
+    apply(schedules(:six), 3)
     get mypage_path
     assert_template 'participants/show'
 
@@ -31,6 +32,9 @@ class ParticipantsMypageTest < ActionDispatch::IntegrationTest
 
     # 拒否した予定がカレンダーに表示されない
     assert_select 'div[class=?]', "#{schedules(:four).experiment.name}2", count: 0
+
+    # 強い拒否をした予定がカレンダーに表示されない
+    assert_select 'div[class=?]', "#{schedules(:five).experiment.name}3", count: 0
 
     # 実験外予定がカレンダーに表示される
     assert_select 'div[class=?]', "#{events(:one).name}#{events(:one).experiment.name}"

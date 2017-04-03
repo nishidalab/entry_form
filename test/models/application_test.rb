@@ -38,7 +38,7 @@ class ApplicationTest < ActiveSupport::TestCase
   end
 
   test "status is valid" do
-    (0..2).each do |i|
+    (0..3).each do |i|
       @application.status = i
       assert @application.valid?, "status #{i} should be valid."
     end
@@ -47,7 +47,7 @@ class ApplicationTest < ActiveSupport::TestCase
   test "status is invalid" do
     @application.status = -1
     assert_not @application.valid?
-    @application.status = 3
+    @application.status = 4
     assert_not @application.valid?
   end
 

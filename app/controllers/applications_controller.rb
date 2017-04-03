@@ -2,9 +2,20 @@ class ApplicationsController < ApplicationController
   before_action :redirect_to_login
 
   def index
-    @experiments = Experiment.all
-    @participant = current_participant
-    @applied_ids = Application.where(participant_id: current_participant.id).map { |a| a.schedule.experiment.id }
+    @draw_experiments = []
+    Experiment.find_each do |ex|
+      exschedules = Schedule.where(experiment_id: ex.id)
+      status = Application.where(participant_id: current_participant.id).where(schedule_id: exschedules).map{ |a| a.status }
+      if !status.include?(3)
+        current_ex = {}
+        current_ex[:id] = ex.id
+        current_ex[:name] = ex.name
+        current_ex[:requirement] = ex.requirement
+        current_ex[:description] = ex.description
+        current_ex[:apply] = !(status.include?(0) || status.include?(1))
+        @draw_experiments.push(current_ex)
+      end
+    end
   end
 
   def new
@@ -13,11 +24,14 @@ class ApplicationsController < ApplicationController
       return
     end
     applied_ids = Application.where(participant_id: current_participant.id).map { |a| a.schedule.experiment.id }
-    if applied_ids.include?(@experiment.id)
+    exschedules = Schedule.where(experiment_id: @experiment.id)
+    status = Application.where(participant_id: current_participant.id).where(schedule_id: exschedules).map{ |a| a.status }
+    if applied_ids.include?(@experiment.id) && status.count != status.count(2)
       redirect_to applications_url
       return
     end
-    @schedules = @experiment.schedules.where(participant_id: nil)
+    apps = Application.where(participant_id: current_participant.id).where(status: 2).map { |a| a.schedule_id }
+    @schedules = @experiment.schedules.where(participant_id: nil).where.not(id: apps)
     @times = []
     @schedules.each do |s|
       @times.push({ start: s.datetime, end: s.datetime + s.experiment.duration * 60 })
