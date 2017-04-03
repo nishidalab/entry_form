@@ -35,31 +35,3 @@ var dated_schedules = (function() {
     }
     return ret;
 })();
-
-$(function() {
-    // カレンダー要素の削除(「戻る」でのカレンダー重複表示対策)
-    $('#calendar').html('');
-
-    var cal = $('#calendar').calendario({
-        weeks: ['日', '月', '火', '水', '木', '金', '土'],
-        weekabbrs: ['日', '月', '火', '水', '木', '金', '土'],
-        months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-        monthabbrs: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-        zone: '+09:00',
-        fillEmpty: false,
-        caldata: dated_schedules,
-        checkUpdate: false,
-    });
-    updateMonthYear();
-    $('#custom-next').on('click', function() {
-        cal.gotoNextMonth(updateMonthYear);
-    });
-    $('#custom-prev').on('click', function() {
-        cal.gotoPreviousMonth(updateMonthYear);
-    });
-
-    function updateMonthYear() {
-        $('#custom-year').html(cal.getYear() + '年');
-        $('#custom-month').html(cal.getMonthName());
-    }
-});

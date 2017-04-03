@@ -33,3 +33,7 @@
     <%= render partial: 'members/javascripts/show.js',
       locals: { schedules: @schedules, times: @times, experiments: @experiments } %>
 </script>
+
+<script type="text/javascript">
+  <%= render partial: 'shared/javascripts/calendar_init.js' %>
+</script>
