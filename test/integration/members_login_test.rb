@@ -19,6 +19,7 @@ class MembersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a", {:text => 'Nishida Lab.'} do
       assert_select "[href=?]", root_path
       assert_select "[href=?]", mypage_path, count: 0
+      assert_select "[href=?]", member_mypage_path, count: 0
     end
   end
 
@@ -34,7 +35,8 @@ class MembersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", new_experiment_path
     assert_select "a", {:text => 'Nishida Lab.'} do
       assert_select "[href=?]", root_path, count: 0
-      assert_select "[href=?]", mypage_path
+      assert_select "[href=?]", mypage_path, count: 0
+      assert_select "[href=?]", member_mypage_path
     end
     delete member_logout_path
     assert_redirected_to member_login_url
@@ -46,6 +48,7 @@ class MembersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a", {:text => 'Nishida Lab.'} do
       assert_select "[href=?]", root_path
       assert_select "[href=?]", mypage_path, count: 0
+      assert_select "[href=?]", member_mypage_path, count: 0
     end
   end
 
