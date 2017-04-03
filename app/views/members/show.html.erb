@@ -29,11 +29,6 @@
   <div id="calendar" class="fc-calendar-container"></div>
 </div>
 
-<div class="custom-submit">
-  <%= button_tag '応募する', onclick: "submit(this, '#{applications_path}')", class: "form-control btn btn-primary" %>
-
-</div>
-
 <script type="text/javascript">
     <%= render partial: 'members/javascripts/show.js',
       locals: { schedules: @schedules, times: @times, experiments: @experiments } %>

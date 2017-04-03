@@ -18,12 +18,11 @@ var schedules = [
 // カレンダーに表示するイベント情報を日付ごとにまとめる
 var dated_schedules = (function() {
     var ret = {};
+    var sp = ' '
     for(var s of schedules) {
         var e = {
             content:
-                '<button type="button" id="b' + s.index +
-                '" class="form-control btn btn-default" onclick="scheduleClicked(' +
-                s.index + ')">' + s.title + s.participant + s.experiment + '</button>',
+                s.title + sp + s.participant + sp + s.experiment,
             startTime: s.start,
             endTime:   s.end,
         };
@@ -36,44 +35,6 @@ var dated_schedules = (function() {
     }
     return ret;
 })();
-
-// スケジュールの選択状態を反転させる
-$(".schedule")
-function scheduleClicked(index) {
-    schedules[index].selected = !schedules[index].selected;
-    var id = '#b' + index
-    if(schedules[index].selected) {
-        $(id).text('【選択】' + schedules[index].title);
-        $(id).removeClass('btn-default');
-        $(id).addClass('btn-primary');
-    }
-    else {
-        $(id).text(schedules[index].title);
-        $(id).removeClass('btn-primary');
-        $(id).addClass('btn-default');
-    }
-};
-
-// スケジュールを登録する
-function submit (elem, url){
-    var selected = false;
-    schedules.forEach(function(s) {
-        if(s['selected']) {
-            selected = true;
-        }
-    });
-    if(!selected) {
-        alert("日時を選択してください。");
-        return;
-    }
-    clicked(elem);
-    <% experiments.each do |experiment| %>
-      $.post(url, {
-          'experiment': <%= experiment.id %>,
-          'schedules[]': schedules.filter(function(e) { return e['selected']; }).map(function(e) { return e['id']; })
-      });
-    <% end %>
-}
 
 $(function() {
     // カレンダー要素の削除(「戻る」でのカレンダー重複表示対策)
