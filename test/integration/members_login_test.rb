@@ -16,6 +16,10 @@ class MembersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", login_path
     assert_select "a[href=?]", member_mypage_path, count: 0
     assert_select "a[href=?]", member_logout_path, count: 0
+    assert_select "a", {:text => 'Nishida Lab.'} do
+      assert_select "[href=?]", root_path
+      assert_select "[href=?]", mypage_path, count: 0
+    end
   end
 
   test "member login with valid information and logout" do
@@ -28,6 +32,10 @@ class MembersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", member_mypage_path
     assert_select "a[href=?]", member_logout_path
     assert_select "a[href=?]", new_experiment_path
+    assert_select "a", {:text => 'Nishida Lab.'} do
+      assert_select "[href=?]", root_path, count: 0
+      assert_select "[href=?]", mypage_path
+    end
     delete member_logout_path
     assert_redirected_to member_login_url
     follow_redirect!
@@ -35,6 +43,10 @@ class MembersLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", member_mypage_path, count: 0
     assert_select "a[href=?]", member_logout_path, count: 0
     assert_select "a[href=?]", new_experiment_path, count: 0
+    assert_select "a", {:text => 'Nishida Lab.'} do
+      assert_select "[href=?]", root_path
+      assert_select "[href=?]", mypage_path, count: 0
+    end
   end
 
   test "login with remembering" do
