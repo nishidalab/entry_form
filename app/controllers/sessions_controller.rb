@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  include AccountsCommon
   before_action :logged_in, only: [:new_participant, :new_member, :create_participant, :create_member]
 
   def new_participant
@@ -25,14 +26,10 @@ class SessionsController < ApplicationController
   def create(model_class, user_classification)
     user = Object.const_get(model_class).find_by_email(params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
-      if user_classification == :member || user.activated?
+      if user.activated?
         self.send("log_in_#{user_classification}", user)
         params[:session][:remember_me] == '1' ? self.send("remember_#{user_classification}", user) : self.send("forget_#{user_classification}", user)
-        if user_classification == :participant
-          redirect_back_or applications_url
-        elsif user_classification == :member
-          redirect_to member_mypage_path
-        end
+        redirect_to_home(user_classification)
       else
         flash[:warning] = 'アカウントが有効化されていません。メールを確認してください。'
         redirect_to eval("#{user_classification}_login_path")
