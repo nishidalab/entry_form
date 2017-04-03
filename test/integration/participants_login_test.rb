@@ -21,6 +21,11 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", mypage_path, count: 0
     assert_select "a[href=?]", settings_path, count: 0
     assert_select "a[href=?]", logout_path, count: 0
+    assert_select "a", {:text => 'Nishida Lab.'} do
+      assert_select "[href=?]", root_path
+      assert_select "[href=?]", mypage_path, count: 0
+      assert_select "[href=?]", member_mypage_path, count: 0
+    end
   end
 
   test "login with valid information and logout" do
@@ -35,6 +40,11 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", mypage_path
     assert_select "a[href=?]", settings_path
     assert_select "a[href=?]", logout_path
+    assert_select "a", {:text => 'Nishida Lab.'} do
+      assert_select "[href=?]", root_path, count: 0
+      assert_select "[href=?]", mypage_path
+      assert_select "[href=?]", member_mypage_path, count: 0
+    end
     delete logout_path
     assert_redirected_to participant_login_url
     follow_redirect!
@@ -47,6 +57,11 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", mypage_path, count: 0
     assert_select "a[href=?]", settings_path, count: 0
     assert_select "a[href=?]", logout_path, count: 0
+    assert_select "a", {:text => 'Nishida Lab.'} do
+      assert_select "[href=?]", root_path
+      assert_select "[href=?]", mypage_path, count: 0
+      assert_select "[href=?]", member_mypage_path, count: 0
+    end
   end
 
   test "login with remembering" do
@@ -73,5 +88,10 @@ class ParticipantsLoginTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", mypage_path, count: 0
     assert_select "a[href=?]", settings_path, count: 0
     assert_select "a[href=?]", logout_path, count: 0
+    assert_select "a", {:text => 'Nishida Lab.'} do
+      assert_select "[href=?]", root_path
+      assert_select "[href=?]", mypage_path, count: 0
+      assert_select "[href=?]", member_mypage_path, count: 0
+    end
   end
 end
