@@ -23,6 +23,22 @@ class MembersController < ApplicationController
   def show
     @member = current_member
     @experiments = Experiment.where(member_id: @member.id)
+    @schedules = Schedule.where(experiment_id: @experiments.ids)
+
+    @times = []
+    @schedules.each do |s|
+      participant = ''
+      if s.participant
+        participant = s.participant.name
+      else
+        participant = '空き'
+      end
+      @times.push({
+        start: s.datetime,
+        end: s.datetime + s.experiment.duration * 60,
+        experiment: @experiments.find_by_id(s.experiment_id).name,
+        participant: participant})
+    end
   end
 
   private

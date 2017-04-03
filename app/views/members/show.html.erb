@@ -14,3 +14,27 @@
     <% end %>
   <% end %>
 <% end %>
+
+<div class="custom-calendar-wrap custom-calendar-full">
+  <div class="custom-header clearfix">
+    <h3 class="custom-month-year">
+      <span id="custom-year" class="custom-year"></span>
+      <span id="custom-month" class="custom-month"></span>
+      <nav>
+        <span id="custom-prev" class="custom-prev"></span>
+        <span id="custom-next" class="custom-next"></span>
+      </nav>
+    </h3>
+  </div>
+  <div id="calendar" class="fc-calendar-container"></div>
+</div>
+
+<div class="custom-submit">
+  <%= button_tag '応募する', onclick: "submit(this, '#{applications_path}')", class: "form-control btn btn-primary" %>
+
+</div>
+
+<script type="text/javascript">
+    <%= render partial: 'members/javascripts/show.js',
+      locals: { schedules: @schedules, times: @times, experiments: @experiments } %>
+</script>
