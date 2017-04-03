@@ -38,6 +38,18 @@ class ActionDispatch::IntegrationTest
     !session[:member_id].nil?
   end
 
+  # adminでないメンバーはマイページに飛ばされる
+  def assertion_normal_member_redirect_to_mypage
+    follow_redirect!
+    assert_template 'members/show'
+  end
+
+
+  # テスト実験者がログイン中で、adminの場合に true を返す
+  def is_logged_in_admin_member?
+    is_logged_in_member? && Member.find_by_id(session[:member_id]).admin
+  end
+
   # テスト実験者がログアウトする
   def log_out_as_member
     delete member_logout_path

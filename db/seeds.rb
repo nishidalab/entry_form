@@ -5,13 +5,14 @@ Member.create!([
     email: "taro@ii.ist.i.kyoto-u.ac.jp",
     password: 'password',
     password_confirmation: 'password',
+    admin: false,
   },
   { name: "アドミン",
     yomi: "あどみん",
     email: "admin@i.kyoto-u.ac.jp",
     password: 'password',
     password_confirmation: 'password',
-    admin: true
+    admin: true,
   },
 ])
 

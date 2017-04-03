@@ -3,6 +3,7 @@ require 'test_helper'
 class MembersLoginTest < ActionDispatch::IntegrationTest
   def setup
     @member = members(:one)
+    @admin = members(:admin)
   end
 
   test "member login with invalid information" do
@@ -23,10 +24,28 @@ class MembersLoginTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "member login with valid information and logout" do
+  test "normal member login with valid information and logout" do
     get member_login_path
     log_in_as_member @member
     assert is_logged_in_member?
+    follow_redirect!
+    assert_template 'members/show'
+    assert_select "a[href=?]", login_path, count: 0
+    assert_select "a[href=?]", member_mypage_path
+    assert_select "a[href=?]", member_logout_path
+    delete member_logout_path
+    assert_redirected_to member_login_url
+    follow_redirect!
+    assert_select "a[href=?]", login_path
+    assert_select "a[href=?]", member_mypage_path, count: 0
+    assert_select "a[href=?]", member_logout_path, count: 0
+  end
+
+  test "admin member login with valid information and logout" do
+    get member_login_path
+    log_in_as_member @admin
+    assert is_logged_in_member?
+    assert is_logged_in_admin_member?
     follow_redirect!
     assert_template 'members/show'
     assert_select "a[href=?]", login_path, count: 0

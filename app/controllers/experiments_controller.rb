@@ -1,6 +1,7 @@
 class ExperimentsController < ApplicationController
   include MembersCommon
   before_action :redirect_to_member_login
+  before_action :redirect_to_member_mypage_exclude_admin
 
   def index
     redirect_to member_mypage_url
