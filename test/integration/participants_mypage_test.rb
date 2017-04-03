@@ -20,7 +20,7 @@ class ParticipantsMypageTest < ActionDispatch::IntegrationTest
     apply(schedules(:two), 0)
     apply(schedules(:three), 1)
     apply(schedules(:four), 2)
-    apply(schedules(:five), 3)
+    apply(schedules(:six), 3)
     get mypage_path
     assert_template 'participants/show'
 
