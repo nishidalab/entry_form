@@ -58,13 +58,6 @@ class ApplicationTest < ActiveSupport::TestCase
     assert_not dup.valid?
   end
 
-  test "schedule.participant_id should be filled when status become 1" do
-    @application.status = 1
-    assert @application.valid?
-    @application.save
-    assert_equal @application.participant_id, @application.schedule.participant_id
-  end
-
   test "status should not become 1 if double booking" do
     # @application の10分後に開始するスケジュール(bad)と、60分後に開始するスケジュール(good)を登録
     another_experiment = Experiment.new(

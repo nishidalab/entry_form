@@ -136,7 +136,6 @@ Experiment.create!([
 
 Schedule.delete_all
 experiments = Experiment.all
-participants = Participant.all
 Schedule.create!([
   { experiment_id: experiments[0].id,
     datetime: DateTime.new(2017, 2, 24, 13, 0, 0, "+0900"),
@@ -145,11 +144,9 @@ Schedule.create!([
     datetime: DateTime.new(2017, 2, 26, 15, 0, 0, "+0900"),
   },
   { experiment_id: experiments[1].id,
-    participant_id: participants[1].id,
     datetime: DateTime.new(2017, 2, 27, 9, 0, 0, "+0900"),
   },
   { experiment_id: experiments[2].id,
-    participant_id: participants[2].id,
     datetime: DateTime.new(2017, 1, 27, 9, 0, 0, "+0900"),
   },
   { experiment_id: experiments[1].id,
@@ -158,6 +155,7 @@ Schedule.create!([
 ])
 
 Application.delete_all
+participants = Participant.all
 schedules = Schedule.all
 Application.create!([
    { participant_id: participants[0].id,

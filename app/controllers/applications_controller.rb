@@ -23,15 +23,12 @@ class ApplicationsController < ApplicationController
       redirect_to applications_url
       return
     end
-    applied_ids = Application.where(participant_id: current_participant.id).map { |a| a.schedule.experiment.id }
-    exschedules = Schedule.where(experiment_id: @experiment.id)
-    status = Application.where(participant_id: current_participant.id).where(schedule_id: exschedules).map{ |a| a.status }
-    if applied_ids.include?(@experiment.id) && status.count != status.count(2)
+    if current_participant.applications.where.not(status: 2).map { |a| a.schedule.experiment.id }.include?(@experiment.id)
       redirect_to applications_url
       return
     end
-    apps = Application.where(participant_id: current_participant.id).where(status: 2).map { |a| a.schedule_id }
-    @schedules = @experiment.schedules.where(participant_id: nil).where.not(id: apps)
+    unappliable_schedule_ids = Application.where(status: 1).map { |a| a.schedule.id }
+    @schedules = @experiment.schedules.select { |s| !unappliable_schedule_ids.include?(s.id) }
     @times = []
     @schedules.each do |s|
       @times.push({ start: s.datetime, end: s.datetime + s.experiment.duration * 60 })
@@ -48,9 +45,10 @@ class ApplicationsController < ApplicationController
       return
     end
     schedules = Schedule.where(id: schedule_ids)
+    unappliable_schedule_ids = Application.where(status: 1).map { |a| a.schedule.id }
     applications = []
     schedules.each do |schedule|
-      unless schedule.participant_id.nil?
+      if unappliable_schedule_ids.include?(schedule.id)
         create_error '希望日時の一部が既に埋まっています。', experiment_id
         return
       end
