@@ -3,24 +3,22 @@
 <p>
   現在応募可能な実験の一覧です。
 </p>
-<% @experiments.each do |ex| %>
-<% if @panel[ex.id - 1 ] %>
-  <div class="panel panel-primary">
-    <div class="panel-heading"><%= simple_format(h(ex.name)) %></div>
-    <div class="panel-body">
-      <b>応募条件</b>
-      <%= simple_format(h(ex.requirement)) %>
-      <hr>
-      <b>実験内容</b>
-      <%= simple_format(h(ex.description)) %>
+<% @draw_experiments.each do |ex| %>
+    <div class="panel panel-primary">
+      <div class="panel-heading"><%= simple_format(h(ex[:name])) %></div>
+      <div class="panel-body">
+        <b>応募条件</b>
+        <%= simple_format(h(ex[:requirement])) %>
+        <hr>
+        <b>実験内容</b>
+        <%= simple_format(h(ex[:description])) %>
+      </div>
+      <div class="panel-footer">
+        <% if !ex[:apply] %>
+          <%= button_tag "応募済み", class: 'form-control btn btn-default', disabled: true %>
+        <% else %>
+          <%= link_to "参加する", new_application_path(experiment: ex[:id]), class: 'form-control btn btn-success' %>
+        <% end %>
+      </div>
     </div>
-    <div class="panel-footer">
-       <% if !@apply[ex.id - 1] %>
-         <%= button_tag "応募済み", class: 'form-control btn btn-default', disabled: true %>
-       <% else %>
-         <%= link_to "参加する", new_application_path(experiment: ex.id), class: 'form-control btn btn-success' %>
-       <% end %>
-    </div>
-  </div>
-<% end %>
 <% end %>

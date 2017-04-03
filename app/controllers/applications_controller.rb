@@ -2,25 +2,19 @@ class ApplicationsController < ApplicationController
   before_action :redirect_to_login
 
   def index
-    @experiments = Experiment.all
-    @participant = current_participant
-    @applied_ids = Application.where(participant_id: current_participant.id).map { |a| a.schedule.experiment.id }
-    @panel = []
-    @apply = []
-    @experiments.each do |ex|
-     exschedules = Schedule.where(experiment_id: ex.id)
-     status = Application.where(participant_id: current_participant.id).where(schedule_id: exschedules).map{ |a| a.status }
-     if status.include?(3)
-       @panel.push(false)
-       @apply.push(false)
-     else
-       @panel.push(true)
-       if status.include?(0) || status.include?(1)
-         @apply.push(false)
-       else
-         @apply.push(true)
-       end
-     end
+    @draw_experiments = []
+    Experiment.find_each do |ex|
+      exschedules = Schedule.where(experiment_id: ex.id)
+      status = Application.where(participant_id: current_participant.id).where(schedule_id: exschedules).map{ |a| a.status }
+      if !status.include?(3)
+        current_ex = {}
+        current_ex[:id] = ex.id
+        current_ex[:name] = ex.name
+        current_ex[:requirement] = ex.requirement
+        current_ex[:description] = ex.description
+        current_ex[:apply] = !(status.include?(0) || status.include?(1))
+        @draw_experiments.push(current_ex)
+      end
     end
   end
 
