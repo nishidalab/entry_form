@@ -47,7 +47,7 @@ class Experiment < ApplicationRecord
   def validate_same_name
     experiment = Experiment.find_by(name: name)
 
-    if !experiment.nil?
+    if experiment
       errors.add(:name, "同名の実験が存在します。")
     end
   end
