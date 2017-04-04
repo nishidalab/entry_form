@@ -29,16 +29,14 @@ class MembersController < ApplicationController
     @schedules.each do |s|
       p_infos = []
       my_apps = Application.where(schedule_id: s.id).where(status: [0, 1])
-      if !my_apps.empty?
-        my_apps.each do |my_app|
-          p_info = {}
-          p = Participant.find_by_id(my_app.participant_id)
-          p_info[:id] = p.id
-          p_info[:name] = p.name
-          p_info[:yomi] = p.yomi
-          p_info[:status] = my_app.status
-          p_infos.push(p_info)
-        end
+      my_apps.each do |my_app|
+        p_info = {}
+        p = Participant.find_by_id(my_app.participant_id)
+        p_info[:id] = p.id
+        p_info[:name] = p.name
+        p_info[:yomi] = p.yomi
+        p_info[:status] = my_app.status
+        p_infos.push(p_info)
       end
       @times.push({
         start: s.datetime,
