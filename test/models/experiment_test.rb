@@ -4,9 +4,11 @@ class ExperimentTest < ActiveSupport::TestCase
   def setup
     @member = Member.new(name: 'ラボ員', yomi: 'らぼいん', email: 'member@ii.ist.i.kyoto-u.ac.jp', password: 'password')
     @member.save
+    @room = rooms(:one)
+    @room.save
     @experiment = Experiment.new(
       member_id: @member.id, zisshi_ukagai_date: Date.new(2017, 3, 23),
-      project_owner: 'プロ主', place: '207号室', budget: 'あの金',
+      project_owner: 'プロ主', room_id: @room.id, budget: 'あの金',
       department_code: 'hoge1234', project_num: 'z1234',
       project_name: 'ほげプロ', creditor_code: 'Z9876',
       expected_participant_count: 24, duration: 2,
@@ -14,6 +16,7 @@ class ExperimentTest < ActiveSupport::TestCase
       schedule_from: Date.new(2017, 3, 24),
       schedule_to: Date.new(2017, 3, 30))
     @member_max_id = Member.maximum(:id)
+    @room_max_id = Room.maximum(:id)
   end
 
   test "should be valid" do
@@ -57,6 +60,11 @@ class ExperimentTest < ActiveSupport::TestCase
 
   test "member id should be the id of the member exists" do
     @experiment.member_id = @member_max_id + 1
+    assert_not @experiment.valid?
+  end
+
+  test "room id should be the id of the room exists" do
+    @experiment.room_id = @room_max_id + 1
     assert_not @experiment.valid?
   end
 

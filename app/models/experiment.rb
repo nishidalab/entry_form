@@ -7,12 +7,13 @@ class Experiment < ApplicationRecord
   has_many :events, dependent: :destroy
 
   validate :validate_member_id
+  validate :validate_room_id
   validate :validate_same_name
   validate :validate_schedule
 
   validates :member_id, presence: true
   validates :project_owner, presence: true
-  validates :place, presence: true
+  validates :room_id, presence: true
   validates :budget, presence: true
   validates :department_code, presence: true
   validates :project_num, presence: true
@@ -30,6 +31,15 @@ class Experiment < ApplicationRecord
 
     if !member
       errors.add(:member_id)
+    end
+  end
+
+  # 指定されたroom_idのroomが存在するかチェック
+  def validate_room_id
+    room = Room.find_by_id(room_id)
+
+    if !room
+      errors.add(:room_id)
     end
   end
 

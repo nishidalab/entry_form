@@ -15,7 +15,7 @@ class ExperimentsController < ApplicationController
     @member = current_member
 
     @experiment = Experiment.new(params.require(:experiment).permit(
-      :zisshi_ukagai_date, :project_owner, :place, :budget,
+      :zisshi_ukagai_date, :project_owner, :room_id, :budget,
       :department_code, :project_num, :project_name, :creditor_code,
       :expected_participant_count, :duration, :name, :description,
       :schedule_from, :schedule_to))
