@@ -1,0 +1,58 @@
+// コントローラから渡されるイベント情報
+var schedules = [
+    <% schedules.each_with_index do |schedule, idx| %>
+    {
+        index:      '<%= idx %>',
+        id:         '<%= schedule.id %>',
+        selected:   false,
+        date:       '<%= times[idx][:start].strftime('%m-%d-%Y') %>',
+        title:      '<%= "#{times[idx][:start].to_s(:time)} ～ #{times[idx][:end].to_s(:time)}" %>',
+        start:      '<%= times[idx][:start].to_s(:time) %>',
+        end:        '<%= times[idx][:end].to_s(:time) %>',
+        experiment: '<%= times[idx][:experiment] %>',
+        p_infos:    <%= times[idx][:p_infos].to_json.html_safe %>,
+    },
+    <% end %>
+];
+
+// カレンダーに表示するイベント情報を日付ごとにまとめる
+var dated_schedules = (function() {
+    var ret = {};
+    var sp = ' '
+    for(var s of schedules) {
+        var e = {
+            content:
+                s.title + sp + make_participants_name(s.p_infos) + sp + s.experiment,
+            startTime: s.start,
+            endTime:   s.end,
+        };
+        if(ret[s.date]) {
+            ret[s.date].push(e);
+        }
+        else {
+            ret[s.date] = [e];
+        }
+    }
+    return ret;
+})();
+
+function make_participants_name(p_infos){
+    var p_names = '';
+    var sp = ' ';
+    if(p_infos.length > 0){
+        p_infos.forEach(function(p_info){
+            p_names += p_info.name;
+            p_names += sp;
+        });
+
+        // もし承認のリンクを張る場合
+        // * scheduleに対応する場合
+        //     →schedules = の段階でapp_url: みたいにしてここでリンク張る
+        // * participantに対応する場合
+        //     →p_infos: に突っ込む段階でerb使って<a>人名1</a> <a>人名2</a>みたいなテキストを突っ込む
+        // とかになりそう
+    }else{
+        p_names += '空き' + sp;
+    }
+    return p_names;
+}

@@ -52,4 +52,14 @@ class MemberControllerTest < ActionDispatch::IntegrationTest
       assert_select "a[href=?]", experiment_path(experiment)
     end
   end
+
+  test "member mypage should have his experiments schedules" do
+    log_in_as_member @test
+    get member_mypage_path
+    instance_schedules = assigns(:schedules)
+    experiments = Experiment.where(member_id: @test.id)
+    schedules = Schedule.where(experiment_id: experiments.ids)
+    assert (schedules - instance_schedules).empty?
+    assert (instance_schedules - schedules).empty?
+  end
 end

@@ -36,3 +36,7 @@
     <%= render partial: 'applications/javascripts/new.js',
                locals: { schedules: @schedules, times: @times, experiment: @experiment } %>
 </script>
+
+<script type="text/javascript">
+  <%= render partial: 'shared/javascripts/calendar_init.js' %>
+</script>
