@@ -20,14 +20,17 @@
     <%= form_password_field f, :password_confirmation, 'パスワード(確認)' %>
   <% end %>
   <% if type == 'all' %>
+    <label>個人情報の取り扱い</label>
+    <textarea cols="100" '個人情報の取り扱い' rows="6" style="overflow:scroll;vertical-align:middle" readonly=true>
+      <%= render :partial => "agreement" %>
+    </textarea>
     <div class="form-group">
       <div class="col-sm-2"></div>
       <div class="col-sm-8">
         <div class="checkbox">
           <%= f.label :agreement, class: "checkbox inline" do %>
             <%= f.check_box :agreement,required: true %>
-            <%= link_to "個人情報の取り扱い", agreement_path, :target=>["_blank"] %>
-            に同意する
+           個人情報の取り扱いに同意する
           <% end %>
         </div>
       </div>

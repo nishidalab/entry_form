@@ -73,8 +73,4 @@ Rails.application.routes.draw do
   # admin付与ページ
   get    '/member/approve',     to: 'approve_members#show'
   patch  '/member/approve/:id', to: 'approve_members#update', as: 'update_member_admin'
-
-  # 個人情報取り扱い説明ページ
-  get   '/agreement',  to: 'participants#agreement'
-
 end

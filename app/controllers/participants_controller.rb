@@ -7,9 +7,6 @@ class ParticipantsController < ApplicationController
     @participant = Participant.new
   end
 
-  def agreement
-  end
-
   def create
     get_options_info
     @participant = Participant.new(params.require(:participant).permit(

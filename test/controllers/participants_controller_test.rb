@@ -37,9 +37,4 @@ class ParticipantsControllerTest < ActionDispatch::IntegrationTest
     get settings_path
     assert_template 'participants/edit'
   end
-
-  test "agreement should get agreement" do
-    get agreement_path
-    assert_template 'participants/agreement'
-  end
 end
