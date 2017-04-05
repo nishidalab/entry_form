@@ -11,7 +11,11 @@
     <%= form_text_field f, :budget, '予算科目' %>
     <%= form_text_field f, :creditor_code, '債主コード' %>
     <%= form_text_field f, :department_code, '部署コード' %>
-    <%= form_text_field f, :room_id, 'room_id', example: '0 => 総合研究7号館207号室（実際はこの辺もadd可能なプルダウン）' %>
+    <%= form_text_field f, :room_id, 'room_id', example: "#{Room.first.id} => #{Room.first.name}（実際はこの辺もadd可能なプルダウン）" %>
+    <%= f.hidden_field :id %>
+    <%= f.fields_for :ex_places do |pf| %>
+      <%= render partial: "ex_place_form", locals: {pf: pf } %>
+    <% end %>
     <%= form_text_field f, :expected_participant_count, '予定人数' %>
     <%= form_text_field f, :duration, '時間数(単位はh)' %>
     <%= form_text_field f, :description, '実験概要' %>

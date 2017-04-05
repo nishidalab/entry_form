@@ -1,6 +1,6 @@
 class ExPlace < ApplicationRecord
   belongs_to :experiment
-  has_many :places
+  belongs_to :places
 
   validate :validate_experiment_id
   validate :validate_place_id

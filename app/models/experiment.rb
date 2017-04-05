@@ -5,6 +5,8 @@ class Experiment < ApplicationRecord
   has_many :inquiries, dependent: :destroy
   has_many :participants, through: :applications
   has_many :events, dependent: :destroy
+  has_many :ex_places
+  accepts_nested_attributes_for :ex_places
 
   validate :validate_member_id
   validate :validate_room_id

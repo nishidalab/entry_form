@@ -1,5 +1,6 @@
 class Place < ApplicationRecord
   belongs_to :room
+  has_many :ex_places
 
   validates :detail, length: { maximum: 50 }
   validate  :validate_unique_record

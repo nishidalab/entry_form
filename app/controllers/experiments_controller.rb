@@ -9,6 +9,7 @@ class ExperimentsController < ApplicationController
 
   def new
     @experiment = Experiment.new
+    @experiment.ex_places.build # place情報追加用
   end
 
   def create
@@ -18,8 +19,13 @@ class ExperimentsController < ApplicationController
       :zisshi_ukagai_date, :project_owner, :room_id, :budget,
       :department_code, :project_num, :project_name, :creditor_code,
       :expected_participant_count, :duration, :name, :description,
-      :schedule_from, :schedule_to))
+      :schedule_from, :schedule_to, :id,
+      ex_places: [
+        :place_id,
+      ],))
     @experiment.member_id = @member.id
+
+    logger.debug(params.require(:experiment))
 
     if @experiment.save
       redirect_to member_mypage_url
