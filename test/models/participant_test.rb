@@ -179,4 +179,9 @@ class ParticipantTest < ActiveSupport::TestCase
     @participant.address = "あ" * 256
     assert_not @participant.valid?
   end
+
+  test "agreement should not be false" do
+    @participant.agreement = false
+    assert_not @participant.valid?
+  end
 end

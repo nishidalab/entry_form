@@ -7,11 +7,14 @@ class ParticipantsController < ApplicationController
     @participant = Participant.new
   end
 
+  def agreement
+  end
+
   def create
     get_options_info
     @participant = Participant.new(params.require(:participant).permit(
         :name, :yomi, :gender, :classification, :grade, :faculty_id, :address, :birth, :email,
-        :password, :password_confirmation))
+        :password, :password_confirmation, :agreement))
     if @participant.save
       ParticipantMailer.account_activation(@participant).deliver_now
       flash[:info] = "アカウント有効化のためのメールを送信しました。"
