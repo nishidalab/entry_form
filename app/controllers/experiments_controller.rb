@@ -15,19 +15,17 @@ class ExperimentsController < ApplicationController
   def create
     @member = current_member
 
-    @experiment = Experiment.new(params.require(:experiment).permit(
-      :zisshi_ukagai_date, :project_owner, :room_id, :budget,
-      :department_code, :project_num, :project_name, :creditor_code,
-      :expected_participant_count, :duration, :name, :description,
-      :schedule_from, :schedule_to, :id,
-      ex_places: [
-        :place_id,
-      ],))
+    @experiment = Experiment.new(experiment_param_for_create)
     @experiment.member_id = @member.id
 
-    logger.debug(params.require(:experiment))
+    logger.debug('----------------------------------')
+    logger.debug(experiment_param_for_create.pretty_inspect)
 
     if @experiment.save
+      logger.debug('exp saved!!')
+      @experiment.ex_places.each do |exp|
+        logger.debug(exp.id)
+      end
       redirect_to member_mypage_url
     else
       render 'new'
@@ -57,5 +55,16 @@ class ExperimentsController < ApplicationController
     end
   end
 
+  private
+    def experiment_param_for_create
+      params.require(:experiment).permit(
+        :zisshi_ukagai_date, :project_owner, :room_id, :budget,
+        :department_code, :project_num, :project_name, :creditor_code,
+        :expected_participant_count, :duration, :name, :description,
+        :schedule_from, :schedule_to, :id,
+        ex_places_attributes: [
+          :place_id,
+        ],)
+    end
 
 end

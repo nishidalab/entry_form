@@ -1,23 +1,23 @@
 class ExPlace < ApplicationRecord
-  belongs_to :experiment
-  belongs_to :places
+  belongs_to :experiment, inverse_of: :ex_places
+  belongs_to :place
 
-  validate :validate_experiment_id
+  #validate :validate_experiment_id
   validate :validate_place_id
-  validate :validate_unique_record
+  #validate :validate_unique_record
 
-  validates :experiment_id, presence: true
+  #validates :experiment_id, presence: true
   validates :place_id, presence: true
 
   private
     # 指定されたexperiment_idのexperimentが存在するかチェック
-    def validate_experiment_id
-      experiment = Experiment.find_by_id(experiment_id)
+    #def validate_experiment_id
+    #  experiment = Experiment.find_by_id(experiment_id)
 
-      if !experiment
-        errors.add(:experiment_id)
-      end
-    end
+    #  if !experiment
+    #    errors.add(:experiment_id)
+    #  end
+    #end
 
     # 指定されたplace_idのplaceが存在するかチェック
     def validate_place_id
@@ -29,10 +29,10 @@ class ExPlace < ApplicationRecord
     end
     #
     # 既存のデータが存在するか確認する(二重 post などの検証)
-    def validate_unique_record
-      r  = ExPlace.find_by(experiment_id: experiment_id, place_id: place_id)
-      if r
-        errors.add(:base, '既に登録されている場所です。。')
-      end
-    end
+    #def validate_unique_record
+    #  r  = ExPlace.find_by(experiment_id: experiment_id, place_id: place_id)
+    #  if r
+    #    errors.add(:base, '既に登録されている場所です。。')
+    #  end
+    #end
 end

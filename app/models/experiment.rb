@@ -5,7 +5,7 @@ class Experiment < ApplicationRecord
   has_many :inquiries, dependent: :destroy
   has_many :participants, through: :applications
   has_many :events, dependent: :destroy
-  has_many :ex_places
+  has_many :ex_places, inverse_of: :experiment
   accepts_nested_attributes_for :ex_places
 
   validate :validate_member_id
