@@ -3,7 +3,7 @@ class ExPlace < ApplicationRecord
   belongs_to :place
 
   validate :validate_place_id
-  #validate :validate_unique_record
+  validate :validate_unique_record
 
   #validates :experiment_id, presence: true
   validates :place_id, presence: true
