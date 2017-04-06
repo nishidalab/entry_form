@@ -1,5 +1,4 @@
 <div class="field">
-  <%= f.label :place_id, "place_id (example: #{Place.first.id}=>#{Place.first.detail})" %>
-  <%= f.text_field :place_id %>
+  <%= form_text_field f, :place_id, "place_id (example: #{Place.first.id}=>#{Place.first.detail})" %>
   <%= link_to_remove_field('実験場所削除', f, {}) %>
 </div>
