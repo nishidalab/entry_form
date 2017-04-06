@@ -18,14 +18,7 @@ class ExperimentsController < ApplicationController
     @experiment = Experiment.new(experiment_param_for_create)
     @experiment.member_id = @member.id
 
-    logger.debug('----------------------------------')
-    logger.debug(experiment_param_for_create.pretty_inspect)
-
     if @experiment.save
-      logger.debug('exp saved!!')
-      @experiment.ex_places.each do |exp|
-        logger.debug(exp.id)
-      end
       redirect_to member_mypage_url
     else
       render 'new'
@@ -64,6 +57,7 @@ class ExperimentsController < ApplicationController
         :schedule_from, :schedule_to, :id,
         ex_places_attributes: [
           :place_id,
+          :_destroy,
         ],)
     end
 

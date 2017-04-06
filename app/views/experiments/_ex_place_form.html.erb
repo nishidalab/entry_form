@@ -1,4 +1,5 @@
 <div class="field">
-  <%= pf.label :place_id, "place_id (example: #{Place.first.id}=>#{Place.first.detail})" %>
-  <%= pf.text_field :place_id %>
+  <%= f.label :place_id, "place_id (example: #{Place.first.id}=>#{Place.first.detail})" %>
+  <%= f.text_field :place_id %>
+  <%= link_to_remove_field('実験場所削除', f, {}) %>
 </div>
