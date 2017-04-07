@@ -17,10 +17,10 @@ class ParticipantsMypageTest < ActionDispatch::IntegrationTest
     assert_select 'div.test', count: 0
 
     # 実験参加申請をする(申請中・確定・拒否を1件ずつ)
-    apply(schedules(:two), 0)
-    apply(schedules(:three), 1)
-    apply(schedules(:four), 2)
-    apply(schedules(:six), 3)
+    apply(schedules(:two), ApplicationStatus::APPLYING)
+    apply(schedules(:three), ApplicationStatus::ACCEPTED)
+    apply(schedules(:four), ApplicationStatus::CANCELED)
+    apply(schedules(:six), ApplicationStatus::REJECTED)
     get mypage_path
     assert_template 'participants/show'
 

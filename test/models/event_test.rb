@@ -100,7 +100,7 @@ class EventTest < ActiveSupport::TestCase
   test "check double booking (conflicting application)" do
     schedule = Schedule.new(experiment_id: @experiment.id, datetime: @now + 5 * 60)
     schedule.save
-    application = Application.new(participant_id: @participant.id, schedule_id: schedule.id, status: 1)
+    application = Application.new(participant_id: @participant.id, schedule_id: schedule.id, status: ApplicationStatus::ACCEPTED)
     application.save
     setup_event
     assert_not @event.valid?
@@ -109,7 +109,7 @@ class EventTest < ActiveSupport::TestCase
   test "check double booking (not conflicting application)" do
     schedule = Schedule.new(experiment_id: @experiment.id, datetime: @now + 10 * 60)
     schedule.save
-    application = Application.new(participant_id: @participant.id, schedule_id: schedule.id, status: 1)
+    application = Application.new(participant_id: @participant.id, schedule_id: schedule.id, status: ApplicationStatus::ACCEPTED)
     application.save
     setup_event
     assert @event.valid?

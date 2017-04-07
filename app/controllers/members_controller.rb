@@ -28,7 +28,7 @@ class MembersController < ApplicationController
     @times = []
     @schedules.each do |s|
       p_infos = []
-      my_apps = Application.where(schedule_id: s.id).where(status: [0, 1])
+      my_apps = Application.where(schedule_id: s.id).where(status: [ApplicationStatus::APPLYING, ApplicationStatus::ACCEPTED])
       my_apps.each do |my_app|
         p_info = {}
         p = Participant.find_by_id(my_app.participant_id)

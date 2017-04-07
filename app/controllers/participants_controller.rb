@@ -23,7 +23,7 @@ class ParticipantsController < ApplicationController
 
   def show
     @participant = current_participant
-    @applications = Application.where(participant_id: @participant.id, status: 0..1)
+    @applications = Application.where(participant_id: @participant.id, status: [ApplicationStatus::APPLYING, ApplicationStatus::ACCEPTED])
     @events = Event.where(participant_id: @participant.id)
   end
 
