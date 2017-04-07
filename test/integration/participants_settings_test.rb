@@ -3,6 +3,7 @@ require 'test_helper'
 class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
   def setup
     @participant = participants(:one)
+    ActionMailer::Base.deliveries.clear
   end
 
   def update_profile(participant)
@@ -15,6 +16,10 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
   def update_password(password, password_confirmation)
     patch settings_path, params: { type: 'password', participant: {
         password: password, password_confirmation: password_confirmation } }
+  end
+
+  def update_email(email)
+    patch settings_path, params: { type: 'email', participant: { email: email}}
   end
 
   test "not logged in" do
@@ -31,6 +36,11 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     update_password(password, password)
     @participant.reload
     assert_equal old_password_digest, @participant.password_digest
+
+    old_email = @participant.email
+    update_email("update@example.com")
+    @participant.reload
+    assert_equal old_email, @participant.email
   end
 
   test "invalid profiles" do
@@ -54,6 +64,14 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     password = 'hogehoge'
     password_confirmation = 'fugafuga'
     update_password(password, password_confirmation)
+    assert_template 'participants/edit'
+    assert_select 'div#error_explanation', 1
+  end
+
+  test "invalid email" do
+    log_in_as_participant @participant
+    email = ""
+    update_email(email)
     assert_template 'participants/edit'
     assert_select 'div#error_explanation', 1
   end
@@ -98,6 +116,26 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     # 新しいパスワードでログインできるか？
     delete logout_path
     log_in_as_participant @participant, password: password
+    assert is_logged_in_participant?
+  end
+
+  test "valid email" do
+    log_in_as_participant @participant
+    old_email = @participant.email
+    email = "update@example.com"
+    update_email(email)
+    assert_equal 1, ActionMailer::Base.deliveries.size # 1通目、仮登録
+    participant = assigns(:user)
+    assert_equal participant.email old_email
+    # トークンが正しく無い場合
+    get email_reset_url(t: "invalid token", e: email)
+    assert_equal participant.email old_email
+    # 正しい場合
+    get email_reset_url(t: participant.email_reset_token, e: email)
+    assert_equal 2, ActionMailer::Base.deliveries.size # 2通目、本登録
+    assert_equal participant.email email
+    assert_redirected_to applications_url
+    follow_redirect!
     assert is_logged_in_participant?
   end
 end
