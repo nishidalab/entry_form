@@ -20,10 +20,8 @@
     <%= form_password_field f, :password_confirmation, 'パスワード(確認)' %>
   <% end %>
   <% if type == 'all' %>
-    <label>個人情報の取り扱い</label>
-    <textarea cols="100" '個人情報の取り扱い' rows="6" style="overflow:scroll;vertical-align:middle" readonly=true>
-      <%= render :partial => "agreement" %>
-    </textarea>
+    <% participant.agreetext = File.open("#{Rails.root}/app/views/participants/_agreement.html.erb","rb").read.force_encoding("UTF-8") %>
+    <%= form_text_area f, :agreetext, '個人情報の取り扱い' %> 
     <div class="form-group">
       <div class="col-sm-2"></div>
       <div class="col-sm-8">
