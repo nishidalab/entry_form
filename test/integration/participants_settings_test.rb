@@ -121,19 +121,19 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
 
   test "valid email" do
     log_in_as_participant @participant
-    old_email = @participant.email
-    email = "update@example.com"
-    update_email(email)
-    assert_equal 1, ActionMailer::Base.deliveries.size # 1通目、仮登録
+    email = @participant.email
+    new_email = "update@example.com"
+    update_email(new_email)
+    assert_equal 1, ActionMailer::Base.deliveries.size
     participant = assigns(:user)
-    assert_equal participant.email old_email
-    # トークンが正しく無い場合
-    get email_reset_url(t: "invalid token", e: email)
-    assert_equal participant.email old_email
-    # 正しい場合
-    get email_reset_url(t: participant.email_reset_token, e: email)
-    assert_equal 2, ActionMailer::Base.deliveries.size # 2通目、本登録
+    assert_equal participant.new_email new_email
     assert_equal participant.email email
+    # トークンが正しく無い場合
+    get email_update_url(t: "invalid token", e: new_email)
+    assert_equal participant.email email
+    # 正しい場合
+    get email_update_url(t: participant.email_update_token, e: new_email)
+    assert_equal participant.email new_email
     assert_redirected_to applications_url
     follow_redirect!
     assert is_logged_in_participant?

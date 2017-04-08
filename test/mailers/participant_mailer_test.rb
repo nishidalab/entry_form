@@ -66,4 +66,18 @@ class ParticipantMailerTest < ActionMailer::TestCase
       assert_match CGI.escape(participant.email), body
     end
   end
+
+  test "email_update" do
+    participant = participants(:one)
+    participant.email_update_token = Participant.new_token
+    mail = ParticipantMailer.email_update(participant)
+    assert_equal "メールアドレスの更新", mail.subject
+    assert_equal [participant.new_email], mail.to
+    assert_equal ["no-reply@ii.ist.i.kyoto-u.ac.jp"], mail.from
+    [mail.text_part.body.encoded, mail.html_part.body.encoded].each do |body|
+      assert_match participant.name, body
+      assert_match participant.email_update_token, body
+      assert_match CGI.escape(participant.email), body
+    end
+  end
 end
