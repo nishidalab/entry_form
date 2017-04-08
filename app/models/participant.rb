@@ -28,7 +28,6 @@ class Participant < ApplicationRecord
   validates :address, presence: true, length: { maximum: 255 }
   validates :agreement, acceptance: true
   validate  :validate_birth
-  validates :agreetext, presence: true, allow_blank: true
 
   # 生年月日のバリデーション
   def validate_birth

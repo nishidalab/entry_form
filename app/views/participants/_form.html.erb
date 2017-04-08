@@ -20,8 +20,8 @@
     <%= form_password_field f, :password_confirmation, 'パスワード(確認)' %>
   <% end %>
   <% if type == 'all' %>
-    <% participant.agreetext = File.open("#{Rails.root}/app/views/participants/_agreement.html.erb","rb").read.force_encoding("UTF-8") %>
-    <%= form_text_area f, :agreetext, '個人情報の取り扱い' %> 
+    <% agreetext = File.open("#{Rails.root}/app/views/participants/_agreement.html.erb","rb").read.force_encoding("UTF-8") %>
+    <%= form_text_area_tag :agreetext, '個人情報の取り扱い', value: agreetext %> 
     <div class="form-group">
       <div class="col-sm-2"></div>
       <div class="col-sm-8">
