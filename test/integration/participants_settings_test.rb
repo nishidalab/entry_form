@@ -19,7 +19,7 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
   end
 
   def update_email(email)
-    patch settings_path, params: { type: 'email', participant: { email: email}}
+    patch settings_path, params: { type: 'email_update', participant: { new_email: email}}
   end
 
   test "not logged in" do
