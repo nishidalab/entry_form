@@ -40,6 +40,7 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     old_email = @participant.email
     update_email("update@example.com")
     @participant.reload
+    assert_not @participant.changing_email
     assert_equal old_email, @participant.email
   end
 
@@ -47,6 +48,7 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     log_in_as_participant @participant
     @participant.name = ""
     update_profile(@participant)
+    assert_not @participant.changing_email
     assert_template 'participants/edit'
     assert_select 'div#error_explanation', 1
   end
@@ -126,6 +128,7 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     update_email(new_email)
     assert_equal 1, ActionMailer::Base.deliveries.size
     participant = assigns(:user)
+    assert participant.changing_email
     assert_equal participant.new_email new_email
     assert_equal participant.email email
     # トークンが正しく無い場合
@@ -134,6 +137,7 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     # 正しい場合
     get email_update_url(t: participant.email_update_token, e: new_email)
     assert_equal participant.email new_email
+    assert_not participant.changing_email
     assert_redirected_to applications_url
     follow_redirect!
     assert is_logged_in_participant?
