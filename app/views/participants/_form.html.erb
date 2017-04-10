@@ -12,7 +12,7 @@
     <%= form_text_field f, :address, '住所', example: '京都市左京区吉田本町' %>
     <%= form_date f, :birth, '生年月日', 1970, Date.today.year - 17 %>
   <% end %>
-  <% if type == 'all' %>
+  <% if type == 'all' || type == 'email_update'%>
     <%= form_email_field f, :email, 'メールアドレス', description: 'ログインや連絡に用いるため、普段お使いのメールアドレスをご入力ください。' %>
   <% end %>
   <% if type == 'all' || type == 'password' %>

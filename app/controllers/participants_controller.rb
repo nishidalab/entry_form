@@ -44,13 +44,21 @@ class ParticipantsController < ApplicationController
     elsif @type == 'password'
       participant_params = params.require(:participant).permit(
           :password, :password_confirmation)
+    elsif @type == 'email_update'
+      @participant.changing_email = true
+      participant_params = params.require(:participant).permit(:new_email)
     end
     if @participant.update_attributes(participant_params)
       flash.now[:success] = 'プロフィールを更新しました。' if @type == 'profile'
       flash.now[:success] = 'アカウント情報を更新しました。' if @type == 'password'
+      flash.now[:success] = '新しいメールアドレスに確認メールを送信したのでそこから本更新をおこなってください。' if @type == 'email_update'
     else
       flash.now[:danger] = 'プロフィールの更新に失敗しました。' if @type == 'profile'
       flash.now[:danger] = 'アカウント情報の更新に失敗しました。' if @type == 'password'
+      if @type == 'email_update'
+        flash.now[:danger] = 'メールアドレスの更新に失敗しました。'
+        @participant.changing_email = false
+      end
     end
     render 'edit'
   end
