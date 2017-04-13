@@ -54,14 +54,16 @@ class Participant < ApplicationRecord
 
   # アクティブ被験者のメールアドレスのユニーク性バリデーション
   def validate_email_uniqueness
-    participant = Participant.find_by("deactivated = ? and (email == ? or (changing_email = ? and new_email = ?))",false,email.downcase,true,email.downcase)
+    participant = Participant.find_by("deactivated == ? and (email == ? or (changing_email == ? and new_email == ?))",false,email.downcase,true,email.downcase)
     errors.add(:email, "は既に登録済みです") if participant && (id.nil? || participant.id != id)
   end
 
   # メール更新時のメールアドレスのユニーク性を検証する
   def validate_new_email_uniqueness
-    participant = Participant.find_by("deactivated = ? and (email == ? or (changing_email = ? and new_email = ?))",false,new_email.downcase,true,new_email.downcase)
-    errors.add(:new_email, "は既に登録済みです") if participant && (id.nil? || participant.id != id)
+    if !new_email.nil?
+      participant = Participant.find_by("deactivated == ? and (email == ? or (changing_email == ? and new_email ==   ?))",false,new_email.downcase,true,new_email.downcase)
+      errors.add(:new_email, "は既に登録済みです") if participant && (id.nil? || participant.id != id)
+    end
   end
 
   # 永続セッションのためにトークンをデータベースに記憶する。
@@ -88,6 +90,10 @@ class Participant < ApplicationRecord
   # メールアドレスから非退会被験者を取得する(既存メソッドのオーバーライド)
   def self.find_by_email(email)
     Participant.find_by(email: email, deactivated: false)
+  end
+
+  def self.find_by_new_email(new_email)
+    Participant.find_by(new_email: new_email, deactivated: false)
   end
 
   def deactivatable?

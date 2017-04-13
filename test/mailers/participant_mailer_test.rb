@@ -70,7 +70,7 @@ class ParticipantMailerTest < ActionMailer::TestCase
   test "email_update" do
     participant = participants(:one)
     participant.new_email = "update@example.com"
-    participant.changing_email = true
+    # participant.changing_email = true
     participant.email_update_token = Participant.new_token
     mail = ParticipantMailer.email_update(participant)
     assert_equal "メールアドレスの更新", mail.subject

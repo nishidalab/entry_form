@@ -136,6 +136,7 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     assert_equal participant.email, email
     # 正しい場合
     get email_update_url(t: participant.email_update_token, e: new_email)
+    participant.reload
     assert_equal participant.email, new_email
     assert_not participant.changing_email
     assert_redirected_to applications_url
