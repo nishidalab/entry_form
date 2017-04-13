@@ -36,6 +36,12 @@ module Account
     BCrypt::Password.new(reset_digest).is_password?(reset_token)
   end
 
+  # 渡されたメール更新トークンがダイジェストと一致したら true を返す。
+  def email_update_authenticated?(email_update_token)
+    return false if email_update_digest.nil?
+    BCrypt::Password.new(email_update_digest).is_password?(email_update_token)
+  end
+
   # パスワード再設定の期限が切れている場合は true を返す
   def password_reset_expired?
     reset_sent_at < 1.hours.ago
@@ -52,6 +58,12 @@ module Account
     update(reset_digest: self.class::digest(reset_token), reset_sent_at: Time.zone.now)
   end
 
+  # メール更新のトークンとダイジェストを作成する
+  def create_email_update_token_and_digest
+    self.email_update_token = self.class::new_token
+    update(email_update_digest: self.class::digest(email_update_token))
+  end
+
   private
 
     # 有効化トークンとダイジェストを作成する。作成した時刻を記録しておく
@@ -60,5 +72,4 @@ module Account
       self.activation_digest = self.class::digest(activation_token)
       self.set_activation_token_at = Time.zone.now
     end
-
 end
