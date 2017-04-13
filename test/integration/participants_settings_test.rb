@@ -127,16 +127,16 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     new_email = "update@example.com"
     update_email(new_email)
     assert_equal 1, ActionMailer::Base.deliveries.size
-    participant = assigns(:user)
+    participant = assigns(:participant)
     assert participant.changing_email
-    assert_equal participant.new_email new_email
-    assert_equal participant.email email
+    assert_equal participant.new_email, new_email
+    assert_equal participant.email, email
     # トークンが正しく無い場合
     get email_update_url(t: "invalid token", e: new_email)
-    assert_equal participant.email email
+    assert_equal participant.email, email
     # 正しい場合
     get email_update_url(t: participant.email_update_token, e: new_email)
-    assert_equal participant.email new_email
+    assert_equal participant.email, new_email
     assert_not participant.changing_email
     assert_redirected_to applications_url
     follow_redirect!
