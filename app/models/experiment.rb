@@ -12,7 +12,6 @@ class Experiment < ApplicationRecord
 
   validates :member_id, presence: true
   validates :project_owner, presence: true
-  validates :place, presence: true
   validates :budget, presence: true
   validates :department_code, presence: true
   validates :project_num, presence: true

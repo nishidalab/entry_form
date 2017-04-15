@@ -11,8 +11,9 @@ class EventTest < ActiveSupport::TestCase
         email: "test@ii.ist.i.kyoto-u.ac.jp", name: "テスト", yomi: "てすと",
         password: "password", password_confirmation: "password")
     @member.save
+    @room = rooms(:one)
     @experiment = Experiment.new(
-        member_id: @member.id, zisshi_ukagai_date: Date.today, project_owner: "ほげ", place: "ほげ", budget: "ほげ",
+        member_id: @member.id, zisshi_ukagai_date: Date.today, project_owner: "ほげ", room_id: @room.id, budget: "ほげ",
         department_code: "123", project_num: "123", project_name: "ほげ", creditor_code: "XXX",
         expected_participant_count: 1, duration: 60, name: "ほげ", requirement: "ほげ", description: "ほげ",
         schedule_from: Date.today, schedule_to: Date.today, final_report_date: Date.today)
