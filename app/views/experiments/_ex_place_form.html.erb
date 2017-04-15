@@ -1,0 +1,7 @@
+<div class="field">
+  <%= form_text_field f, :place_id, "place_id (example: #{Place.first.id}=>#{Place.first.detail})" %>
+  <%= link_to_remove_field('実験場所削除', f, {}) %>
+  <script type="text/javascript" class="set_valid_form_script">
+    <%= render partial: "experiments/javascripts/set_validation_form.js" %>
+  </script>
+</div>

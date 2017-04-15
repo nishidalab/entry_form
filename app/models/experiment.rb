@@ -1,18 +1,22 @@
 class Experiment < ApplicationRecord
   belongs_to :member
+  belongs_to :room
   has_many :schedules, dependent: :destroy
   has_many :applications, dependent: :destroy
   has_many :inquiries, dependent: :destroy
   has_many :participants, through: :applications
   has_many :events, dependent: :destroy
+  has_many :ex_places, inverse_of: :experiment
+  accepts_nested_attributes_for :ex_places, allow_destroy: true
 
-  validate :validate_member_id
-  validate :validate_same_name
   validate :validate_schedule
 
   validates :member_id, presence: true
+  validates :member, presence: true
   validates :project_owner, presence: true
-  validates :place, presence: true
+  validates :room_id, presence: true
+  validates :room, presence: true
+  validates :name, uniqueness: true
   validates :budget, presence: true
   validates :department_code, presence: true
   validates :project_num, presence: true
@@ -24,24 +28,6 @@ class Experiment < ApplicationRecord
   validates :description, presence: true, length: { maximum: 400 }
 
   private
-  # 指定されたmember_idのmemberが存在するかチェック
-  def validate_member_id
-    member = Member.find_by_id(member_id)
-
-    if !member
-      errors.add(:member_id)
-    end
-  end
-
-  # 同名の実験が既に存在するかをチェック
-  def validate_same_name
-    experiment = Experiment.find_by(name: name)
-
-    if !experiment.nil?
-      errors.add(:name, "同名の実験が存在します。")
-    end
-  end
-
   # 実験予定がfromからtoまでで正しい期間になっているかをチェック
   def validate_schedule
     nil_check = false
