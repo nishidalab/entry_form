@@ -129,15 +129,22 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     assert_equal 1, ActionMailer::Base.deliveries.size
     participant = assigns(:participant)
     assert participant.changing_email
-    assert_equal participant.new_email, new_email
-    assert_equal participant.email, email
+    assert_equal new_email, participant.new_email
+    assert_equal email, participant.email
     # トークンが正しく無い場合
     get email_update_url(t: "invalid token", e: new_email)
-    assert_equal participant.email, email
+    participant.reload
+    assert_equal email, participant.email
+    # トークンの期限が切れている場合
+    participant.update(set_email_update_at: participant.set_email_update_at - 86401)
+    get email_update_url(t: participant.email_update_token, e: new_email)
+    participant.reload
+    assert_equal email, participant.email
+    participant.update(set_email_update_at: participant.set_email_update_at + 86401)
     # 正しい場合
     get email_update_url(t: participant.email_update_token, e: new_email)
     participant.reload
-    assert_equal participant.email, new_email
+    assert_equal new_email, participant.email
     assert_not participant.changing_email
     assert_redirected_to applications_url
     follow_redirect!

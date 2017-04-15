@@ -5,7 +5,7 @@ class ParticipantsEmailUpdateController < ApplicationController
     new_email = params[:e]
     token = params[:t]
     participant = Participant.find_by_new_email(new_email)
-    if participant.email_update_authenticated?(token)
+    if participant.email_update_authenticated?(token) && !participant.email_update_token_expired?
       participant.update(email: new_email,new_email: nil,changing_email: false)
       log_in_participant(participant)
       flash[:success] = "メールアドレスの更新に成功しました。"

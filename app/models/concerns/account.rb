@@ -52,6 +52,11 @@ module Account
     set_activation_token_at < 24.hours.ago
   end
 
+  # メール更新トークンの期限が切れている場合は true を返す
+  def email_update_token_expired?
+    set_email_update_at < 24.hours.ago
+  end
+
   # パスワード再設定用の属性を設定する
   def create_reset_digest
     self.reset_token = self.class::new_token
@@ -61,7 +66,7 @@ module Account
   # メール更新のトークンとダイジェストを作成する
   def create_email_update_token_and_digest
     self.email_update_token = self.class::new_token
-    update(email_update_digest: self.class::digest(email_update_token))
+    update(email_update_digest: self.class::digest(email_update_token), set_email_update_at: Time.zone.now)
   end
 
   private
