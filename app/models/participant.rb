@@ -26,6 +26,7 @@ class Participant < ApplicationRecord
   validates :grade, inclusion: { in: 1..2 }, if: Proc.new { |a| a.classification == 2 }
   validates :grade, inclusion: { in: 1..3 }, if: Proc.new { |a| a.classification == 3 }
   validates :address, presence: true, length: { maximum: 255 }
+  validates :agreement, acceptance: true
   validate  :validate_birth
 
   # 生年月日のバリデーション
