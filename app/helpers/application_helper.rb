@@ -101,6 +101,11 @@ module ApplicationHelper
     "</div>".html_safe
   end
 
+  # form_tag の入力フィールド(text_area_tag)となる HTML を返します。
+  def form_text_area_tag(name, label, size: 8, value: nil, description: nil, example: nil, required: true)
+    form_xxxx_tag 'text_area_tag', name, label, size: size, value: value, description: description, example: example, required: required
+  end
+
   private
 
     # form_xxxx (form_text_field や form_text_area) で呼び出されるメソッドです。
@@ -112,6 +117,23 @@ module ApplicationHelper
         form.label(attribute, label, class: 'col-sm-2 control-label') +
         "<div class='col-sm-#{size}'>".html_safe +
         form.send(xxxx, attribute, html_option) +
+        (description ?
+          "<span class='help-block'>#{description}</span>" : "").html_safe +
+        (example ?
+          "<span class='help-block'><span class='label label-default'>例</span>#{example}</span>" : "").html_safe +
+        "</div>".html_safe +
+      "</div>".html_safe
+    end
+
+    # form_xxxx_tag (form_text_field_tag や form_text_area_tag) で呼び出されるメソッドです。
+    def form_xxxx_tag(xxxx, name, label, size: 8, value: nil, description: nil, example: nil, required: true)
+      html_option = required ?
+          { class: 'form-control validation', required: true } :
+          { class: 'form-control' }
+      "<div class='form-group'>".html_safe +
+        label(name,label, class: 'col-sm-2 control-label') +
+        "<div class='col-sm-#{size}'>".html_safe +
+        send(xxxx, name, value, html_option) +
         (description ?
           "<span class='help-block'>#{description}</span>" : "").html_safe +
         (example ?
