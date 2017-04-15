@@ -101,84 +101,9 @@ module ApplicationHelper
     "</div>".html_safe
   end
 
-  # form_tag の入力フィールド(text_field_tag)となる HTML を返します。
-  def form_text_field_tag(name, label, size: 8, value: nil, description: nil, example: nil, required: true)
-    form_xxxx_tag 'text_field_tag', name, label, size: size, value:value, description: description, example: example, required: required
-  end
-
-  # form_tag の入力フィールド(email_field_tag)となる HTML を返します。
-  def form_email_field_tag(name, label, size: 8, value:nil, description: nil, example: nil, required: true)
-    form_xxxx_tag 'email_field_tag', name, label, size: size, value:value, description: description, example: example, required: required
-  end
-
-  # form_tag の入力フィールド(password_field_tag)となる HTML を返します。
-  def form_password_field_tag(name, label, size: 8, value:nil, description: nil, example: nil, required: true)
-    form_xxxx_tag 'password_field_tag', name, label, size: size, value:value, description: description, example: example, required: required
-  end
-
   # form_tag の入力フィールド(text_area_tag)となる HTML を返します。
   def form_text_area_tag(name, label, size: 8, value: nil, description: nil, example: nil, required: true)
     form_xxxx_tag 'text_area_tag', name, label, size: size, value: value, description: description, example: example, required: required
-  end
-
-  # form_tag の入力フィールド(年・月・日)となる HTML を返します。
-  def form_date_tag(name, label, start_year, end_year, size: 4, description: nil, example: nil, required: true)
-    html_option = required ?
-        { class: 'form-control bootstrap-date validation', required: true } :
-        { class: 'form-control bootstrap-date' }
-    "<div class='form-group'>".html_safe +
-      label(name, label, class: 'col-sm-2 control-label') +
-      "<div class='col-sm-#{size}'>".html_safe +
-      (raw sprintf( date_select(name, 'date', { start_year: start_year, end_year: end_year, use_month_numbers: true,
-                                                  prompt: '----', date_separator: '%s' }, html_option),
-                    '年 ', '月 ') + '日') +
-      (description ?
-        "<span class='help-block'>#{description}</span>" : "").html_safe +
-      (example ?
-        "<span class='help-block'><span class='label label-default'>例</span>#{example}</span>" : "").html_safe +
-      "</div>".html_safe +
-    "</div>".html_safe
-  end
-
-  # form_tag の submit ボタンとなる HTML を返します。
-  def form_submit_tag(label, size: 8, type: 'btn-primary')
-    "<div class='col-sm-offset-2 col-sm-#{size}'>".html_safe +
-      (submit_tag label, class: "form-control btn #{type}") +
-    "</div>".html_safe
-  end
-
-  # form_tag の入力フィールド(select_tag)となる HTML を返します。
-  def form_select_tag(name, label, options, foption, selected: nil, size: 4, description: nil, example: nil, required: true)
-    html_option = required ?
-        { class: 'form-control validation', required: true ,prompt: '選択してください' } :
-        { class: 'form-control' ,prompt: '選択してください' }
-    "<div class='form-group'>".html_safe +
-      label(name, label, class: 'col-sm-2 control-label') +
-      "<div class='col-sm-#{size}'>".html_safe +
-      select_tag(name, options_for_select(options, selected: selected), html_option) +
-        (description ?
-          "<span class='help-block'>#{description}</span>" : "").html_safe +
-        (example ?
-          "<span class='help-block'><span class='label label-default'>例</span>#{example}</span>" : "").html_safe +
-      "</div>".html_safe +
-    "</div>".html_safe
-  end
-
-  # form_tag の入力フィールド(collection_select)となる HTML を返します。
-  def collection_select_tag(objname, propname, label, object_array, value, name, options, selected: nil, size: 4, description: nil, example: nil, required: true)
-    html_option = required ?
-        { class: 'form-control validation', required: true } :
-        { class: 'form-control' }
-    "<div class='form-group'>".html_safe +
-      label(objname, label, class: 'col-sm-2 control-label') +
-      "<div class='col-sm-#{size}'>".html_safe +
-      collection_select(objname, propname, object_array, value, name, options, html_option) +
-        (description ?
-          "<span class='help-block'>#{description}</span>" : "").html_safe +
-        (example ?
-          "<span class='help-block'><span class='label label-default'>例</span>#{example}</span>" : "").html_safe +
-      "</div>".html_safe +
-    "</div>".html_safe
   end
 
   private
