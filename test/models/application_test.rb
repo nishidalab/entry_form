@@ -8,6 +8,8 @@ class ApplicationTest < ActiveSupport::TestCase
         classification: 1, grade: 1, faculty_id: 1, address: "京都市左京区吉田本町",
         password: "password", password_confirmation: "password")
     @participant.save
+    @room = rooms(:one)
+    @room.save
     @member = Member.new(
         email: "test@ii.ist.i.kyoto-u.ac.jp", name: "テスト", yomi: "てすと",
         password: "password", password_confirmation: "password")
@@ -60,10 +62,9 @@ class ApplicationTest < ActiveSupport::TestCase
   end
 
   test "status should not become 1 if double booking" do
-    room = rooms(:one)
     # @application の10分後に開始するスケジュール(bad)と、60分後に開始するスケジュール(good)を登録
     another_experiment = Experiment.new(
-        member_id: @member.id, zisshi_ukagai_date: Date.today, project_owner: "ほげ", room_id: room.id, budget: "ほげ",
+        member_id: @member.id, zisshi_ukagai_date: Date.today, project_owner: "ほげ", room_id: @room.id, budget: "ほげ",
         department_code: "123", project_num: "123", project_name: "ほげ", creditor_code: "XXX",
         expected_participant_count: 1, duration: 60, name: "ふが", requirement: "ほげ", description: "ほげ",
         schedule_from: Date.today, schedule_to: Date.today, final_report_date: Date.today)

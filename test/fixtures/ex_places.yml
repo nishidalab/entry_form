@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  id: 1
-  name: ほげ
+  experiment_id: 0
+  place_id: 0
 
 two:
-  id: 2
-  name: ふが
+  experiment_id: 1
+  place_id: 1

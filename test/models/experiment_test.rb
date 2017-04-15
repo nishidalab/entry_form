@@ -62,4 +62,9 @@ class ExperimentTest < ActiveSupport::TestCase
     assert_not @experiment.valid?
   end
 
+  test "room id should be the id of the room exists" do
+    @experiment.room_id = @room_max_id + 1
+    assert_not @experiment.valid?
+  end
+
 end

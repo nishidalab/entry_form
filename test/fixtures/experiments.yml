@@ -6,6 +6,7 @@ one:
   room_id: 1
   zisshi_ukagai_date: 2017-02-17
   project_owner: MyString
+  room_id: 1
   budget: MyString
   department_code: MyString
   project_num: MyString
@@ -26,6 +27,7 @@ two:
   room_id: 2
   zisshi_ukagai_date: 2017-02-17
   project_owner: MyString
+  room_id: 1
   budget: MyString
   department_code: MyString
   project_num: MyString
@@ -46,6 +48,7 @@ three:
   room_id: 2
   zisshi_ukagai_date: 2017-02-17
   project_owner: MyString
+  room_id: 2
   budget: MyString
   department_code: MyString
   project_num: MyString
@@ -66,6 +69,7 @@ four:
   room_id: 1
   zisshi_ukagai_date: 2017-02-17
   project_owner: MyString
+  room_id: 1
   budget: MyString
   department_code: MyString
   project_num: MyString
@@ -86,6 +90,7 @@ five:
   room_id: 2
   zisshi_ukagai_date: 2017-02-17
   project_owner: MyString
+  room_id: 1
   budget: MyString
   department_code: MyString
   project_num: MyString

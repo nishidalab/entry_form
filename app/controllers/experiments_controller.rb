@@ -10,16 +10,13 @@ class ExperimentsController < ApplicationController
 
   def new
     @experiment = Experiment.new
+    @experiment.ex_places.build # place情報追加用
   end
 
   def create
     @member = current_member
 
-    @experiment = Experiment.new(params.require(:experiment).permit(
-      :zisshi_ukagai_date, :project_owner, :place, :budget,
-      :department_code, :project_num, :project_name, :creditor_code,
-      :expected_participant_count, :duration, :name, :description,
-      :schedule_from, :schedule_to))
+    @experiment = Experiment.new(experiment_param_for_create)
     @experiment.member_id = @member.id
 
     if @experiment.save
@@ -55,5 +52,17 @@ class ExperimentsController < ApplicationController
     end
   end
 
+  private
+    def experiment_param_for_create
+      params.require(:experiment).permit(
+        :zisshi_ukagai_date, :project_owner, :room_id, :budget,
+        :department_code, :project_num, :project_name, :creditor_code,
+        :expected_participant_count, :duration, :name, :description,
+        :schedule_from, :schedule_to, :id,
+        ex_places_attributes: [
+          :place_id,
+          :_destroy,
+        ],)
+    end
 
 end

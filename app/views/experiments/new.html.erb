@@ -2,4 +2,4 @@
 <h2><%= yield(:title) %></h2>
 
 <%= render partial: 'form',
-           locals: { form_for_url: new_experiment_path, experiment: @experiment, submit_label: '募集する', type: 'all', show_errors: true } %>
+           locals: { form_for_url: experiments_path, experiment: @experiment, submit_label: '募集する', type: 'all', show_errors: true } %>
