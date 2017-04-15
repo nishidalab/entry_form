@@ -12,7 +12,6 @@ class EventTest < ActiveSupport::TestCase
         password: "password", password_confirmation: "password")
     @member.save
     @room = rooms(:one)
-    @room.save
     @experiment = Experiment.new(
         member_id: @member.id, zisshi_ukagai_date: Date.today, project_owner: "ほげ", room_id: @room.id, budget: "ほげ",
         department_code: "123", project_num: "123", project_name: "ほげ", creditor_code: "XXX",

@@ -5,10 +5,9 @@ class ExperimentTest < ActiveSupport::TestCase
     @member = Member.new(name: 'ラボ員', yomi: 'らぼいん', email: 'member@ii.ist.i.kyoto-u.ac.jp', password: 'password')
     @member.save
     @room = rooms(:one)
-    @room.save
     @experiment = Experiment.new(
       member_id: @member.id, zisshi_ukagai_date: Date.new(2017, 3, 23),
-      project_owner: 'プロ主', room_id: @room.id, budget: 'あの金',
+      room_id: @room.id, project_owner: 'プロ主', budget: 'あの金',
       department_code: 'hoge1234', project_num: 'z1234',
       project_name: 'ほげプロ', creditor_code: 'Z9876',
       expected_participant_count: 24, duration: 2,
