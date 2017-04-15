@@ -86,7 +86,7 @@ class Participant < ApplicationRecord
     for s in schedules do
       if s.datetime > DateTime.now
         for a in s.applications do
-          if a.status != 2
+          if a.status != ApplicationStatus::CANCELED
             return false
           end
         end

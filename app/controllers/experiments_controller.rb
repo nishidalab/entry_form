@@ -47,8 +47,7 @@ class ExperimentsController < ApplicationController
     if @experiment.nil? || @member.id != @experiment.member_id
       redirect_to member_mypage_url
     else
-      # TODO status定数化完了後に修正
-      @times = get_times(Schedule.where(experiment_id: @experiment.id), [0, 1])
+      @times = get_times(Schedule.where(experiment_id: @experiment.id), [ApplicationStatus::APPLYING, ApplicationStatus::ACCEPTED])
     end
   end
 

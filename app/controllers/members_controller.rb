@@ -25,9 +25,7 @@ class MembersController < ApplicationController
     @member = current_member
     @experiments = Experiment.where(member_id: @member.id)
     @schedules = Schedule.where(experiment_id: @experiments.ids)
-
-    # TODO status定数化完了後に修正
-    @times = get_times(@schedules, [0, 1])
+    @times = get_times(@schedules, [ApplicationStatus::APPLYING, ApplicationStatus::ACCEPTED])
   end
 
   private
