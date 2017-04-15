@@ -13,8 +13,7 @@ class PlaceTest < ActiveSupport::TestCase
   end
 
   test "room_id should be in Room table" do
-    @place.save
-    assert !Room.find_by_id(@place.room_id).nil?
+    assert Room.find_by_id(@place.room_id)
     @place.room_id = Room.last.id + 1
     assert_not @place.valid?
   end

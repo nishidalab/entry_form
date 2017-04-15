@@ -3,3 +3,19 @@
 <p>
   <%= "id: #{@experiment.id}, 名前: #{@experiment.name}" %>
 </p>
+<h3>実験参加者一覧</h3>
+<table border="1">
+  <tr><th>名前</th><th>よみ</th><th>from</th><th>to</th><th>分類（学部1, 修士2, 博士3）</th><th>AppStatus</th></tr>
+  <% @times.each do |t| %>
+    <% t[:p_infos].each do |p_info| %>
+      <tr>
+        <td><%= p_info[:name] %></td>
+        <td><%= p_info[:yomi] %></td>
+        <td><%= t[:start] %></td>
+        <td><%= t[:end] %></td>
+        <td><%= p_info[:classification] %></td>
+        <td><%= p_info[:status] %></td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>

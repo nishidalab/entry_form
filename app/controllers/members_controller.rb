@@ -1,5 +1,6 @@
 class MembersController < ApplicationController
   include MembersCommon
+  include SchedulesCommon
   before_action :redirect_to_member_login, only: :show
   before_action :redirect_to_member_mypage, only: [:new, :create]
 
@@ -24,26 +25,7 @@ class MembersController < ApplicationController
     @member = current_member
     @experiments = Experiment.where(member_id: @member.id)
     @schedules = Schedule.where(experiment_id: @experiments.ids)
-
-    @times = []
-    @schedules.each do |s|
-      p_infos = []
-      my_apps = Application.where(schedule_id: s.id).where(status: [ApplicationStatus::APPLYING, ApplicationStatus::ACCEPTED])
-      my_apps.each do |my_app|
-        p_info = {}
-        p = Participant.find_by_id(my_app.participant_id)
-        p_info[:id] = p.id
-        p_info[:name] = p.name
-        p_info[:yomi] = p.yomi
-        p_info[:status] = my_app.status
-        p_infos.push(p_info)
-      end
-      @times.push({
-        start: s.datetime,
-        end: s.datetime + s.experiment.duration * 60,
-        experiment: @experiments.find_by_id(s.experiment_id).name,
-        p_infos: p_infos})
-    end
+    @times = get_times(@schedules, [ApplicationStatus::APPLYING, ApplicationStatus::ACCEPTED])
   end
 
   private

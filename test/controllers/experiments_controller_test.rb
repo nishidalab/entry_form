@@ -70,6 +70,31 @@ class ExperimentsControllerTest < ActionDispatch::IntegrationTest
     assert_template 'experiments/show'
   end
 
+  test "show should have participants infomation" do
+    @member1.admin = true
+    @member1.save
+    log_in_as_member(@member1)
+    get experiment_path(@experiment1)
+    # TODO status 置換
+    participants = Participant.where(id: Application.where(schedule_id: Schedule.where(experiment_id: @experiment1.id).ids).where(status: [0, 1]).select(:participant_id))
+    p_ids = []
+    participants.each do |p|
+      assert_select "table tr td", {:text => p.name}
+      assert_select "table tr td", {:text => p.yomi}
+      assert_select "table tr td", {:text => p.email, count: 0}
+      assert_select "table tr td", {:text => p.address, count: 0}
+      # TODO 実際はこのへんでacceptコントローラへのリンクとかも検証
+      p_ids.push(p.id)
+    end
+    excluded_participants = Participant.all - Participant.where(id: p_ids)
+    excluded_participants.each do |p|
+      assert_select "table tr td", {:text => p.name, count: 0}
+      assert_select "table tr td", {:text => p.yomi, count: 0}
+      assert_select "table tr td", {:text => p.email, count: 0}
+      assert_select "table tr td", {:text => p.address, count: 0}
+    end
+  end
+
   private
     # indexを実装していないのでマイページへのassertionを利用している
     # indexを実装したら対応する部分はすべてそれに書き換えよう
