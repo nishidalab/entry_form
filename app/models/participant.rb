@@ -15,9 +15,9 @@ class Participant < ApplicationRecord
   before_save { email.downcase! }
 
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }
-  validates :new_email, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, if: :changing_email
+  validates :new_email, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, allow_nil: true
   validate  :validate_email_uniqueness
-  validate  :validate_new_email_uniqueness, if: :changing_email
+  validate  :validate_new_email_uniqueness
   validates :password, presence: true, length: { minimum: 8, maximum: 32 }, allow_nil: true
 
   validates :name, presence: true, length: { maximum: 50 }
@@ -54,15 +54,33 @@ class Participant < ApplicationRecord
 
   # アクティブ被験者のメールアドレスのユニーク性バリデーション
   def validate_email_uniqueness
-    participant = Participant.find_by("deactivated == ? and (email == ? or (changing_email == ? and new_email == ?))",false,email.downcase,true,email.downcase)
-    errors.add(:email, "は既に登録済みです") if participant && (id.nil? || participant.id != id)
+    # 現在登録されているメールアドレスとのユニーク性
+    participant = Participant.find_by("deactivated == ? and email == ?",false,email.downcase)
+    if participant && (id.nil? || participant.id != id)
+      errors.add(:email, "は既に登録済みです")
+    end
+
+    # 更新予定のメールアドレスとのユニーク性
+    participant = Participant.find_by("deactivated == ? and new_email == ?",false,email.downcase)
+    if participant && (id.nil? || participant.id != id) && participant.email_update_token_expired?
+      errors.add(:email, "は既に登録済みです")
+    end
   end
 
   # メール更新時のメールアドレスのユニーク性を検証する
   def validate_new_email_uniqueness
     if !new_email.nil?
-      participant = Participant.find_by("deactivated == ? and (email == ? or (changing_email == ? and new_email ==   ?))",false,new_email.downcase,true,new_email.downcase)
-      errors.add(:new_email, "は既に登録済みです") if participant && (id.nil? || participant.id != id)
+      # 現在登録されているメールアドレスとのユニーク性
+      participant = Participant.find_by("deactivated == ? and email == ?",false,email.downcase)
+      if participant && (id.nil? || participant.id != id)
+        errors.add(:email, "は既に登録済みです")
+      end
+
+      # 更新予定のメールアドレスとのユニーク性
+      participant = Participant.find_by("deactivated == ? and new_email == ?",false,email.downcase)
+      if participant && (id.nil? || participant.id != id) && participant.email_update_token_expired?
+        errors.add(:email, "は既に登録済みです")
+      end
     end
   end
 

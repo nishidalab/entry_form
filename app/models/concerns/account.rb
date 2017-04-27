@@ -1,7 +1,7 @@
 module Account
   extend ActiveSupport::Concern
   included do
-    attr_accessor :remember_token, :activation_token, :reset_token
+    attr_accessor :remember_token, :activation_token, :reset_token, :email_update_token
     before_create :create_activation_token_and_digest
   end
 
