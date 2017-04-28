@@ -62,7 +62,7 @@ class Participant < ApplicationRecord
 
     # 更新予定のメールアドレスとのユニーク性
     participant = Participant.find_active_by_new_email(email.downcase)
-    if participant && (id.nil? || participant.id != id) && participant.email_update_token_expired?
+    if participant && (id.nil? || participant.id != id) && !participant.email_update_token_expired?
       errors.add(:email, "は既に登録済みです")
     end
   end
@@ -72,14 +72,14 @@ class Participant < ApplicationRecord
     return true if new_email.nil?
     # 現在登録されているメールアドレスとのユニーク性
     participant = Participant.find_active_by_email(new_email.downcase)
-    if participant && (id.nil? || participant.id != id)
-      errors.add(:email, "は既に登録済みです")
+    if participant
+      errors.add(:new_email, "は既に登録済みです")
     end
 
     # 更新予定のメールアドレスとのユニーク性
     participant = Participant.find_active_by_new_email(new_email.downcase)
-    if participant && (id.nil? || participant.id != id) && participant.email_update_token_expired?
-      errors.add(:email, "は既に登録済みです")
+    if participant && (id.nil? || participant.id != id) && !participant.email_update_token_expired?
+      errors.add(:new_email, "は既に登録済みです")
     end
   end
 

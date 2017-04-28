@@ -70,9 +70,14 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
 
   test "invalid email" do
     log_in_as_participant @participant
+    # 書式として無効なアドレスの場合
     email = ""
     update_email(email)
     assert_template 'participants/edit'
+    assert_select 'div#error_explanation', 1
+    # 現在使用しているアドレスで更新しようとした場合
+    email = @participant.email
+    update_email(email)
     assert_select 'div#error_explanation', 1
   end
 
