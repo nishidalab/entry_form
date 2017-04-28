@@ -2,10 +2,10 @@ class ParticipantsEmailUpdateController < ApplicationController
   include AccountsCommon
 
   def update
-    new_email = params[:e]
+    new_email = params[:e].downcase
     token = params[:t]
-    participant = Participant.find_by_new_email(new_email)
-    if participant.email_update_authenticated?(token) && !participant.email_update_token_expired?
+    participant = Participant.find_active_by_new_email(new_email)
+    if participant.email_update_authenticated?(token)
       participant.update(email: new_email,new_email: nil)
       log_in_participant(participant)
       flash[:success] = "メールアドレスの更新に成功しました。"

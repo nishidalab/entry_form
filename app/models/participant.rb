@@ -55,13 +55,13 @@ class Participant < ApplicationRecord
   # アクティブ被験者のメールアドレスのユニーク性バリデーション
   def validate_email_uniqueness
     # 現在登録されているメールアドレスとのユニーク性
-    participant = Participant.find_by("deactivated == ? and email == ?",false,email.downcase)
+    participant = Participant.find_by(deactivated: false, email: email.downcase)
     if participant && (id.nil? || participant.id != id)
       errors.add(:email, "は既に登録済みです")
     end
 
     # 更新予定のメールアドレスとのユニーク性
-    participant = Participant.find_by("deactivated == ? and new_email == ?",false,email.downcase)
+    participant = Participant.find_by(deactivated: false, new_email: email.downcase)
     if participant && (id.nil? || participant.id != id) && participant.email_update_token_expired?
       errors.add(:email, "は既に登録済みです")
     end
@@ -69,18 +69,17 @@ class Participant < ApplicationRecord
 
   # メール更新時のメールアドレスのユニーク性を検証する
   def validate_new_email_uniqueness
-    if !new_email.nil?
-      # 現在登録されているメールアドレスとのユニーク性
-      participant = Participant.find_by("deactivated == ? and email == ?",false,email.downcase)
-      if participant && (id.nil? || participant.id != id)
-        errors.add(:email, "は既に登録済みです")
-      end
+    return new_email.nil?
+    # 現在登録されているメールアドレスとのユニーク性
+    participant = Participant.find_by(deactivated: false, email: new_email.downcase)
+    if participant && (id.nil? || participant.id != id)
+      errors.add(:email, "は既に登録済みです")
+    end
 
-      # 更新予定のメールアドレスとのユニーク性
-      participant = Participant.find_by("deactivated == ? and new_email == ?",false,email.downcase)
-      if participant && (id.nil? || participant.id != id) && participant.email_update_token_expired?
-        errors.add(:email, "は既に登録済みです")
-      end
+    # 更新予定のメールアドレスとのユニーク性
+    participant = Participant.find_by(deactivated: false, new_email: new_email.downcase)
+    if participant && (id.nil? || participant.id != id) && participant.email_update_token_expired?
+      errors.add(:email, "は既に登録済みです")
     end
   end
 
@@ -110,7 +109,7 @@ class Participant < ApplicationRecord
     Participant.find_by(email: email, deactivated: false)
   end
 
-  def self.find_by_new_email(new_email)
+  def self.find_active_by_new_email(new_email)
     Participant.find_by(new_email: new_email, deactivated: false)
   end
 

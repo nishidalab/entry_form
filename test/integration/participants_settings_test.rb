@@ -133,11 +133,11 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     participant.reload
     assert_equal email, participant.email
     # トークンの期限が切れている場合
-    participant.update(set_email_update_at: participant.set_email_update_at - 86401)
+    participant.update(set_email_update_at: 24.hours.ago(participant.set_email_update_at).ago(1))
     get email_update_url(t: participant.email_update_token, e: new_email)
     participant.reload
     assert_equal email, participant.email
-    participant.update(set_email_update_at: participant.set_email_update_at + 86401)
+    participant.update(set_email_update_at: 24.hours.since(participant.set_email_update_at).since(1))
     # 正しい場合
     get email_update_url(t: participant.email_update_token, e: new_email)
     participant.reload

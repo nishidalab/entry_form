@@ -39,6 +39,7 @@ module Account
   # 渡されたメール更新トークンがダイジェストと一致したら true を返す。
   def email_update_authenticated?(email_update_token)
     return false if email_update_digest.nil?
+    return false if email_update_token_expired?
     BCrypt::Password.new(email_update_digest).is_password?(email_update_token)
   end
 
