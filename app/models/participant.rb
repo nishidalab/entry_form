@@ -55,13 +55,13 @@ class Participant < ApplicationRecord
   # アクティブ被験者のメールアドレスのユニーク性バリデーション
   def validate_email_uniqueness
     # 現在登録されているメールアドレスとのユニーク性
-    participant = Participant.find_by(deactivated: false, email: email.downcase)
+    participant = Participant.find_active_by_email(email.downcase)
     if participant && (id.nil? || participant.id != id)
       errors.add(:email, "は既に登録済みです")
     end
 
     # 更新予定のメールアドレスとのユニーク性
-    participant = Participant.find_by(deactivated: false, new_email: email.downcase)
+    participant = Participant.find_active_by_new_email(email.downcase)
     if participant && (id.nil? || participant.id != id) && participant.email_update_token_expired?
       errors.add(:email, "は既に登録済みです")
     end
@@ -71,13 +71,13 @@ class Participant < ApplicationRecord
   def validate_new_email_uniqueness
     return true if new_email.nil?
     # 現在登録されているメールアドレスとのユニーク性
-    participant = Participant.find_by(deactivated: false, email: new_email.downcase)
+    participant = Participant.find_active_by_email(new_email.downcase)
     if participant && (id.nil? || participant.id != id)
       errors.add(:email, "は既に登録済みです")
     end
 
     # 更新予定のメールアドレスとのユニーク性
-    participant = Participant.find_by(deactivated: false, new_email: new_email.downcase)
+    participant = Participant.find_active_by_new_email(new_email.downcase)
     if participant && (id.nil? || participant.id != id) && participant.email_update_token_expired?
       errors.add(:email, "は既に登録済みです")
     end
@@ -106,6 +106,11 @@ class Participant < ApplicationRecord
 
   # メールアドレスから非退会被験者を取得する(既存メソッドのオーバーライド)
   def self.find_by_email(email)
+    Participant.find_by(email: email, deactivated: false)
+  end
+
+  # new_emailに合わせてオーバーライドではなく新規に関数を定義
+  def self.find_active_by_email(email)
     Participant.find_by(email: email, deactivated: false)
   end
 
