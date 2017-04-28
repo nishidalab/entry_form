@@ -69,7 +69,7 @@ class Participant < ApplicationRecord
 
   # メール更新時のメールアドレスのユニーク性を検証する
   def validate_new_email_uniqueness
-    return new_email.nil?
+    return true if new_email.nil?
     # 現在登録されているメールアドレスとのユニーク性
     participant = Participant.find_by(deactivated: false, email: new_email.downcase)
     if participant && (id.nil? || participant.id != id)
