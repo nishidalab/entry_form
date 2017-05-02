@@ -101,6 +101,32 @@ module ApplicationHelper
     "</div>".html_safe
   end
 
+  # 子モデルのフォーム追加ボタン
+  def link_to_add_field(name, f, association, options={})
+    # association で渡されたシンボルから、対象のモデルを作る
+    # @parent.children.build に対応する処理
+    new_object = f.object.class.reflect_on_association(association).klass.new
+
+    # JS側の配列のインデックス値。重複対策で後にミリ秒の値で置き換える
+    id = new_object.object_id
+
+    # f はビューから渡されたフォームオブジェクト
+    # fields_for で f の子要素を作る
+    fields = f.fields_for(association, new_object, child_index: id) do |builder|
+      render(association.to_s.singularize + "_form", f: builder)
+    end
+
+    # ボタンの設置。classを指定してJSと連動、fields を渡しておいて、
+    # ボタン押下時にこの要素(fields)をJavascript側で増やすようにする
+    link_to(name, '#', class: "add_field", data: {id: id, fields: fields.gsub("\n","")})
+  end
+
+  #削除ボタン
+  def link_to_remove_field(name, f, options={})
+    # _destroy の hiddenフィールドと削除ボタンを設置
+    f.hidden_field(:_destroy) + link_to(name, '#', class: "remove_field")
+  end
+
   # form_tag の入力フィールド(text_area_tag)となる HTML を返します。
   def form_text_area_tag(name, label, size: 8, value: nil, description: nil, example: nil, required: true)
     form_xxxx_tag 'text_area_tag', name, label, size: size, value: value, description: description, example: example, required: required

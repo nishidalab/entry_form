@@ -11,8 +11,9 @@ class EventTest < ActiveSupport::TestCase
         email: "test@ii.ist.i.kyoto-u.ac.jp", name: "テスト", yomi: "てすと",
         password: "password", password_confirmation: "password")
     @member.save
+    @room = rooms(:one)
     @experiment = Experiment.new(
-        member_id: @member.id, zisshi_ukagai_date: Date.today, project_owner: "ほげ", place: "ほげ", budget: "ほげ",
+        member_id: @member.id, zisshi_ukagai_date: Date.today, project_owner: "ほげ", room_id: @room.id, budget: "ほげ",
         department_code: "123", project_num: "123", project_name: "ほげ", creditor_code: "XXX",
         expected_participant_count: 1, duration: 60, name: "ほげ", requirement: "ほげ", description: "ほげ",
         schedule_from: Date.today, schedule_to: Date.today, final_report_date: Date.today)
@@ -100,7 +101,7 @@ class EventTest < ActiveSupport::TestCase
   test "check double booking (conflicting application)" do
     schedule = Schedule.new(experiment_id: @experiment.id, datetime: @now + 5 * 60)
     schedule.save
-    application = Application.new(participant_id: @participant.id, schedule_id: schedule.id, status: 1)
+    application = Application.new(participant_id: @participant.id, schedule_id: schedule.id, status: ApplicationStatus::ACCEPTED)
     application.save
     setup_event
     assert_not @event.valid?
@@ -109,7 +110,7 @@ class EventTest < ActiveSupport::TestCase
   test "check double booking (not conflicting application)" do
     schedule = Schedule.new(experiment_id: @experiment.id, datetime: @now + 10 * 60)
     schedule.save
-    application = Application.new(participant_id: @participant.id, schedule_id: schedule.id, status: 1)
+    application = Application.new(participant_id: @participant.id, schedule_id: schedule.id, status: ApplicationStatus::ACCEPTED)
     application.save
     setup_event
     assert @event.valid?

@@ -91,13 +91,50 @@ Participant.create!([
   },
 ])
 
+Room.delete_all
+Room.create!([
+    { name: '総合研究7号館207号室',
+    },
+    { name: '総合研究7号館217号室',
+    },
+    { name: '3号館B棟',
+    },
+    { name: '時計台前',
+    },
+    { name: '総合研究7号館215号室',
+    },
+])
+
+Place.delete_all
+rooms = Room.all
+Place.create!([
+    { room_id: rooms[0].id,
+      detail:  'ICIE 1'
+    },
+    { room_id: rooms[1].id,
+      detail:  'ICIE 2'
+    },
+    { room_id: rooms[2].id,
+      detail:  'ドームディスプレイ'
+    },
+    { room_id: rooms[0].id,
+      detail:  ''
+    },
+    { room_id: rooms[3].id,
+      detail:  ''
+    },
+    { room_id: rooms[4].id,
+      detail:  ''
+    },
+])
+
 Experiment.delete_all
 members = Member.all
 Experiment.create!([
   { member_id: members[0].id,
     zisshi_ukagai_date: Date.new(2017, 2, 18),
     project_owner: "主",
-    place: "あそこ",
+    room_id: rooms[0].id,
     budget: "あの金",
     department_code: "12345",
     project_num: "123",
@@ -115,7 +152,7 @@ Experiment.create!([
   { member_id: members[1].id,
     zisshi_ukagai_date: Date.new(2017, 2, 17),
     project_owner: "主2",
-    place: "ここ",
+    room_id: rooms[1].id,
     budget: "この金",
     department_code: "23456",
     project_num: "234",
@@ -133,7 +170,7 @@ Experiment.create!([
   { member_id: members[1].id,
     zisshi_ukagai_date: Date.new(2017, 1, 17),
     project_owner: "主",
-    place: "ここ",
+    room_id: rooms[3].id,
     budget: "この金",
     department_code: "23456",
     project_num: "234",
@@ -176,23 +213,23 @@ schedules = Schedule.all
 Application.create!([
    { participant_id: participants[0].id,
      schedule_id: schedules[0].id,
-     status: 0,
+     status: ApplicationStatus::APPLYING,
    },
    { participant_id: participants[1].id,
      schedule_id: schedules[1].id,
-     status: 1,
+     status: ApplicationStatus::ACCEPTED,
    },
    { participant_id: participants[2].id,
      schedule_id: schedules[2].id,
-     status: 0,
+     status: ApplicationStatus::APPLYING,
    },
    { participant_id: participants[0].id,
      schedule_id: schedules[2].id,
-     status: 0,
+     status: ApplicationStatus::APPLYING,
    },
    { participant_id: participants[3].id,
      schedule_id: schedules[3].id,
-     status: 0,
+     status: ApplicationStatus::APPLYING,
    },
 ])
 

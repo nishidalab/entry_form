@@ -18,7 +18,7 @@ class Event < ApplicationRecord
     start_at = self.start_at.to_i
     end_at = (start_at + duration * 60).to_i
     error = lambda { errors.add(:start_at, "は無効です。指定した参加者は、拘束時間中に既に確定された予定が入っています。") }
-    participant.applications.where(status: 1).each do |application|
+    participant.applications.where(status: ApplicationStatus::ACCEPTED).each do |application|
       application_start_at = application.schedule.datetime.to_i
       application_end_at = (application_start_at + application.schedule.experiment.duration * 60).to_i
       if application_start_at < end_at && start_at < application_end_at

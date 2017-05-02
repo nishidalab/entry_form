@@ -8,19 +8,22 @@ class ApplicationTest < ActiveSupport::TestCase
         classification: 1, grade: 1, faculty_id: 1, address: "京都市左京区吉田本町",
         password: "password", password_confirmation: "password")
     @participant.save
+    @room = rooms(:one)
+    @room.save
     @member = Member.new(
         email: "test@ii.ist.i.kyoto-u.ac.jp", name: "テスト", yomi: "てすと",
         password: "password", password_confirmation: "password")
     @member.save
+    @room = rooms(:one)
     @experiment = Experiment.new(
-        member_id: @member.id, zisshi_ukagai_date: Date.today, project_owner: "ほげ", place: "ほげ", budget: "ほげ",
+        member_id: @member.id, zisshi_ukagai_date: Date.today, project_owner: "ほげ", room_id: @room.id, budget: "ほげ",
         department_code: "123", project_num: "123", project_name: "ほげ", creditor_code: "XXX",
         expected_participant_count: 1, duration: 60, name: "ほげ", requirement: "ほげ", description: "ほげ",
         schedule_from: Date.today, schedule_to: Date.today, final_report_date: Date.today)
     @experiment.save
     @schedule = Schedule.new(experiment_id: @experiment.id, datetime: @now)
     @schedule.save
-    @application = Application.new(participant_id: @participant.id, schedule_id: @schedule.id, status: 0)
+    @application = Application.new(participant_id: @participant.id, schedule_id: @schedule.id, status: ApplicationStatus::APPLYING)
   end
 
   test "should be valid" do
@@ -54,14 +57,14 @@ class ApplicationTest < ActiveSupport::TestCase
   test "should be unique" do
     dup = @application.dup
     @application.save
-    dup.status = 2
+    dup.status = ApplicationStatus::CANCELED
     assert_not dup.valid?
   end
 
   test "status should not become 1 if double booking" do
     # @application の10分後に開始するスケジュール(bad)と、60分後に開始するスケジュール(good)を登録
     another_experiment = Experiment.new(
-        member_id: @member.id, zisshi_ukagai_date: Date.today, project_owner: "ほげ", place: "ほげ", budget: "ほげ",
+        member_id: @member.id, zisshi_ukagai_date: Date.today, project_owner: "ほげ", room_id: @room.id, budget: "ほげ",
         department_code: "123", project_num: "123", project_name: "ほげ", creditor_code: "XXX",
         expected_participant_count: 1, duration: 60, name: "ふが", requirement: "ほげ", description: "ほげ",
         schedule_from: Date.today, schedule_to: Date.today, final_report_date: Date.today)
@@ -72,19 +75,19 @@ class ApplicationTest < ActiveSupport::TestCase
     good_schedule.save
 
     # 時間内に既に確定している application が存在する
-    bad_application = Application.new(participant_id: @participant.id, schedule_id: bad_schedule.id, status: 1)
+    bad_application = Application.new(participant_id: @participant.id, schedule_id: bad_schedule.id, status: ApplicationStatus::ACCEPTED)
     bad_application.valid?
     assert bad_application.valid?
     bad_application.save
-    @application.status = 1
+    @application.status = ApplicationStatus::ACCEPTED
     assert_not @application.valid?
     bad_application.destroy
 
     # 終了時刻と開始時刻が被っているものは OK
-    good_application = Application.new(participant_id: @participant.id, schedule_id: good_schedule.id, status: 1)
+    good_application = Application.new(participant_id: @participant.id, schedule_id: good_schedule.id, status: ApplicationStatus::ACCEPTED)
     assert good_application.valid?
     good_application.save
-    @application.status = 1
+    @application.status = ApplicationStatus::ACCEPTED
     assert @application.valid?
 
     # 時間内に既に確定している event が存在する
@@ -92,7 +95,7 @@ class ApplicationTest < ActiveSupport::TestCase
         name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: @now + 10 * 60,
         duration: 10, experiment_id: @experiment.id, participant_id: @participant.id)
     bad_event.save
-    @application.status = 1
+    @application.status = ApplicationStatus::ACCEPTED
     assert_not @application.valid?
     bad_event.destroy
 
@@ -101,7 +104,7 @@ class ApplicationTest < ActiveSupport::TestCase
         name: "事前手続き", requirement: "必要なこと", description: "説明", place: "場所", start_at: @now + 60 * 60,
         duration: 10, experiment_id: @experiment.id, participant_id: @participant.id)
     good_event.save
-    @application.status = 1
+    @application.status = ApplicationStatus::ACCEPTED
     assert @application.valid?
   end
 end

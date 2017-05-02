@@ -4,7 +4,9 @@ class Application < ApplicationRecord
 
   validate   :validate_unique_record
   validate   :validate_double_booking
-  validates  :status, inclusion: { in: 0..3 }  # 0: 申請中、1: 許可、2: 拒否、 3: 強い拒否
+  validates  :status, inclusion: {
+    in: ApplicationStatus.constants.map{|name|
+    ApplicationStatus.const_get(name)} }
 
   # 既存のデータが存在するか確認する(二重 post などの検証)
   def validate_unique_record
@@ -13,11 +15,11 @@ class Application < ApplicationRecord
 
   # 他の application や event と被っていないかのバリデーション
   def validate_double_booking
-    return if status != 1 || participant.nil? || schedule.nil?
+    return if status != ApplicationStatus::ACCEPTED || participant.nil? || schedule.nil?
     start_at = schedule.datetime.to_i
     end_at = (start_at + schedule.experiment.duration * 60).to_i
     error = lambda { errors.add(:status, "を「承認」にできません。指定した参加者は、拘束時間中に既に確定された予定が入っています。") }
-    participant.applications.where(status: 1).each do |application|
+    participant.applications.where(status: ApplicationStatus::ACCEPTED).each do |application|
       application_start_at = application.schedule.datetime.to_i
       application_end_at = (application_start_at + application.schedule.experiment.duration * 60).to_i
       if application_start_at < end_at && start_at < application_end_at
