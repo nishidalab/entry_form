@@ -35,6 +35,9 @@ Rails.application.routes.draw do
   # アカウント有効化ページ(for 被験者)
   get '/activate', to: 'participant_activations#edit'
 
+  # メール更新ページ(for 被験者)
+  get '/email_update', to: 'participants_email_update#update'
+
   # 問い合わせフォーム(for 被験者)
   get  '/inquiries',     to: 'inquiries#index'
   post '/inquiries/new', to: 'inquiries#create'

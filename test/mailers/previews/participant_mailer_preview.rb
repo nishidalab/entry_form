@@ -27,4 +27,11 @@ class ParticipantMailerPreview < ActionMailer::Preview
     ParticipantMailer.password_reset(participant)
   end
 
+  # Preview this email at http://localhost:3000/rails/mailers/participant_mailer/password_reset
+  def email_update
+    participant = Participant.first
+    participant.email_update_token = Participant.new_token
+    ParticipantMailer.email_update(participant)
+  end
+
 end

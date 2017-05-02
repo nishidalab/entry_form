@@ -20,4 +20,9 @@ class ParticipantMailer < ApplicationMailer
     @user = participant
     mail to: @user.email, subject: "パスワードの再設定"
   end
+
+  def email_update(participant)
+    @participant = participant
+    mail to: @participant.new_email, subject: "メールアドレスの更新"
+  end
 end

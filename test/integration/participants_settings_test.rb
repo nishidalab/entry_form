@@ -3,6 +3,7 @@ require 'test_helper'
 class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
   def setup
     @participant = participants(:one)
+    ActionMailer::Base.deliveries.clear
   end
 
   def update_profile(participant)
@@ -15,6 +16,10 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
   def update_password(password, password_confirmation)
     patch settings_path, params: { type: 'password', participant: {
         password: password, password_confirmation: password_confirmation } }
+  end
+
+  def update_email(email)
+    patch settings_path, params: { type: 'email_update', participant: { new_email: email}}
   end
 
   test "not logged in" do
@@ -31,6 +36,11 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     update_password(password, password)
     @participant.reload
     assert_equal old_password_digest, @participant.password_digest
+
+    old_email = @participant.email
+    update_email("update@example.com")
+    @participant.reload
+    assert_equal old_email, @participant.email
   end
 
   test "invalid profiles" do
@@ -55,6 +65,19 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     password_confirmation = 'fugafuga'
     update_password(password, password_confirmation)
     assert_template 'participants/edit'
+    assert_select 'div#error_explanation', 1
+  end
+
+  test "invalid email" do
+    log_in_as_participant @participant
+    # 書式として無効なアドレスの場合
+    email = ""
+    update_email(email)
+    assert_template 'participants/edit'
+    assert_select 'div#error_explanation', 1
+    # 現在使用しているアドレスで更新しようとした場合
+    email = @participant.email
+    update_email(email)
     assert_select 'div#error_explanation', 1
   end
 
@@ -98,6 +121,34 @@ class ParticipantsSettingsTest < ActionDispatch::IntegrationTest
     # 新しいパスワードでログインできるか？
     delete logout_path
     log_in_as_participant @participant, password: password
+    assert is_logged_in_participant?
+  end
+
+  test "valid email" do
+    log_in_as_participant @participant
+    email = @participant.email
+    new_email = "update@example.com"
+    update_email(new_email)
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    participant = assigns(:participant)
+    assert_equal new_email, participant.new_email
+    assert_equal email, participant.email
+    # トークンが正しく無い場合
+    get email_update_url(t: "invalid token", e: new_email)
+    participant.reload
+    assert_equal email, participant.email
+    # トークンの期限が切れている場合
+    participant.update(set_email_update_at: 24.hours.ago(participant.set_email_update_at).ago(1))
+    get email_update_url(t: participant.email_update_token, e: new_email)
+    participant.reload
+    assert_equal email, participant.email
+    participant.update(set_email_update_at: 24.hours.since(participant.set_email_update_at).since(1))
+    # 正しい場合
+    get email_update_url(t: participant.email_update_token, e: new_email)
+    participant.reload
+    assert_equal new_email, participant.email
+    assert_redirected_to applications_url
+    follow_redirect!
     assert is_logged_in_participant?
   end
 end

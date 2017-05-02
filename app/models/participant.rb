@@ -15,7 +15,9 @@ class Participant < ApplicationRecord
   before_save { email.downcase! }
 
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }
+  validates :new_email, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, allow_nil: true
   validate  :validate_email_uniqueness
+  validate  :validate_new_email_uniqueness
   validates :password, presence: true, length: { minimum: 8, maximum: 32 }, allow_nil: true
 
   validates :name, presence: true, length: { maximum: 50 }
@@ -52,8 +54,33 @@ class Participant < ApplicationRecord
 
   # アクティブ被験者のメールアドレスのユニーク性バリデーション
   def validate_email_uniqueness
-    participant = Participant.find_by(deactivated: false, email: email.downcase)
-    errors.add(:email, "は既に登録済みです") if participant && (id.nil? || participant.id != id)
+    # 現在登録されているメールアドレスとのユニーク性
+    participant = Participant.find_active_by_email(email.downcase)
+    if participant && (id.nil? || participant.id != id)
+      errors.add(:email, "は既に登録済みです")
+    end
+
+    # 更新予定のメールアドレスとのユニーク性
+    participant = Participant.find_active_by_new_email(email.downcase)
+    if participant && (id.nil? || participant.id != id) && !participant.email_update_token_expired?
+      errors.add(:email, "は既に登録済みです")
+    end
+  end
+
+  # メール更新時のメールアドレスのユニーク性を検証する
+  def validate_new_email_uniqueness
+    return true if new_email.nil?
+    # 現在登録されているメールアドレスとのユニーク性
+    participant = Participant.find_active_by_email(new_email.downcase)
+    if participant
+      errors.add(:new_email, "は既に登録済みです")
+    end
+
+    # 更新予定のメールアドレスとのユニーク性
+    participant = Participant.find_active_by_new_email(new_email.downcase)
+    if participant && (id.nil? || participant.id != id) && !participant.email_update_token_expired?
+      errors.add(:new_email, "は既に登録済みです")
+    end
   end
 
   # 永続セッションのためにトークンをデータベースに記憶する。
@@ -80,6 +107,15 @@ class Participant < ApplicationRecord
   # メールアドレスから非退会被験者を取得する(既存メソッドのオーバーライド)
   def self.find_by_email(email)
     Participant.find_by(email: email, deactivated: false)
+  end
+
+  # new_emailに合わせてオーバーライドではなく新規に関数を定義
+  def self.find_active_by_email(email)
+    Participant.find_by(email: email, deactivated: false)
+  end
+
+  def self.find_active_by_new_email(new_email)
+    Participant.find_by(new_email: new_email, deactivated: false)
   end
 
   def deactivatable?
