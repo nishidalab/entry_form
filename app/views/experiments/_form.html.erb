@@ -11,17 +11,28 @@
     <%= form_text_field f, :budget, '予算科目' %>
     <%= form_text_field f, :creditor_code, '債主コード' %>
     <%= form_text_field f, :department_code, '部署コード' %>
-    <%= form_text_field f, :room_id, 'room_id', example: "#{Room.first.id} => #{Room.first.name}（実際はこの辺もadd可能なプルダウン）" %>
+    <%= form_collection_select f, :room_id, 'room_id', Room.all, :id, :name, prompt: "-----------------------------" %>
     <%= f.hidden_field :id %>
+    <div class="form-group">
+      <%= label 'explaces','place', 'ex_place',class: 'col-sm-2 control-label' %>
+      <div class="checkbox">
+        <% Place.all.each do |place| %>
+          <div class="col-sm-1">
+           <%= check_box 'explaces', 'place', {multiple: true}, place.id, nil %>
+           <%= place.detail %>
+          </div>
+        <% end %>
+      </div>
+    </div>
     <%= f.fields_for :ex_places do |pf| %>
       <%= render partial: "ex_place_form", locals: {f: pf } %>
     <% end %>
     <%= link_to_add_field("実験場所追加", f, :ex_places, {}) %>
-    <%= form_text_field f, :expected_participant_count, '予定人数' %>
-    <%= form_text_field f, :duration, '時間数(単位はh)' %>
+    <%= form_text_field f, :expected_participant_count, '予定人数', unit: ' 人' %>
+    <%= form_text_field f, :duration, '時間数(単位はh)', unit: ' 時間' %>
     <%= form_text_field f, :description, '実験概要' %>
-    <%= form_date f, :schedule_from, '実施予定日(from)', 1970, Date.today.year - 17 %>
-    <%= form_date f, :schedule_to, '実施予定日(to)', 1970, Date.today.year - 17 %>
+    <%= form_date_fromto f, :schedule_from, :schedule_to, '実施予定日(from~to)', 1970, Date.today.year - 17 %>
+    <%#= form_date f, :schedule_to, '実施予定日(to)', 1970, Date.today.year - 17 %>
   <% end %>
   <%= form_submit f, submit_label %>
 <% end %>
