@@ -10,8 +10,8 @@ module ApplicationHelper
   end
 
   # form_for の入力フィールド(text_field)となる HTML を返します。
-  def form_text_field(form, attribute, label, size: 8, description: nil, example: nil, required: true)
-    form_xxxx 'text_field', form, attribute, label, size: size, description: description, example: example, required: required
+  def form_text_field(form, attribute, label, size: 8, description: nil, example: nil, required: true, unit: nil)
+    form_xxxx 'text_field', form, attribute, label, size: size, description: description, example: example, required: required, unit: unit
   end
 
   # form_for の入力フィールド(email_field)となる HTML を返します。
@@ -82,6 +82,28 @@ module ApplicationHelper
     "</div>".html_safe
   end
 
+  # form_for の入力フィールド(年・月・日 fromとto)となる HTML を返します。
+  def form_date_fromto(form, attribute_from, attribute_to, label, start_year, end_year, size: 4, description: nil, example: nil, required: true)
+    html_option = required ?
+        { class: 'form-control bootstrap-date validation', required: true } :
+        { class: 'form-control bootstrap-date' }
+    "<div class='form-group'>".html_safe +
+      form.label(attribute_from, label, class: 'col-sm-2 control-label') +
+      "<div class='col-sm-#{size * 2}'>".html_safe +
+      (raw sprintf( form.date_select(attribute_from, { start_year: start_year, end_year: end_year, use_month_numbers: true,
+                                                  prompt: '----', date_separator: '%s' }, html_option),
+                    '年 ', '月 ') + '日') + "〜" +
+      (raw sprintf( form.date_select(attribute_to, { start_year: start_year, end_year: end_year, use_month_numbers: true,
+                                                  prompt: '----', date_separator: '%s' }, html_option),
+                    '年 ', '月 ') + '日') +
+      (description ?
+        "<span class='help-block'>#{description}</span>" : "").html_safe +
+      (example ?
+        "<span class='help-block'><span class='label label-default'>例</span>#{example}</span>" : "").html_safe +
+      "</div>".html_safe +
+    "</div>".html_safe
+  end
+
   # form_for の submit ボタンとなる HTML を返します。
   def form_submit(form, label, size: 8, type: 'btn-primary')
     "<div class='col-sm-offset-2 col-sm-#{size}'>".html_safe +
@@ -135,14 +157,16 @@ module ApplicationHelper
   private
 
     # form_xxxx (form_text_field や form_text_area) で呼び出されるメソッドです。
-    def form_xxxx(xxxx, form, attribute, label, size: 8, description: nil, example: nil, required: true)
+    def form_xxxx(xxxx, form, attribute, label, size: 8, description: nil, example: nil, required: true, unit: nil)
       html_option = required ?
           { class: 'form-control validation', required: true } :
           { class: 'form-control' }
       "<div class='form-group'>".html_safe +
         form.label(attribute, label, class: 'col-sm-2 control-label') +
         "<div class='col-sm-#{size}'>".html_safe +
-        form.send(xxxx, attribute, html_option) +
+        (unit ? "<div class='form-inline'>".html_safe : "") +
+        form.send(xxxx, attribute, html_option) + " " + unit + 
+        (unit ? "</div>".html_safe : "") +
         (description ?
           "<span class='help-block'>#{description}</span>" : "").html_safe +
         (example ?
@@ -157,7 +181,7 @@ module ApplicationHelper
           { class: 'form-control validation', required: true } :
           { class: 'form-control' }
       "<div class='form-group'>".html_safe +
-        label(name,label, class: 'col-sm-2 control-label') +
+        label('dummy',label, class: 'col-sm-2 control-label') +
         "<div class='col-sm-#{size}'>".html_safe +
         send(xxxx, name, value, html_option) +
         (description ?
