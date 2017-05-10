@@ -165,7 +165,7 @@ module ApplicationHelper
         form.label(attribute, label, class: 'col-sm-2 control-label') +
         "<div class='col-sm-#{size}'>".html_safe +
         (unit ? "<div class='form-inline'>".html_safe : "") +
-        form.send(xxxx, attribute, html_option) + unit + 
+        form.send(xxxx, attribute, html_option) + " " + unit + 
         (unit ? "</div>".html_safe : "") +
         (description ?
           "<span class='help-block'>#{description}</span>" : "").html_safe +
@@ -181,7 +181,7 @@ module ApplicationHelper
           { class: 'form-control validation', required: true } :
           { class: 'form-control' }
       "<div class='form-group'>".html_safe +
-        label('damy',label, class: 'col-sm-2 control-label') +
+        label('dummy',label, class: 'col-sm-2 control-label') +
         "<div class='col-sm-#{size}'>".html_safe +
         send(xxxx, name, value, html_option) +
         (description ?

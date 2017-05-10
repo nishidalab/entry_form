@@ -17,8 +17,8 @@
       <%= render partial: "ex_place_form", locals: {f: pf } %>
     <% end %>
     <%= link_to_add_field("実験場所追加", f, :ex_places, {}) %>
-    <%= form_text_field f, :expected_participant_count, '予定人数', unit: ' 人' %>
-    <%= form_text_field f, :duration, '時間数(単位はh)', unit: ' 時間' %>
+    <%= form_text_field f, :expected_participant_count, '予定人数', unit: '人' %>
+    <%= form_text_field f, :duration, '時間数(単位はh)', unit: '時間' %>
     <%= form_text_field f, :description, '実験概要' %>
     <%= form_date_fromto f, :schedule_from, :schedule_to, '実施予定日(from~to)', 1970, Date.today.year - 17 %>
   <% end %>
