@@ -11,7 +11,7 @@
     <%= form_text_field f, :budget, '予算科目' %>
     <%= form_text_field f, :creditor_code, '債主コード' %>
     <%= form_text_field f, :department_code, '部署コード' %>
-    <%= form_collection_select f, :room_id, 'room_id', Room.all, :id, :name, prompt: "-------------------------------------------------------" %>
+    <%= form_collection_select f, :room_id, '実施場所', Room.all, :id, :name, prompt: "-------------------------------------------------------" %>
     <%= f.hidden_field :id %>
     <%= f.fields_for :ex_places do |pf| %>
       <%= render partial: "ex_place_form", locals: {f: pf } %>
