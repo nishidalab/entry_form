@@ -1,6 +1,7 @@
 class ExperimentsController < ApplicationController
   include MembersCommon
   include SchedulesCommon
+  include ExperimentPlaceFormHelper
   before_action :redirect_to_member_login
   before_action :redirect_to_member_mypage_exclude_admin
 
@@ -10,7 +11,6 @@ class ExperimentsController < ApplicationController
 
   def new
     @experiment = Experiment.new
-    @experiment.ex_places.build # place情報追加用
   end
 
   def create
@@ -53,7 +53,7 @@ class ExperimentsController < ApplicationController
 
   private
     def experiment_param_for_create
-      params.require(:experiment).permit(
+      _params = params.require(:experiment).permit(
         :zisshi_ukagai_date, :project_owner, :room_id, :budget,
         :department_code, :project_num, :project_name, :creditor_code,
         :expected_participant_count, :duration, :name, :description,
@@ -62,6 +62,7 @@ class ExperimentsController < ApplicationController
           :place_id,
           :_destroy,
         ],)
+      setup_ex_places_attributes(_params)
     end
 
 end
