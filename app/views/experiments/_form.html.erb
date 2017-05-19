@@ -1,3 +1,10 @@
+<%= javascript_tag do %>
+  var place_table = <%= raw places.to_json %>;
+<% end %>
+<script type="text/javascript" class="create_places_checkbox">
+  <%= render partial: "experiments/javascripts/create_places_checkbox.js" %>
+</script>
+
 <%= form_for(setup_ex_places(experiment), url: form_for_url, html: { class: "form-horizontal" }) do |f| %>
   <%= render 'shared/error_messages', object: f.object if show_errors %>
 
@@ -11,16 +18,16 @@
     <%= form_text_field f, :budget, '予算科目' %>
     <%= form_text_field f, :creditor_code, '債主コード' %>
     <%= form_text_field f, :department_code, '部署コード' %>
-    <%= form_text_field f, :room_id, 'room_id', example: "#{Room.first.id} => #{Room.first.name}（実際はこの辺もadd可能なプルダウン）" %>
+    <%= form_collection_select f, :room_id, '実施場所', Room.all, :id, :name, prompt: "選択してください" %>
     <%= f.fields_for :ex_places do |pf| %>
     <div class="form-group">
       <div class="col-sm-2"></div>
       <div class="col-sm-8">
-        <div class="checkbox">
-          <%= pf.label :apply, class: "checkbox inline" do %>
+        <div class="checkbox" id="place_checkbox">
+          <%= pf.label :apply, class: "checkbox inline hogehoge" do %>
             <%= pf.hidden_field :id%>
             <%= pf.hidden_field :place_id%>
-            <%= f.check_box :apply, {checked: pf.object.persisted?} %>
+            <%= f.check_box :apply, {checked: pf.object.persisted?, class: :hogehoge} %>
             <%= pf.object.place.detail %>
           <% end %>
         </div>
