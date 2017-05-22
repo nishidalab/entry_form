@@ -18,7 +18,7 @@
     <%= form_text_field f, :budget, '予算科目' %>
     <%= form_text_field f, :creditor_code, '債主コード' %>
     <%= form_text_field f, :department_code, '部署コード' %>
-    <%= form_collection_select f, :room_id, '実施場所', Room.all, :id, :name, prompt: "選択してください" %>
+    <%= form_collection_select f, :room_id, '実施場所', Room.all, :id, :name, prompt: "-------------------------------------------------------" %>
     <div class="form-group">
       <div class="col-sm-2"></div>
       <div class="col-sm-8 checkbox">
@@ -26,11 +26,10 @@
         </ul>
       </div>
     </div>
-    <%= form_text_field f, :expected_participant_count, '予定人数' %>
-    <%= form_text_field f, :duration, '時間数(単位はh)' %>
+    <%= form_text_field f, :expected_participant_count, '予定人数', unit: '人' %>
+    <%= form_text_field f, :duration, '時間数(単位はh)', unit: '時間' %>
     <%= form_text_field f, :description, '実験概要' %>
-    <%= form_date f, :schedule_from, '実施予定日(from)', 1970, Date.today.year - 17 %>
-    <%= form_date f, :schedule_to, '実施予定日(to)', 1970, Date.today.year - 17 %>
+    <%= form_date_fromto f, :schedule_from, :schedule_to, '実施予定日(from~to)', 1970, Date.today.year - 17 %>
   <% end %>
   <%= form_submit f, submit_label %>
 <% end %>
