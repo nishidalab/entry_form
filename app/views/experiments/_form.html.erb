@@ -19,21 +19,13 @@
     <%= form_text_field f, :creditor_code, '債主コード' %>
     <%= form_text_field f, :department_code, '部署コード' %>
     <%= form_collection_select f, :room_id, '実施場所', Room.all, :id, :name, prompt: "選択してください" %>
-    <%= f.fields_for :ex_places do |pf| %>
     <div class="form-group">
       <div class="col-sm-2"></div>
-      <div class="col-sm-8">
-        <div class="checkbox" id="place_checkbox">
-          <%= pf.label :apply, class: "checkbox inline hogehoge" do %>
-            <%= pf.hidden_field :id%>
-            <%= pf.hidden_field :place_id%>
-            <%= f.check_box :apply, {checked: pf.object.persisted?, class: :hogehoge} %>
-            <%= pf.object.place.detail %>
-          <% end %>
-        </div>
+      <div class="col-sm-8 checkbox">
+        <ul id ="place_checkbox">
+        </ul>
       </div>
     </div>
-    <% end %>
     <%= form_text_field f, :expected_participant_count, '予定人数' %>
     <%= form_text_field f, :duration, '時間数(単位はh)' %>
     <%= form_text_field f, :description, '実験概要' %>

@@ -114,7 +114,7 @@ Place.create!([
     { room_id: rooms[1].id,
       detail:  'ICIE 2'
     },
-    { room_id: rooms[2].id,
+    { room_id: rooms[1].id, # TODO: 元に戻す rooms[1].id -> roomds[2].id
       detail:  'ドームディスプレイ'
     },
     { room_id: rooms[0].id,

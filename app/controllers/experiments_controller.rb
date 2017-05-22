@@ -14,8 +14,8 @@ class ExperimentsController < ApplicationController
 
     # room_idがキーで中身がdetailのハッシュテーブル作成
     h = Hash.new { |h, k| h[k] = [] }
-    Place.select(:room_id, :detail).each do |place|
-        h[place.room_id] << place.detail # TODO ここplace.idとの組にする必要あるわ、その場合selectで明示的に:idしないといけないので.allの方が良いか？
+    Place.all.each do |place|
+        h[place.room_id] << {:id => place.id,:detail => place.detail} # TODO ここplace.idとの組にする必要あるわ、その場合selectで明示的に:idしないといけないので.allの方が良いか？
     end
     @places = h
   end
