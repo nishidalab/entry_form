@@ -1,7 +1,6 @@
 class ExperimentsController < ApplicationController
   include MembersCommon
   include SchedulesCommon
-  include ExperimentPlaceFormHelper
   before_action :redirect_to_member_login
   before_action :redirect_to_member_mypage_exclude_admin
 
@@ -15,7 +14,7 @@ class ExperimentsController < ApplicationController
     # room_idがキーで中身がdetailのハッシュテーブル作成
     h = Hash.new { |h, k| h[k] = [] }
     Place.all.each do |place|
-        h[place.room_id] << {:id => place.id,:detail => place.detail} # TODO ここplace.idとの組にする必要あるわ、その場合selectで明示的に:idしないといけないので.allの方が良いか？
+        h[place.room_id] << {:id => place.id,:detail => place.detail}
     end
     @places = h
   end
@@ -60,7 +59,9 @@ class ExperimentsController < ApplicationController
 
   private
     def experiment_param_for_create
-      _params = params.require(:experiment).permit(
+      params[:experiment][:ex_places_attributes].each { |index, hash| \
+        hash[:_destroy] = hash[:place_id].blank? }
+      params.require(:experiment).permit(
         :zisshi_ukagai_date, :project_owner, :room_id, :budget,
         :department_code, :project_num, :project_name, :creditor_code,
         :expected_participant_count, :duration, :name, :description,
@@ -69,7 +70,6 @@ class ExperimentsController < ApplicationController
           :place_id,
           :_destroy,
         ],)
-      setup_ex_places_attributes(_params)
     end
 
 end
