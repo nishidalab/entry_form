@@ -7,6 +7,7 @@ $(document).ready(function(){
           data: { room_id: $("#experiment_room_id").val() }
         }
       ).done(function(data){
+        console.log(data);
         $('#places_checkbox').html(data);
       });
     });

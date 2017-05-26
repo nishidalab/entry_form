@@ -123,6 +123,30 @@ module ApplicationHelper
     "</div>".html_safe
   end
 
+  # form_for の入力フィールド(箇条書きチェックボックス)となる HTML を返します。
+  def form_ul_checkbox(form, attribute, label, object_array, value_hash, name_hash, options, selected: nil, size: 4, required: true)
+    html_option = required ?
+        { class: 'form-control validation', required: true } :
+        { class: 'form-control' }
+    lists = object_array.map.with_index{|o, index|
+      name_prefix = "experiment[ex_places_attributes][#{index}]"
+      "<li><label>".html_safe +
+        hidden_field_tag("#{name_prefix}[id]") +
+        check_box_tag("#{name_prefix}[place_id]", o[value_hash]) +
+        o[name_hash] +
+      "</label></li>".html_safe
+    }.join("")
+    "<div class='form-group'>".html_safe +
+      "<label class='col-sm-2 control-label'>".html_safe + # 本当はform.labelを使いたい
+        label.html_safe +
+      "</label>".html_safe +
+
+      "<ul class='col-sm-#{size}'>".html_safe +
+        lists.html_safe +
+      "</ul>".html_safe +
+    "</div>".html_safe
+  end
+
   # 子モデルのフォーム追加ボタン
   def link_to_add_field(name, f, association, options={})
     # association で渡されたシンボルから、対象のモデルを作る
@@ -165,7 +189,7 @@ module ApplicationHelper
         form.label(attribute, label, class: 'col-sm-2 control-label') +
         "<div class='col-sm-#{size}'>".html_safe +
         (unit ? "<div class='form-inline'>".html_safe : "") +
-        form.send(xxxx, attribute, html_option) + " " + unit + 
+        form.send(xxxx, attribute, html_option) + " " + unit +
         (unit ? "</div>".html_safe : "") +
         (description ?
           "<span class='help-block'>#{description}</span>" : "").html_safe +
