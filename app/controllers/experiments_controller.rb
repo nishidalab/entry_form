@@ -10,13 +10,6 @@ class ExperimentsController < ApplicationController
 
   def new
     @experiment = Experiment.new
-
-    # room_idがキーで中身がdetailのハッシュテーブル作成
-    h = Hash.new { |h, k| h[k] = [] }
-    Place.all.each do |place|
-        h[place.room_id] << {:id => place.id,:detail => place.detail}
-    end
-    @places = h
   end
 
   def create
@@ -55,6 +48,11 @@ class ExperimentsController < ApplicationController
     else
       @times = get_times(Schedule.where(experiment_id: @experiment.id), [ApplicationStatus::APPLYING, ApplicationStatus::ACCEPTED])
     end
+  end
+
+  def place_checkbox
+    places = Place.where(room_id: params[:room_id])
+    render partial: 'experiments/ex_place_form', locals: {places: places}
   end
 
   private

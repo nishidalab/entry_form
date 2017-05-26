@@ -1,6 +1,3 @@
-<%= javascript_tag do %>
-  var place_table = <%= raw places.to_json %>;
-<% end %>
 <script type="text/javascript" class="create_places_checkbox">
   <%= render partial: "experiments/javascripts/create_places_checkbox.js" %>
 </script>
@@ -21,9 +18,7 @@
     <%= form_collection_select f, :room_id, '実施場所', Room.all, :id, :name, prompt: "-------------------------------------------------------" %>
     <div class="form-group">
       <div class="col-sm-2"></div>
-      <div class="col-sm-8 checkbox">
-        <ul id ="place_checkbox">
-        </ul>
+      <div class="col-sm-8 checkbox" id="places_checkbox">
       </div>
     </div>
     <%= form_text_field f, :expected_participant_count, '予定人数', unit: '人' %>
