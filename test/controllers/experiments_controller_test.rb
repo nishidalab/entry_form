@@ -31,6 +31,11 @@ class ExperimentsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to member_login_url
   end
 
+  test "newroom should redirect to member login page when not logged in" do
+    get experiment_newroom_path
+    assert_redirected_to member_login_url
+  end
+
   test "show should redirect to index when parameter experiment is invalid" do
     log_in_as_member(@member1)
     get experiment_path(@max_experiment_id + 1)

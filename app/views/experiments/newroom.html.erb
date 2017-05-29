@@ -1,0 +1,17 @@
+<% provide(:title, '実験場所追加フォーム') %>
+<h2><%= yield(:title) %></h2>
+<div class="panel panel-primary">
+  <div class="panel-heading"><%= simple_format("部屋追加") %></div>
+  <div class="panel-body">
+    <%= render partial: 'roomform',
+               locals: { form_for_url: experiment_newroom_path, room: @room, submit_label: '追加する', type: 'room', show_errors: true } %>
+  </div>
+</div>
+
+<div class="panel panel-primary">
+  <div class="panel-heading"><%= simple_format("場所追加") %></div>
+  <div class="panel-body">
+    <%= render partial: 'roomform',
+               locals: { form_for_url: experiment_newroom_path, room: @place, submit_label: '追加する', type: 'place', show_errors: true } %>
+  </div>
+</div>

@@ -63,6 +63,8 @@ Rails.application.routes.draw do
 
   # 実験募集ページ
   resources :experiments
+  get '/experiment/newroom', to: 'experiments#newroom'
+  post '/experiment/newroom', to: 'experiments#createroom'
 
   # アカウント有効化ページ(for 実験者)
   get '/member/activate', to: 'member_activations#edit'

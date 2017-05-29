@@ -51,6 +51,35 @@ class ExperimentsController < ApplicationController
     end
   end
 
+  def newroom
+    @room = Room.new
+    @place = Place.new
+  end
+
+  def createroom
+    @type = params[:type]
+    if @type == 'room'
+      @room = Room.new(params.require(:room).permit(:name))
+      if @room.save
+        flash[:info] = "部屋を追加しました。"
+        redirect_to experiment_newroom_url
+      else
+        @place = Place.new
+        render 'newroom'
+      end
+    end
+    if @type == 'place'
+      @place = Room.find(params[:place][:room_id]).places.build(params.require(:place).permit(:room_id, :detail))
+      if @place.save
+        flash[:info] = "場所を追加しました。"
+        redirect_to experiment_newroom_url
+      else
+        @room = Room.new
+        render 'newroom'
+      end
+    end
+  end
+
   private
     def experiment_param_for_create
       params.require(:experiment).permit(
