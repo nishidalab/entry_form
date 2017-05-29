@@ -1,12 +1,5 @@
-<ul>
-  <% places.each_with_index do |p, index| %>
-    <li>
-      <label>
-        <% name_prefix = "experiment[ex_places_attributes][#{index}]" %>
-        <%= hidden_field_tag "#{name_prefix}[id]" %>
-        <%= check_box_tag "#{name_prefix}[place_id]", p[:id] %>
-        <%= p[:detail] %>
-      </label>
-    </li>
-  <% end %>
-</ul>
+<% places.each_with_index do |p, index| %>
+  <% name_prefix = "experiment[ex_places_attributes][#{index}]" %>
+  <%= hidden_field_tag "#{name_prefix}[id]" %>
+  <%= form_check_box_tag "#{name_prefix}[place_id]", p[:detail], value: p[:id] %>
+<% end %>
