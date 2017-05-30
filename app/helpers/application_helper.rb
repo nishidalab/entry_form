@@ -154,6 +154,19 @@ module ApplicationHelper
     form_xxxx_tag 'text_area_tag', name, label, size: size, value: value, description: description, example: example, required: required
   end
 
+  def form_check_box_tag(name, label, value: 0, checked: false, required: false)
+    html_option = {required: required}
+    "<div class='form-group'>".html_safe +
+      "<div class='col-sm-2'></div>".html_safe +
+      "<div class='col-sm-8'>".html_safe +
+        "<label>".html_safe +
+          check_box_tag(name,value,checked,html_option) +
+          "#{label}".html_safe +
+        "</label>".html_safe +
+      "</div>".html_safe +
+    "</div>".html_safe
+  end
+
   private
 
     # form_xxxx (form_text_field や form_text_area) で呼び出されるメソッドです。
@@ -165,7 +178,7 @@ module ApplicationHelper
         form.label(attribute, label, class: 'col-sm-2 control-label') +
         "<div class='col-sm-#{size}'>".html_safe +
         (unit ? "<div class='form-inline'>".html_safe : "") +
-        form.send(xxxx, attribute, html_option) + " " + unit + 
+        form.send(xxxx, attribute, html_option) + " " + unit +
         (unit ? "</div>".html_safe : "") +
         (description ?
           "<span class='help-block'>#{description}</span>" : "").html_safe +

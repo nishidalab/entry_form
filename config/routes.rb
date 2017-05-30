@@ -62,7 +62,11 @@ Rails.application.routes.draw do
   delete '/member/logout', to: 'sessions#destroy_member'
 
   # 実験募集ページ
-  resources :experiments
+  resources :experiments do
+    collection do
+      get 'place_checkbox'
+    end
+  end
 
   # アカウント有効化ページ(for 実験者)
   get '/member/activate', to: 'member_activations#edit'
