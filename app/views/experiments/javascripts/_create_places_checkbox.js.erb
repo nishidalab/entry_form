@@ -1,0 +1,13 @@
+$(document).ready(function(){
+  $("#experiment_room_id").change(function(){
+      $.ajax(
+        {
+          type: 'GET',
+          url: '/experiments/place_checkbox',
+          data: { room_id: $("#experiment_room_id").val() }
+        }
+      ).done(function(data){
+        $('#places_checkbox').html(data);
+      });
+    });
+});

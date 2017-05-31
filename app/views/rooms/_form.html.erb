@@ -1,0 +1,35 @@
+<%= form_for(room, url: form_for_url, html: { class: "form-horizontal" }) do |f| %>
+  <%= render 'shared/error_messages', object: f.object if show_errors %>
+
+  <%= hidden_field_tag :type, type %>
+  <% if type == 'room' %>
+    <div class='form-group'>
+      <%= label('dummy',"既存の部屋", class: 'col-sm-2 control-label') %>
+      <div class='col-sm-8'>
+        <% Room.all.each do |r| %>
+        <%= r.name %>
+        <% end %>
+      </div>
+    </div>
+    <%= form_text_field f, :name, '部屋名' %>
+  <% end %>
+  <% if type == 'place' %>
+  <div class='form-group'>
+    <%= label('dummy',"既存の場所", class: 'col-sm-2 control-label') %>
+    <div class='col-sm-8'>
+      <% Room.all.each do |r| %>
+       <b>
+        <%= r.name %>
+       </b>
+        <% Place.where(room_id: r.id).each do |p| %>
+          <%= p.detail %>
+        <% end %>
+        <br>
+      <% end %>
+    </div>
+  </div>
+    <%= form_collection_select f, :room_id, '実施場所', Room.all, :id, :name, prompt: "-------------------------------------------------------" %>
+    <%= form_text_field f, :detail, '場所名' %>
+  <% end %>
+  <%= form_submit f, submit_label %>
+<% end %>

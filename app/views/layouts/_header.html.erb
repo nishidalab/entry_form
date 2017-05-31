@@ -22,7 +22,7 @@
           <% if logged_in_admin_member? %>
             <li><%= link_to "マイページ", member_mypage_path %></li>
             <li><%= link_to "実験募集", new_experiment_path %></li>
-            <li><%= link_to "実験場所追加", experiment_newroom_path %></li>
+            <li><%= link_to "実験場所追加", new_room_path %></li>
             <li><%= link_to "ログアウト", member_logout_path, method: "delete" %></li>
           <% else %>
             <li><%= link_to "マイページ", member_mypage_path %></li>
