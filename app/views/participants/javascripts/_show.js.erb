@@ -26,7 +26,7 @@ var dated_schedules = (function() {
     for(var s of schedules) {
         var e = {
             content:
-            '<button type="button" disabled="true" class="form-control btn btn-default">' + s.title + '</button>',
+            '<a class="hint--top  hint--large" data-hint="test">' + s.title + '</a>',
             startTime: s.start,
             endTime:   s.end,
         };
