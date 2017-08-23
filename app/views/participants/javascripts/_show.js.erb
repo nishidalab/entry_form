@@ -6,6 +6,7 @@ var schedules = [
         {
             date:     '<%= application.schedule.datetime.strftime('%m-%d-%Y') %>',
             title:    '<%= get_title(application.status, application.schedule.experiment.name) %>',
+            detail:   '<%= get_title(application.status, application.schedule.experiment.description) %>',
             start:    '<%= application.schedule.datetime.to_s(:time) %>',
             end:      '<%= (start_time + application.schedule.experiment.duration * 60).to_s(:time) %>',
         },
@@ -14,6 +15,7 @@ var schedules = [
         {
             date:     '<%= event.start_at.strftime('%m-%d-%Y') %>',
             title:    '<%= "#{event.name}【#{event.experiment.name}】" %>',
+            detail:   '<%= "#{event.name}【#{event.experiment.description}】" %>',
             start:    '<%= event.start_at.to_s(:time) %>',
             end:      '<%= (event.start_at + event.duration * 60).to_s(:time) %>',
         },
@@ -26,7 +28,7 @@ var dated_schedules = (function() {
     for(var s of schedules) {
         var e = {
             content:
-            '<a id="popup" title="' + s.start + '~' + s.end + '">' + s.title + '</a>',
+            '<a id="popup" title="' + s.detail + '">'  + s.start + '~' + s.end + ' ' + s.title + '</a>',
             startTime: s.start,
             endTime:   s.end,
         };
