@@ -1,5 +1,6 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "hint";
 
 /* universal */
 
@@ -38,4 +39,21 @@ h2{
 
 div.container, section{
   margin-bottom: 20px;
+}
+
+/* tooltip */
+
+div.tooltip {
+    width: 250px;
+    position: absolute;
+    left: -9999px;  
+    background: #EEE;
+    padding: 5px;
+    border: 1px solid #AAA;
+}
+
+div.tooltip p{
+    color: #FFF;
+    background: #222;
+    padding: 5px 10px;
 }

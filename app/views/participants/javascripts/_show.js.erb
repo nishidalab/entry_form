@@ -6,6 +6,8 @@ var schedules = [
         {
             date:     '<%= application.schedule.datetime.strftime('%m-%d-%Y') %>',
             title:    '<%= get_title(application.status, application.schedule.experiment.name) %>',
+            detail:   '<%= get_title(application.status, application.schedule.experiment.description) %>',
+            room:     '<%= application.schedule.experiment.room.name %>',
             start:    '<%= application.schedule.datetime.to_s(:time) %>',
             end:      '<%= (start_time + application.schedule.experiment.duration * 60).to_s(:time) %>',
         },
@@ -14,6 +16,8 @@ var schedules = [
         {
             date:     '<%= event.start_at.strftime('%m-%d-%Y') %>',
             title:    '<%= "#{event.name}【#{event.experiment.name}】" %>',
+            detail:   '<%= "#{event.name}【#{event.experiment.description}】" %>',
+            room:     '<%= event.experiment.room.name %>',
             start:    '<%= event.start_at.to_s(:time) %>',
             end:      '<%= (event.start_at + event.duration * 60).to_s(:time) %>',
         },
@@ -26,7 +30,7 @@ var dated_schedules = (function() {
     for(var s of schedules) {
         var e = {
             content:
-            '<button type="button" disabled="true" class="form-control btn btn-default">' + s.title + '</button>',
+            '<a id="popup" title="' + s.room + '<br>' + s.detail + '">'  + s.start + '~' + s.end + ' ' + s.title + '</a>',
             startTime: s.start,
             endTime:   s.end,
         };
@@ -47,9 +51,46 @@ var dated_schedules = (function() {
     return ret;
 })();
 
+function simple_tooltip(target_items, name){
+    $(target_items).each(function(i){
+        $("body").append("<div class='"+name+"' id='"+name+i+"'><p>"+$(this).attr('title')+"</p></div>");
+
+        var my_tooltip = $("#"+name+i);
+
+        if($(this).attr("title") != "" && $(this).attr("title") !== undefined ){
+            $(this).removeAttr("title").mouseover(function(){
+                my_tooltip.css({opacity:0.8, display:"none"}).fadeIn(400);
+            }).mousemove(function(kmouse){
+                var border_top = $(window).scrollTop();
+                var border_right = $(window).width();
+                var left_pos;
+                var top_pos;
+                var offset = 20;
+
+                if(border_right - (offset *2) >= my_tooltip.width() + kmouse.pageX){
+                    left_pos = kmouse.pageX+offset;
+                } else{
+                    left_pos = border_right-my_tooltip.width()-offset;
+                }
+
+                if(border_top + (offset *2)>= kmouse.pageY - my_tooltip.height()){
+                  top_pos = border_top +offset;
+                } else{
+                  top_pos = kmouse.pageY-my_tooltip.height()-offset;
+                }
+
+                my_tooltip.css({left:left_pos, top:top_pos});
+            }).mouseout(function(){
+                my_tooltip.css({left:"-9999px"});
+            });
+        }
+    });
+}
+
 $(function() {
     // カレンダー要素の削除(「戻る」でのカレンダー重複表示対策)
     $('#calendar').html('');
+    simple_tooltip("a#popup","tooltip");
 
     var cal = $('#calendar').calendario({
         weeks: ['日', '月', '火', '水', '木', '金', '土'],
@@ -64,9 +105,11 @@ $(function() {
     updateMonthYear();
     $('#custom-next').on('click', function() {
         cal.gotoNextMonth(updateMonthYear);
+        simple_tooltip("a#popup","tooltip");
     });
     $('#custom-prev').on('click', function() {
         cal.gotoPreviousMonth(updateMonthYear);
+        simple_tooltip("a#popup","tooltip");
     });
 
     function updateMonthYear() {

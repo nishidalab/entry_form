@@ -66,3 +66,6 @@ gem 'jquery-turbolinks', '2.1.0'
 
 # 確認モーダル
 gem 'data-confirm-modal', '1.3.0'
+
+# マウスオーバー
+gem 'hint'
