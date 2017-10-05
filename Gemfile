@@ -69,3 +69,9 @@ gem 'data-confirm-modal', '1.3.0'
 
 # マウスオーバー
 gem 'hint'
+
+# 非同期実行
+gem 'sidekiq'
+
+# スケジュール化
+gem 'whenever'
