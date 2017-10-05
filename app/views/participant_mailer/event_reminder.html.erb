@@ -1,0 +1,19 @@
+<p>
+  <%= @participant.name %> 様
+</p>
+
+<p>
+  京都大学 情報学研究科 西田研究室の実験担当者です。
+</p>
+<p>
+  明日、<%= @event.experiment.name %>の<%= @event.name %>が予定されておりますので改めてご案内申し上げます。
+</p>
+<p>
+  日時：<%= @event.start_at.strftime('%m月%d日') %> <%= @event.start_at.to_s(:time) %> <br>
+  場所：<%= @event.experiment.room.name %> <br>
+  詳細：<%= @event.experiment.description %>
+</p>
+<p>
+  ※このメールは送信専用です。このメールに返信をいただきましても対応や回答返信は行っておりません。<br>
+  ※ご不明な点は、別途記載の担当者連絡先までお願いいたします。
+</p>

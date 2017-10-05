@@ -25,4 +25,16 @@ class ParticipantMailer < ApplicationMailer
     @participant = participant
     mail to: @participant.new_email, subject: "メールアドレスの更新"
   end
+
+  def schedule_reminder(participant,schedule)
+    @participant = participant
+    @schedule = schedule
+    mail to: @participant.email, subject: "【リマインダ】明日、#{@schedule.experiment.name}が予定されています。"
+  end
+
+  def event_reminder(participant,event)
+    @participant = participant
+    @event = event
+    mail to: @participant.email, subject: "【リマインダ】明日、#{@event.experiment.name}の#{@event.name}が予定されています。"
+  end
 end

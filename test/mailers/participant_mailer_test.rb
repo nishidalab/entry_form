@@ -81,4 +81,40 @@ class ParticipantMailerTest < ActionMailer::TestCase
       assert_match CGI.escape(participant.new_email), body
     end
   end
+
+  test "schedule_reminder" do
+    application = applications(:one)
+    participant = application.participant
+    schedule = application.schedule
+    mail = ParticipantMailer.schedule_reminder(participant,schedule)
+    assert_equal "【リマインダ】明日、#{schedule.experiment.name}が予定されています。", mail.subject
+    assert_equal [participant.email], mail.to
+    assert_equal ["no-reply@ii.ist.i.kyoto-u.ac.jp"], mail.from
+    [mail.text_part.body.encoded, mail.html_part.body.encoded].each do |body|
+      assert_match participant.name, body
+      assert_match schedule.experiment.name, body
+      assert_match schedule.datetime.strftime('%m月%d日'), body
+      assert_match schedule.datetime.to_s(:time), body
+      assert_match schedule.experiment.room.name, body
+      assert_match schedule.experiment.description, body
+    end
+  end
+
+  test "event_reminder" do
+    event = events(:one)
+    participant = event.participant
+    mail = ParticipantMailer.event_reminder(participant,event)
+    assert_equal "【リマインダ】明日、#{event.experiment.name}の#{event.name}が予定されています。", mail.subject
+    assert_equal [participant.email], mail.to
+    assert_equal ["no-reply@ii.ist.i.kyoto-u.ac.jp"], mail.from
+    [mail.text_part.body.encoded, mail.html_part.body.encoded].each do |body|
+      assert_match participant.name, body
+      assert_match event.experiment.name, body
+      assert_match event.name, body
+      assert_match event.start_at.strftime('%m月%d日'), body
+      assert_match event.start_at.to_s(:time), body
+      assert_match event.experiment.room.name, body
+      assert_match event.experiment.description, body
+    end
+  end
 end
